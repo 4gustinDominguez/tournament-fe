@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 150 12% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 12% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 12% 10%;
+    --primary: 147 70% 34%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 12% 94%;
+    --secondary-foreground: 150 12% 10%;
+    --muted: 150 12% 97%;
+    --muted-foreground: 148 7% 45%;
+    --accent: 146 47% 94%;
+    --accent-foreground: 151 70% 22%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 146 11% 88%;
+    --input: 146 11% 88%;
+    --ring: 147 70% 34%;
+    --chart-1: 147 70% 34%;
+    --chart-2: 38 92% 50%;
+    --chart-3: 221 83% 53%;
+    --chart-4: 347 77% 50%;
+    --chart-5: 145 47% 57%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 153 48% 8%;
+    --foreground: 150 12% 94%;
+    --card: 153 48% 10%;
+    --card-foreground: 150 12% 94%;
+    --popover: 153 48% 10%;
+    --popover-foreground: 150 12% 94%;
+    --primary: 147 70% 34%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 152 30% 18%;
+    --secondary-foreground: 150 12% 94%;
+    --muted: 152 30% 16%;
+    --muted-foreground: 146 8% 64%;
+    --accent: 151 38% 18%;
+    --accent-foreground: 146 47% 94%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 152 30% 18%;
+    --input: 152 30% 18%;
+    --ring: 147 70% 34%;
+    --chart-1: 147 70% 34%;
+    --chart-2: 38 92% 50%;
+    --chart-3: 221 83% 53%;
+    --chart-4: 347 77% 50%;
+    --chart-5: 145 47% 57%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-500 text-white;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@layer components {
+  /* Eyebrow: etiqueta condensada estilo broadcast */
+  .eyebrow {
+    @apply font-display font-bold uppercase tracking-wider text-xs;
+  }
+
+  /* Título display condensado (h1) */
+  .display-title {
+    @apply font-display font-extrabold tracking-tight;
+  }
+
+  /* Tarjeta base del sistema */
+  .card-surface {
+    @apply bg-card text-card-foreground border border-border rounded-xl shadow-card;
+  }
+
+  /* Píldora de estado (puntitos/etiquetas) */
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-display font-semibold uppercase tracking-wider text-[11px];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animación de entrada genérica */
+  .animate-enter {
+    animation: enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
