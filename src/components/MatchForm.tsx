@@ -290,17 +290,21 @@ const MatchForm: React.FC<MatchFormProps> = ({
                 </div>
             )}
 
-            {initialValues && match.teamAId && match.teamBId && (
-                <div className="mb-6">
-                    <label className="block text-xs font-black uppercase tracking-wider text-muted-foreground mb-3">{t('incidentsTitle')}</label>
-                    <IncidentEditor
-                        teamA={teams.find(t => t.id === match.teamAId)!}
-                        teamB={teams.find(t => t.id === match.teamBId)!}
-                        incidents={match.incidents || []}
-                        onChange={(newIncidents) => setMatch({ ...match, incidents: newIncidents })}
-                    />
-                </div>
-            )}
+            {initialValues && match.teamAId && match.teamBId && (() => {
+                const teamA = teams.find(t => t.id === match.teamAId);
+                const teamB = teams.find(t => t.id === match.teamBId);
+                return teamA && teamB ? (
+                    <div className="mb-6">
+                        <label className="block text-xs font-black uppercase tracking-wider text-muted-foreground mb-3">{t('incidentsTitle')}</label>
+                        <IncidentEditor
+                            teamA={teamA}
+                            teamB={teamB}
+                            incidents={match.incidents || []}
+                            onChange={(newIncidents) => setMatch({ ...match, incidents: newIncidents })}
+                        />
+                    </div>
+                ) : null;
+            })()}
 
             <div className="flex gap-2">
                 <button

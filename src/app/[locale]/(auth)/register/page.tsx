@@ -48,7 +48,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[#F6F8F7]">
+        <div className="min-h-[80vh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F6F8F7]">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center font-display text-4xl font-black tracking-tight text-foreground">
                     {t('registerSubtitle')}
@@ -56,7 +56,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-4 shadow-elevated sm:rounded-2xl sm:px-10 border border-border">
+                <div className="bg-white py-8 px-5 sm:px-10 shadow-elevated rounded-2xl border border-border">
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         {error && (
                             <div className="bg-status-danger-soft border-l-4 border-status-danger p-4 rounded-md">

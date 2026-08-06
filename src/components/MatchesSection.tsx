@@ -381,15 +381,25 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                         </div>
 
                         {/* Match Events Timeline */}
-                        {match.incidents && match.incidents.length > 0 && (
-                          <div className="w-full mt-2 pt-6 border-t border-border/60 animate-in slide-in-from-top-1 duration-500">
-                            <MatchTimeline
-                              incidents={match.incidents}
-                              teamA={teams.find((t) => t.id === match.teamAId)!}
-                              teamB={teams.find((t) => t.id === match.teamBId)!}
-                            />
-                          </div>
-                        )}
+                        {match.incidents &&
+                          match.incidents.length > 0 &&
+                          (() => {
+                            const teamA = teams.find(
+                              (t) => t.id === match.teamAId,
+                            );
+                            const teamB = teams.find(
+                              (t) => t.id === match.teamBId,
+                            );
+                            return teamA && teamB ? (
+                              <div className="w-full mt-2 pt-6 border-t border-border/60 animate-in slide-in-from-top-1 duration-500">
+                                <MatchTimeline
+                                  incidents={match.incidents}
+                                  teamA={teamA}
+                                  teamB={teamB}
+                                />
+                              </div>
+                            ) : null;
+                          })()}
                       </div>
                     )}
                   </div>

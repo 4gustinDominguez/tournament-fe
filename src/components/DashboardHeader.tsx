@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Bell,
     Search,
@@ -32,18 +32,22 @@ const DashboardHeader = () => {
     const { user, logout } = useAuth();
     const t = useTranslations('Menu');
     const tDash = useTranslations('Dashboard');
+    const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
     return (
         <header className="h-16 border-b border-border bg-white/90 backdrop-blur sticky top-0 z-30 flex items-center justify-between px-4 md:px-8 gap-4">
             <div className="flex items-center gap-4 flex-1 min-w-0">
-                <Sheet>
+                <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground">
                             <MenuIcon className="h-5 w-5" />
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="p-0 w-64">
-                        <Sidebar className="w-full h-full border-none" />
+                        <Sidebar
+                            className="w-full h-full border-none"
+                            onNavigate={() => setMobileNavOpen(false)}
+                        />
                     </SheetContent>
                 </Sheet>
 

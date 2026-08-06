@@ -16,9 +16,10 @@ import { useAuth, UserRole } from '@/sections/tournaments/auth-context';
 
 interface SidebarProps {
     className?: string;
+    onNavigate?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ className }) => {
+const Sidebar: React.FC<SidebarProps> = ({ className, onNavigate }) => {
     const pathname = usePathname();
     const t = useTranslations('Menu');
     const tDash = useTranslations('Dashboard');
@@ -56,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         pathname === href || pathname.startsWith(`${href}/`);
 
     return (
-        <aside className={cn("hidden md:flex flex-col w-64 border-r border-border bg-white h-screen sticky top-0", className)}>
+        <aside className={cn("flex flex-col w-64 border-r border-border bg-white h-screen sticky top-0", className)}>
             <div className="px-5 py-6 flex items-center gap-3">
                 <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white grid place-items-center shadow-glow">
                     <Trophy className="h-5 w-5" />
@@ -74,6 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
                         <Link
                             key={item.href}
                             href={item.href}
+                            onClick={onNavigate}
                             className={cn(
                                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 relative group",
                                 active
