@@ -13,6 +13,7 @@ import { Tournament } from "@/modules/tournament/domain/tournament";
 import { Place } from "@/modules/places/domain/place";
 import { Referee } from "@/modules/referees/domain/referee";
 import { TeamStats } from "@/modules/tournament/domain/standings";
+import { DashboardStats } from "@/modules/tournament/domain/dashboard-stats";
 import { TournamentRepository } from "@/modules/tournament/domain/tournament-repository";
 
 export interface ContextState {
@@ -80,6 +81,43 @@ export interface ContextState {
     matchId: string;
     tournamentId: string;
   }) => Promise<void>;
+  deleteTeam: ({
+    teamId,
+    tournamentId,
+  }: {
+    teamId: string;
+    tournamentId: string;
+  }) => Promise<void>;
+  deletePlayer: ({
+    playerId,
+    tournamentId,
+  }: {
+    playerId: string;
+    tournamentId: string;
+  }) => Promise<void>;
+  deletePlace: ({
+    placeId,
+    tournamentId,
+  }: {
+    placeId: string;
+    tournamentId: string;
+  }) => Promise<void>;
+  deleteRound: ({
+    roundId,
+    tournamentId,
+  }: {
+    roundId: string;
+    tournamentId: string;
+  }) => Promise<void>;
+  deleteReferee: ({
+    refereeId,
+    tournamentId,
+  }: {
+    refereeId: string;
+    tournamentId: string;
+  }) => Promise<void>;
+  deleteTournament: (tournamentId: string) => Promise<void>;
+  getDashboardStats: () => Promise<DashboardStats>;
   createRound: ({
     tournamentId,
     round,
@@ -393,6 +431,61 @@ export const TournamentContextProvider = ({
           await repository.deleteMatch(matchId);
           await getMatches(tournamentId);
         },
+        deleteTeam: async ({
+          teamId,
+          tournamentId,
+        }: {
+          teamId: string;
+          tournamentId: string;
+        }) => {
+          await repository.deleteTeam(teamId);
+          await getTeams(tournamentId);
+        },
+        deletePlayer: async ({
+          playerId,
+          tournamentId,
+        }: {
+          playerId: string;
+          tournamentId: string;
+        }) => {
+          await repository.deletePlayer(playerId);
+          await getTeams(tournamentId);
+        },
+        deletePlace: async ({
+          placeId,
+          tournamentId,
+        }: {
+          placeId: string;
+          tournamentId: string;
+        }) => {
+          await repository.deletePlace(placeId);
+          await getPlaces(tournamentId);
+        },
+        deleteRound: async ({
+          roundId,
+          tournamentId,
+        }: {
+          roundId: string;
+          tournamentId: string;
+        }) => {
+          await repository.deleteRound(roundId);
+          await getRounds(tournamentId);
+        },
+        deleteReferee: async ({
+          refereeId,
+          tournamentId,
+        }: {
+          refereeId: string;
+          tournamentId: string;
+        }) => {
+          await repository.deleteReferee(refereeId);
+          await getReferees(tournamentId);
+        },
+        deleteTournament: async (tournamentId: string) => {
+          await repository.deleteTournament(tournamentId);
+          await getTournaments();
+        },
+        getDashboardStats: async () => repository.getDashboardStats(),
         getTournamentById,
       }}
     >

@@ -4,6 +4,7 @@ import { Round } from "../domain/round";
 import { Team } from "../domain/team";
 import { Tournament } from "../domain/tournament";
 import { TeamStats } from "../domain/standings";
+import { DashboardStats } from "../domain/dashboard-stats";
 import { Place } from "../../places/domain/place";
 import { Referee } from "../../referees/domain/referee";
 import { TournamentRepository } from "../domain/tournament-repository";
@@ -71,6 +72,84 @@ export function createApiTournamentRepository(): TournamentRepository {
         }
 
         return response.json();
+    }
+
+    async function getDashboardStats(): Promise<DashboardStats> {
+        const response = await fetch(`${baseUrl}/dashboard/stats`, {
+            headers: getHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to get dashboard stats");
+        }
+
+        return response.json();
+    }
+
+    async function deleteTournament(tournamentId: string) {
+        const response = await fetch(`${baseUrl}/tournaments/${tournamentId}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete tournament with id ${tournamentId}`);
+        }
+    }
+
+    async function deleteTeam(teamId: string) {
+        const response = await fetch(`${baseUrl}/teams/${teamId}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete team with id ${teamId}`);
+        }
+    }
+
+    async function deletePlayer(playerId: string) {
+        const response = await fetch(`${baseUrl}/players/${playerId}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete player with id ${playerId}`);
+        }
+    }
+
+    async function deletePlace(placeId: string) {
+        const response = await fetch(`${baseUrl}/places/${placeId}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete place with id ${placeId}`);
+        }
+    }
+
+    async function deleteRound(roundId: string) {
+        const response = await fetch(`${baseUrl}/rounds/${roundId}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete round with id ${roundId}`);
+        }
+    }
+
+    async function deleteReferee(refereeId: string) {
+        const response = await fetch(`${baseUrl}/referees/${refereeId}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete referee with id ${refereeId}`);
+        }
     }
 
     async function getAllTeamsByTournamentId(tournamentId: string): Promise<Team[]> {
@@ -408,6 +487,13 @@ export function createApiTournamentRepository(): TournamentRepository {
         get,
         getAll,
         getMyTournaments,
+        getDashboardStats,
+        deleteTournament,
+        deleteTeam,
+        deletePlayer,
+        deletePlace,
+        deleteRound,
+        deleteReferee,
         saveTeam,
         updateTeam,
         getAllTeamsByTournamentId,

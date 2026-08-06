@@ -6,8 +6,6 @@ import { cn } from '@/lib/utils';
 import {
     Trophy,
     ShieldCheck,
-    Settings,
-    HelpCircle,
     ChevronRight,
     type LucideIcon
 } from 'lucide-react';
@@ -22,7 +20,6 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ className, onNavigate }) => {
     const pathname = usePathname();
     const t = useTranslations('Menu');
-    const tDash = useTranslations('Dashboard');
     const { user, isAuthenticated } = useAuth();
 
     const navItems = useMemo(() => {
@@ -92,17 +89,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onNavigate }) => {
                     );
                 })}
             </nav>
-
-            <div className="p-3 border-t border-border space-y-1">
-                <button className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-muted-foreground hover:bg-neutral-50 hover:text-foreground transition-all">
-                    <Settings className="h-5 w-5 text-neutral-400" />
-                    {tDash('settings')}
-                </button>
-                <button className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-muted-foreground hover:bg-neutral-50 hover:text-foreground transition-all">
-                    <HelpCircle className="h-5 w-5 text-neutral-400" />
-                    {tDash('help')}
-                </button>
-            </div>
         </aside>
     );
 };

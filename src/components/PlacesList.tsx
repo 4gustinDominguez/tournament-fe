@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { createApiPlaceRepository } from "../modules/places/infrastructure/api-place-repository";
 import { Place } from "../modules/places/domain/place";
+import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
+import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import {
   Card,
   CardContent,
@@ -13,7 +15,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Users, Info, Navigation, Building2 } from "lucide-react";
+import { MapPin, Users, Info, Navigation, Building2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export const PlacesList = ({
@@ -24,6 +26,9 @@ export const PlacesList = ({
   tournamentId: string;
 }) => {
   const t = useTranslations("Places");
+  const tCommon = useTranslations("Common");
+  const { deletePlace, tournaments } = useTournamentContext();
+  const { user, isAuthenticated } = useAuth();
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -35,6 +40,24 @@ export const PlacesList = ({
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [refreshTrigger, tournamentId]);
+
+  const tournament = tournaments.find((t) => t.id === tournamentId);
+  const canManage =
+    isAuthenticated &&
+    (user?.role === UserRole.SUPER_ADMIN || tournament?.ownerId === user?.id);
+
+  const handleDeletePlace = async (placeId: string) => {
+    if (confirm(t("deleteConfirm"))) {
+      try {
+        await deletePlace({ placeId, tournamentId });
+        const repository = createApiPlaceRepository();
+        const updated = await repository.getAll(tournamentId);
+        setPlaces(updated);
+      } catch (error: any) {
+        alert(error?.message || t("deleteError"));
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -112,13 +135,16 @@ export const PlacesList = ({
             >
               {t("officialVenue")}
             </Badge>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 text-[10px] font-bold uppercase tracking-widest text-primary hover:text-primary hover:bg-blue-50"
-            >
-              {t("viewMap")}
-            </Button>
+            {canManage && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleDeletePlace(place.id)}
+                className="h-7 text-[10px] font-bold uppercase tracking-widest text-destructive hover:text-destructive hover:bg-red-50"
+              >
+                <Trash2 className="h-3 w-3 mr-1" /> {tCommon("delete")}
+              </Button>
+            )}
           </CardFooter>
         </Card>
       ))}

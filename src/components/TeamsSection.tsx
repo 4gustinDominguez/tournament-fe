@@ -14,7 +14,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, Plus, ChevronRight, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, Plus, ChevronRight, MapPin, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface TeamsSectionProps {
@@ -24,8 +25,15 @@ interface TeamsSectionProps {
 
 const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) => {
   const t = useTranslations("Teams");
-  const { getTeams, teams, places, getPlaces, tournaments } =
-    useTournamentContext();
+  const tCommon = useTranslations("Common");
+  const {
+    getTeams,
+    teams,
+    places,
+    getPlaces,
+    tournaments,
+    deleteTeam,
+  } = useTournamentContext();
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -53,6 +61,18 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
   const getPlaceName = (placeId?: string) => {
     if (!placeId) return null;
     return places.find((p) => p.id === placeId)?.name || t("unknownPlace");
+  };
+
+  const handleDeleteTeam = async (e: React.MouseEvent, teamId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (confirm(t("deleteConfirm"))) {
+      try {
+        await deleteTeam({ teamId, tournamentId });
+      } catch (error: any) {
+        alert(error?.message || t("deleteError"));
+      }
+    }
   };
 
   if (loading) {
@@ -131,14 +151,25 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
                       {t("playersCount", { count: team.player?.length || 0 })}
                     </span>
                   </div>
-                  {!readOnly && (
-                    <Badge
-                      variant="secondary"
-                      className="bg-white border-border text-[10px] font-bold group-hover:bg-brand-50 group-hover:text-brand-600 transition-colors"
-                    >
-                      {t("viewProfile")}
-                    </Badge>
-                  )}
+                  {!readOnly &&
+                    (canManage ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => handleDeleteTeam(e, team.id)}
+                        className="h-8 text-destructive hover:text-destructive hover:bg-red-50 text-[10px] font-bold uppercase tracking-wider"
+                      >
+                        <Trash2 className="h-3 w-3 mr-1" />
+                        {tCommon("delete")}
+                      </Button>
+                    ) : (
+                      <Badge
+                        variant="secondary"
+                        className="bg-white border-border text-[10px] font-bold group-hover:bg-brand-50 group-hover:text-brand-600 transition-colors"
+                      >
+                        {t("viewProfile")}
+                      </Badge>
+                    ))}
                 </CardFooter>
               </Card>
             );

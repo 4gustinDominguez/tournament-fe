@@ -6,9 +6,10 @@ import EditPlayerForm from "@/components/EditPlayerForm";
 import PlayerStatisticsCard from "@/components/PlayerStatisticsCard";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { useAuth, UserRole } from '@/sections/tournaments/auth-context';
-import { Link } from '@/navigation';
+import { Link, useRouter } from '@/navigation';
+import { Button } from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
-import { UserRound } from 'lucide-react';
+import { UserRound, Trash2 } from 'lucide-react';
 
 export default function PlayerPage() {
     const t = useTranslations('PlayerPage');
@@ -18,8 +19,9 @@ export default function PlayerPage() {
     const teamId = params.teams as string;
     const playerId = params.playerId as string;
 
-    const { getTeams, teams, tournaments } = useTournamentContext();
+    const { getTeams, teams, tournaments, deletePlayer } = useTournamentContext();
     const { user, isAuthenticated } = useAuth();
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [showEdit, setShowEdit] = useState(false);
 
@@ -50,6 +52,17 @@ export default function PlayerPage() {
         }
     }, [tournamentId, team, player, getTeams]);
 
+    const handleDeletePlayer = async () => {
+        if (confirm(t('deleteConfirm'))) {
+            try {
+                await deletePlayer({ playerId, tournamentId });
+                router.push(`/manage/my-tournaments/${tournamentId}/${teamId}`);
+            } catch (error: any) {
+                alert(error?.message || t('deleteError'));
+            }
+        }
+    };
+
     if (loading) return <div className="p-8 text-center text-muted-foreground">{t('loading')}</div>;
     if (!player || !team) return (
         <div className="p-8 text-center space-y-4">
@@ -74,6 +87,16 @@ export default function PlayerPage() {
                         @{player.nickname} · {team.name}
                     </p>
                 </div>
+                {canManage && (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleDeletePlayer}
+                        className="h-9 text-destructive hover:text-destructive hover:bg-red-50 font-bold"
+                    >
+                        <Trash2 className="h-4 w-4 mr-2" /> {tCommon('delete')}
+                    </Button>
+                )}
             </header>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

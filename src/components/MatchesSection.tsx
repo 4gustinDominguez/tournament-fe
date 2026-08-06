@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +44,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     teams,
     getTeams,
     deleteMatch,
+    deleteRound,
     getRounds,
     rounds,
     places,
@@ -55,7 +55,6 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     tournaments,
   } = useTournamentContext();
   const { user, isAuthenticated } = useAuth();
-  const [loading, setLoading] = useState(true);
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
   const [openRoundFormId, setOpenRoundFormId] = useState<string | null>(null);
 
@@ -66,7 +65,6 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
 
   useEffect(() => {
     async function fetchData() {
-      setLoading(true);
       try {
         await Promise.all([
           getMatches(tournamentId),
@@ -77,8 +75,6 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
         ]);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     }
 
@@ -111,15 +107,22 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     }
   };
 
+  const handleDeleteRound = async (roundId: string) => {
+    if (confirm(t("deleteRoundConfirm"))) {
+      try {
+        await deleteRound({ roundId, tournamentId });
+      } catch (error: any) {
+        alert(error?.message || t("deleteRoundError"));
+      }
+    }
+  };
+
   const handleGenerateFixtures = async () => {
     if (confirm(t("generateConfirm"))) {
       try {
-        setLoading(true);
         await generateFixtures(tournamentId);
       } catch (error) {
         console.error("Error generating fixtures:", error);
-      } finally {
-        setLoading(false);
       }
     }
   };
@@ -140,26 +143,6 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
   const toggleRoundForm = (roundId: string) => {
     setOpenRoundFormId(openRoundFormId === roundId ? null : roundId);
   };
-
-  // if (loading) {
-  //     return (
-  //         <div className="space-y-8 mt-12">
-  //             <div className="flex justify-between items-center">
-  //                 <Skeleton className="h-10 w-48" />
-  //                 <Skeleton className="h-10 w-32" />
-  //             </div>
-  //             {[1, 2].map((i) => (
-  //                 <Card key={i} className="overflow-hidden border-gray-100">
-  //                     <Skeleton className="h-14 w-full" />
-  //                     <div className="p-6 space-y-4">
-  //                         <Skeleton className="h-20 w-full" />
-  //                         <Skeleton className="h-20 w-full" />
-  //                     </div>
-  //                 </Card>
-  //             ))}
-  //         </div>
-  //     );
-  // }
 
   const matchesByRound: Record<string, Match[]> = {};
   const uncategorizedMatches: Match[] = [];
@@ -243,20 +226,31 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                 {round.name}
               </CardTitle>
               {canManage && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleRoundForm(round.id)}
-                  className="text-brand-600 hover:text-brand-700 hover:bg-brand-50 font-bold"
-                >
-                  {openRoundFormId === round.id ? (
-                    t("close")
-                  ) : (
-                    <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px]">
-                      <Plus className="h-3 w-3" /> {t("addMatch")}
-                    </span>
-                  )}
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleRoundForm(round.id)}
+                    className="text-brand-600 hover:text-brand-700 hover:bg-brand-50 font-bold"
+                  >
+                    {openRoundFormId === round.id ? (
+                      t("close")
+                    ) : (
+                      <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[10px]">
+                        <Plus className="h-3 w-3" /> {t("addMatch")}
+                      </span>
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDeleteRound(round.id)}
+                    title={t("deleteRound")}
+                    className="h-8 w-8 text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               )}
             </CardHeader>
 

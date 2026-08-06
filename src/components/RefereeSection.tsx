@@ -32,7 +32,8 @@ import {
     Mail,
     ShieldCheck,
     Search,
-    AlertCircle
+    AlertCircle,
+    Trash2
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -43,7 +44,7 @@ interface RefereeSectionProps {
 const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
     const t = useTranslations('Referees');
     const tCommon = useTranslations('Common');
-    const { getReferees, referees, tournaments, getAllReferees, updateReferee } = useTournamentContext();
+    const { getReferees, referees, tournaments, getAllReferees, updateReferee, deleteReferee } = useTournamentContext();
     const { user, isAuthenticated } = useAuth();
     const [loading, setLoading] = useState(true);
     const [allReferees, setAllReferees] = useState<any[]>([]);
@@ -106,6 +107,16 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
             console.error("Error loading all referees:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDeleteReferee = async (refereeId: string) => {
+        if (confirm(t('deleteConfirm'))) {
+            try {
+                await deleteReferee({ refereeId, tournamentId });
+            } catch (error: any) {
+                alert(error?.message || t('deleteError'));
+            }
         }
     };
 
@@ -248,9 +259,11 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
                                                 </Badge>
                                             )}
                                         </div>
-                                        <Button variant="ghost" size="sm" className="h-8 text-brand-600 font-bold text-[10px] tracking-wider uppercase">
-                                            {t('viewHistory')}
-                                        </Button>
+                                        {canManage && (
+                                            <Button variant="ghost" size="sm" onClick={() => handleDeleteReferee(referee.id)} className="h-8 text-destructive font-bold text-[10px] tracking-wider uppercase hover:text-destructive hover:bg-red-50">
+                                                <Trash2 className="h-3 w-3 mr-1" /> {tCommon('delete')}
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             </CardContent>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateTournamentForm from "@/components/CreateTournamentForm";
 import { TournamentList } from "@/components/TournamentList";
 import { useTranslations } from "next-intl";
@@ -8,26 +8,59 @@ import {
     Trophy,
     Plus,
     Sparkles,
-    LayoutGrid,
-    List,
-    Filter,
-    Search,
     Users,
-    X
+    X,
+    Shirt,
+    Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import QuickSetupWizard from "@/components/QuickSetupWizard";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
+import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
+import { DashboardStats } from "@/modules/tournament/domain/dashboard-stats";
 
 export default function TournamentsPage() {
     const t = useTranslations('MyTournaments');
     const tTr = useTranslations('Tournaments');
     const { user } = useAuth();
+    const { getDashboardStats } = useTournamentContext();
+    const [stats, setStats] = useState<DashboardStats | null>(null);
     const [showWizard, setShowWizard] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
 
     const canManage = user?.role === UserRole.SUPER_ADMIN || user?.role === UserRole.TOURNAMENT_ADMIN;
+
+    useEffect(() => {
+        getDashboardStats().then(setStats).catch(() => setStats(null));
+    }, [getDashboardStats]);
+
+    const statCards = [
+        {
+            label: t('myTournaments'),
+            value: stats?.tournaments ?? '--',
+            icon: Trophy,
+            iconClass: 'bg-brand-50 text-brand-600',
+        },
+        {
+            label: t('totalTeams'),
+            value: stats?.teams ?? '--',
+            icon: Shirt,
+            iconClass: 'bg-brand-50 text-brand-600',
+        },
+        {
+            label: t('totalPlayers'),
+            value: stats?.players ?? '--',
+            icon: Users,
+            iconClass: 'bg-amber-50 text-amber-600',
+        },
+        {
+            label: t('totalMatches'),
+            value: stats?.matches ?? '--',
+            icon: Activity,
+            iconClass: 'bg-emerald-50 text-emerald-600',
+        },
+    ];
 
     return (
         <div className="space-y-8 pb-10">
@@ -62,73 +95,23 @@ export default function TournamentsPage() {
                 )}
             </header>
 
-            {/* Quick Actions / Stats row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card className="border-border shadow-card overflow-hidden group hover:shadow-elevated transition-shadow">
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Trophy className="h-6 w-6" />
+            {/* Stats row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {statCards.map((card) => (
+                    <Card key={card.label} className="border-border shadow-card overflow-hidden group hover:shadow-elevated transition-shadow">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className={`h-12 w-12 rounded-xl ${card.iconClass} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                                    <card.icon className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="eyebrow text-[10px] text-muted-foreground">{card.label}</p>
+                                    <p className="text-2xl font-black text-foreground">{card.value}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="eyebrow text-[10px] text-muted-foreground">{t('myTournaments')}</p>
-                                <p className="text-2xl font-black text-foreground">--</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="border-border shadow-card overflow-hidden group hover:shadow-elevated transition-shadow">
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Users className="h-6 w-6" />
-                            </div>
-                            <div>
-                                <p className="eyebrow text-[10px] text-muted-foreground">{t('totalTeams')}</p>
-                                <p className="text-2xl font-black text-foreground">--</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="border-border shadow-card overflow-hidden group hover:shadow-elevated transition-shadow">
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Sparkles className="h-6 w-6" />
-                            </div>
-                            <div>
-                                <p className="eyebrow text-[10px] text-muted-foreground">{t('currentPlan')}</p>
-                                <p className="text-2xl font-black text-foreground capitalize">{user?.plan || 'Free'}</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Toolbar section */}
-            <div className="flex items-center justify-between border-b border-border pb-4 gap-4 flex-wrap">
-                <div className="flex items-center gap-1 bg-neutral-100 p-1 rounded-lg">
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 bg-white shadow-card rounded-md text-brand-600">
-                        <LayoutGrid className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-                        <List className="h-4 w-4" />
-                    </Button>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <Button variant="outline" size="sm" className="h-9 gap-2 text-muted-foreground border-border font-semibold">
-                        <Filter className="h-3.5 w-3.5" /> {t('filter')}
-                    </Button>
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
-                        <input
-                            type="text"
-                            placeholder={t('searchPlaceholder')}
-                            className="h-9 pl-9 pr-4 bg-white border border-border rounded-lg text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none w-64"
-                        />
-                    </div>
-                </div>
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
 
             {/* List section */}

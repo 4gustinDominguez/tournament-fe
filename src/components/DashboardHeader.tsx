@@ -2,14 +2,12 @@
 
 import React, { useState } from 'react';
 import {
-    Bell,
-    Search,
     Menu as MenuIcon,
     LogOut,
-    User as UserIcon,
-    Shield
+    User as UserIcon
 } from 'lucide-react';
 import { useAuth } from '@/sections/tournaments/auth-context';
+import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
 import {
     DropdownMenu,
@@ -50,23 +48,9 @@ const DashboardHeader = () => {
                         />
                     </SheetContent>
                 </Sheet>
-
-                <div className="hidden md:flex items-center gap-2 bg-neutral-50 border border-border rounded-lg px-3 h-10 w-64 transition-all focus-within:ring-2 focus-within:ring-brand-500/30 focus-within:border-brand-500">
-                    <Search className="h-4 w-4 text-neutral-400 shrink-0" />
-                    <input
-                        type="text"
-                        placeholder={tDash('searchPlaceholder')}
-                        className="bg-transparent border-none text-sm focus:ring-0 placeholder:text-neutral-400 w-full outline-none"
-                    />
-                </div>
             </div>
 
             <div className="flex items-center gap-2 md:gap-4 shrink-0">
-                <Button variant="ghost" size="icon" className="text-muted-foreground relative hover:bg-neutral-50">
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute top-2 right-2 w-2 h-2 bg-amber-500 rounded-full ring-2 ring-white"></span>
-                </Button>
-
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="p-1 h-auto rounded-full hover:bg-neutral-50">
@@ -91,13 +75,11 @@ const DashboardHeader = () => {
                     <DropdownMenuContent align="end" className="w-56 rounded-xl mt-1 shadow-elevated border-border">
                         <DropdownMenuLabel className="font-bold">{tDash('myAccount')}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="py-2.5 cursor-pointer">
-                            <UserIcon className="mr-2 h-4 w-4" />
-                            <span>{tDash('profile')}</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="py-2.5 cursor-pointer">
-                            <Shield className="mr-2 h-4 w-4" />
-                            <span>{tDash('privacy')}</span>
+                        <DropdownMenuItem asChild className="py-2.5 cursor-pointer">
+                            <Link href="/manage/profile" className="flex items-center">
+                                <UserIcon className="mr-2 h-4 w-4" />
+                                <span>{tDash('profile')}</span>
+                            </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={logout} className="py-2.5 text-destructive focus:text-destructive cursor-pointer">

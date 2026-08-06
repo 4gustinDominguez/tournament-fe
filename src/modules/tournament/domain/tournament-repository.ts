@@ -6,12 +6,20 @@ import { Round } from "./round";
 import { Place } from "../../places/domain/place";
 import { Referee } from "../../referees/domain/referee";
 import { TeamStats } from "./standings";
+import { DashboardStats } from "./dashboard-stats";
 
 export interface TournamentRepository {
   save: (tournament: Tournament) => Promise<void>;
   get: (id: string) => Promise<Tournament | null>;
   getAll: () => Promise<Tournament[]>;
   getMyTournaments: () => Promise<Tournament[]>;
+  getDashboardStats: () => Promise<DashboardStats>;
+  deleteTournament: (tournamentId: string) => Promise<void>;
+  deleteTeam: (teamId: string) => Promise<void>;
+  deletePlayer: (playerId: string) => Promise<void>;
+  deletePlace: (placeId: string) => Promise<void>;
+  deleteRound: (roundId: string) => Promise<void>;
+  deleteReferee: (refereeId: string) => Promise<void>;
 
   saveTeam: ({
     tournamentId,

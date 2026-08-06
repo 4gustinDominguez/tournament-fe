@@ -48,7 +48,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-[80vh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F6F8F7]">
+        <div className="min-h-[100vh] flex flex-col justify-center px-4 sm:px-6 lg:px-8 bg-[#F6F8F7]">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center font-display text-4xl font-black tracking-tight text-foreground">
                     {t('registerSubtitle')}

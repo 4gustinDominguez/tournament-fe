@@ -16,12 +16,8 @@
   "Dashboard": {
     "home": "Home",
     "tagline": "Gestión de Torneos",
-    "settings": "Ajustes",
-    "help": "Ayuda",
-    "searchPlaceholder": "Buscar...",
     "myAccount": "Mi Cuenta",
-    "profile": "Perfil",
-    "privacy": "Privacidad"
+    "profile": "Perfil"
   },
   "Common": {
     "loading": "Cargando...",
@@ -128,11 +124,32 @@
     "subtitle": "Gestiona y organiza tus competencias deportivas.",
     "quickSetup": "Configuración Rápida",
     "myTournaments": "Mis Torneos",
+    "newTournament": "Nuevo Torneo",
     "totalTeams": "Total Equipos",
-    "currentPlan": "Plan Actual",
-    "filter": "Filtrar",
-    "searchPlaceholder": "Buscar torneo...",
-    "newTournament": "Nuevo Torneo"
+    "totalPlayers": "Total Jugadores",
+    "totalMatches": "Total Partidos"
+  },
+  "Profile": {
+    "title": "Mi Perfil",
+    "subtitle": "Gestiona tu información personal y la seguridad de tu cuenta.",
+    "personalInfo": "Información Personal",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "role": "Rol",
+    "saveInfo": "Guardar Cambios",
+    "saving": "Guardando...",
+    "infoUpdated": "Perfil actualizado correctamente",
+    "changePassword": "Cambiar Contraseña",
+    "currentPassword": "Contraseña Actual",
+    "currentPasswordPlaceholder": "Introduce tu contraseña actual",
+    "newPassword": "Nueva Contraseña",
+    "newPasswordPlaceholder": "Introduce una nueva contraseña",
+    "confirmPassword": "Confirmar Nueva Contraseña",
+    "confirmPasswordPlaceholder": "Repite la nueva contraseña",
+    "savePassword": "Actualizar Contraseña",
+    "passwordMismatch": "Las nuevas contraseñas no coinciden",
+    "passwordUpdated": "Contraseña actualizada correctamente"
   },
   "TournamentDetail": {
     "title": "Torneo",
@@ -166,7 +183,10 @@
     "unknownPlace": "Lugar desconocido",
     "unknownReferee": "Árbitro desconocido",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar este partido?",
-    "generateConfirm": "¿Quieres generar el fixture completo automáticamente? Esto creará todas las jornadas y emparejamientos."
+    "generateConfirm": "¿Quieres generar el fixture completo automáticamente? Esto creará todas las jornadas y emparejamientos.",
+    "deleteRound": "Eliminar jornada",
+    "deleteRoundConfirm": "¿Estás seguro de que quieres eliminar esta jornada?",
+    "deleteRoundError": "Esta jornada no se puede eliminar porque tiene partidos programados."
   },
   "Standings": {
     "title": "Tabla de Posiciones",
@@ -196,7 +216,9 @@
     "playersCount": "{count} Jugadores",
     "viewProfile": "Ver Perfil",
     "enrollNew": "Inscribir Nuevo Equipo",
-    "unknownPlace": "Lugar desconocido"
+    "unknownPlace": "Lugar desconocido",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar este equipo? Sus jugadores también se eliminarán.",
+    "deleteError": "Este equipo no se puede eliminar porque tiene partidos programados."
   },
   "Places": {
     "title": "Lugares & Estadios",
@@ -206,7 +228,8 @@
     "emptyText": "Registra los estadios o complejos deportivos donde se jugarán los partidos.",
     "spectators": "{count} espectadores",
     "officialVenue": "Sede Oficial",
-    "viewMap": "Ver Mapa"
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar esta sede?",
+    "deleteError": "Esta sede no se puede eliminar porque está en uso."
   },
   "Referees": {
     "title": "Equipo de Arbitraje",
@@ -224,8 +247,9 @@
     "emptyText": "Necesitas asignar al menos un árbitro para poder gestionar los partidos.",
     "activeAccount": "Cuenta Activa",
     "noAccount": "Sin Cuenta",
-    "viewHistory": "Ver Historial",
-    "registerNew": "Registrar Nuevo Árbitro"
+    "registerNew": "Registrar Nuevo Árbitro",
+    "deleteConfirm": "¿Estás seguro de que quieres desvincular a este árbitro del torneo?",
+    "deleteError": "Este árbitro no se puede eliminar porque está asignado a partidos."
   },
   "CreateTournamentForm": {
     "name": "Nombre del Torneo",
@@ -407,7 +431,9 @@
     "upcomingMatches": "Próximos Partidos",
     "upcomingText": "Consulta el calendario de {team} para no perderte ningún encuentro.",
     "viewCalendar": "Ver Calendario",
-    "backToTeamName": "Volver al equipo {team}"
+    "backToTeamName": "Volver al equipo {team}",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar a este jugador?",
+    "deleteError": "Este jugador no se puede eliminar porque aparece en incidencias de partidos."
   },
   "Referee": {
     "title": "Panel del Árbitro",

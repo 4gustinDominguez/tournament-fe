@@ -29,6 +29,12 @@ interface AuthContextType {
     isAuthenticated: boolean;
     login: (email: string, pass: string) => Promise<void>;
     logout: () => void;
+    updateProfile: (data: {
+        firstName?: string;
+        lastName?: string;
+        currentPassword?: string;
+        newPassword?: string;
+    }) => Promise<void>;
     isLoading: boolean;
 }
 
@@ -76,12 +82,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem("auth_user");
     }, []);
 
+    const updateProfile = useCallback(async (data: {
+        firstName?: string;
+        lastName?: string;
+        currentPassword?: string;
+        newPassword?: string;
+    }) => {
+        const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to update profile");
+        }
+
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        localStorage.setItem("auth_user", JSON.stringify(updatedUser));
+    }, [token]);
+
     const value = {
         user,
         token,
         isAuthenticated: !!token,
         login,
         logout,
+        updateProfile,
         isLoading,
     };
 
