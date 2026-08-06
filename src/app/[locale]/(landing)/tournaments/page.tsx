@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Users, Calendar, MapPin, Eye } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 
 export default function TournamentsPage() {

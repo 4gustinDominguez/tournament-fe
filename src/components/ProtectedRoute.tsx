@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 
 interface ProtectedRouteProps {
     children: React.ReactNode;

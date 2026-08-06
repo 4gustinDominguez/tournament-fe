@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import EditPlayerForm from "@/components/EditPlayerForm";
 import PlayerStatisticsCard from "@/components/PlayerStatisticsCard";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { useAuth, UserRole } from '@/sections/tournaments/auth-context';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
 import { UserRound } from 'lucide-react';
 
@@ -14,7 +14,6 @@ export default function PlayerPage() {
     const t = useTranslations('PlayerPage');
     const tCommon = useTranslations('Common');
     const params = useParams();
-    const router = useRouter();
     const tournamentId = params.id as string;
     const teamId = params.teams as string;
     const playerId = params.playerId as string;

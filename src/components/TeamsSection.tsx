@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import CreateTeamForm from "./CreateTeamForm";

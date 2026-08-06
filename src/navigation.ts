@@ -5,5 +5,6 @@ export const locales = ['en', 'es'] as const;
 export const { Link, redirect, usePathname, useRouter } =
     createNavigation({
         locales,
-        localePrefix: 'always'
+        defaultLocale: 'es',
+        localePrefix: 'as-needed'
     });

@@ -6,7 +6,7 @@ import CreatePlayerForm from "@/components/CreatePlayerForm";
 import EditTeamForm from "@/components/EditTeamForm";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Team } from '@/modules/tournament/domain/team';
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import { useAuth, UserRole } from '@/sections/tournaments/auth-context';
 import { useTranslations } from 'next-intl';
 import { Users } from 'lucide-react';
