@@ -101,8 +101,8 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     if (confirm(t("deleteConfirm"))) {
       try {
         await deleteMatch({ matchId, tournamentId });
-      } catch (error) {
-        console.error("Error deleting match:", error);
+      } catch (error: any) {
+        alert(error?.message || t("deleteError"));
       }
     }
   };
@@ -245,8 +245,13 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                     variant="ghost"
                     size="icon"
                     onClick={() => handleDeleteRound(round.id)}
-                    title={t("deleteRound")}
-                    className="h-8 w-8 text-destructive"
+                    disabled={(matchesByRound[round.id] || []).length > 0}
+                    title={
+                      (matchesByRound[round.id] || []).length > 0
+                        ? t("deleteRoundLocked")
+                        : t("deleteRound")
+                    }
+                    className="h-8 w-8 text-destructive disabled:opacity-40"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -318,7 +323,17 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => handleDelete(match.id)}
-                                className="h-8 w-8 text-destructive"
+                                disabled={
+                                  match.status === "completed" ||
+                                  match.status === "live"
+                                }
+                                title={
+                                  match.status === "completed" ||
+                                  match.status === "live"
+                                    ? t("deleteMatchLocked")
+                                    : tCommon("delete")
+                                }
+                                className="h-8 w-8 text-destructive disabled:opacity-40"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>

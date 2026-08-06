@@ -184,9 +184,12 @@
     "unknownReferee": "Unknown referee",
     "deleteConfirm": "Are you sure you want to delete this match?",
     "generateConfirm": "Do you want to auto-generate the full fixture? This will create all rounds and pairings.",
+    "deleteError": "This match cannot be deleted because it is live or has already been played.",
     "deleteRound": "Delete round",
     "deleteRoundConfirm": "Are you sure you want to delete this round?",
-    "deleteRoundError": "This round cannot be deleted because it has scheduled matches."
+    "deleteRoundError": "This round cannot be deleted because it has scheduled matches.",
+    "deleteRoundLocked": "This round cannot be deleted because it has scheduled matches",
+    "deleteMatchLocked": "A match that is live or already played cannot be deleted"
   },
   "Standings": {
     "title": "Standings Table",
@@ -218,7 +221,8 @@
     "enrollNew": "Enroll New Team",
     "unknownPlace": "Unknown venue",
     "deleteConfirm": "Are you sure you want to delete this team? Its players will be removed too.",
-    "deleteError": "This team cannot be deleted because it has scheduled matches."
+    "deleteError": "This team cannot be deleted because it has scheduled matches.",
+    "deleteLocked": "This team cannot be deleted because it has scheduled matches"
   },
   "Places": {
     "title": "Venues & Stadiums",

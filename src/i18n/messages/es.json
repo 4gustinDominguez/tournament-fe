@@ -184,9 +184,12 @@
     "unknownReferee": "Árbitro desconocido",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar este partido?",
     "generateConfirm": "¿Quieres generar el fixture completo automáticamente? Esto creará todas las jornadas y emparejamientos.",
+    "deleteError": "Este partido no se puede eliminar porque está en juego o ya se ha jugado.",
     "deleteRound": "Eliminar jornada",
     "deleteRoundConfirm": "¿Estás seguro de que quieres eliminar esta jornada?",
-    "deleteRoundError": "Esta jornada no se puede eliminar porque tiene partidos programados."
+    "deleteRoundError": "Esta jornada no se puede eliminar porque tiene partidos programados.",
+    "deleteRoundLocked": "Esta jornada no se puede eliminar porque tiene partidos programados",
+    "deleteMatchLocked": "Un partido en juego o ya jugado no se puede eliminar"
   },
   "Standings": {
     "title": "Tabla de Posiciones",
@@ -218,7 +221,8 @@
     "enrollNew": "Inscribir Nuevo Equipo",
     "unknownPlace": "Lugar desconocido",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar este equipo? Sus jugadores también se eliminarán.",
-    "deleteError": "Este equipo no se puede eliminar porque tiene partidos programados."
+    "deleteError": "Este equipo no se puede eliminar porque tiene partidos programados.",
+    "deleteLocked": "Este equipo no se puede eliminar porque tiene partidos programados"
   },
   "Places": {
     "title": "Lugares & Estadios",

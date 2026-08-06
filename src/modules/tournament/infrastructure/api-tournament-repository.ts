@@ -23,6 +23,16 @@ export function createApiTournamentRepository(): TournamentRepository {
         return baseHeaders;
     };
 
+    async function errorMessage(response: Response, fallback: string): Promise<Error> {
+        try {
+            const data = await response.json();
+            if (data?.message) {
+                return new Error(data.message);
+            }
+        } catch { /* ignore */ }
+        return new Error(fallback);
+    }
+
     async function save(tournament: Tournament) {
         const response = await fetch(`${baseUrl}/tournaments`, {
             method: "POST",
@@ -80,7 +90,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error("Failed to get dashboard stats");
+            throw await errorMessage(response, `Failed to get dashboard stats`);
         }
 
         return response.json();
@@ -93,7 +103,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete tournament with id ${tournamentId}`);
+            throw await errorMessage(response, `Failed to delete tournament with id ${tournamentId}`);
         }
     }
 
@@ -104,7 +114,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete team with id ${teamId}`);
+            throw await errorMessage(response, `Failed to delete team with id ${teamId}`);
         }
     }
 
@@ -115,7 +125,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete player with id ${playerId}`);
+            throw await errorMessage(response, `Failed to delete player with id ${playerId}`);
         }
     }
 
@@ -126,7 +136,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete place with id ${placeId}`);
+            throw await errorMessage(response, `Failed to delete place with id ${placeId}`);
         }
     }
 
@@ -137,7 +147,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete round with id ${roundId}`);
+            throw await errorMessage(response, `Failed to delete round with id ${roundId}`);
         }
     }
 
@@ -148,7 +158,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete referee with id ${refereeId}`);
+            throw await errorMessage(response, `Failed to delete referee with id ${refereeId}`);
         }
     }
 

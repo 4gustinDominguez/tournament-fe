@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Plus, ChevronRight, MapPin, Trash2 } from "lucide-react";
+import { Users, Plus, ChevronRight, MapPin, Trash2, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface TeamsSectionProps {
@@ -33,6 +33,8 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
     getPlaces,
     tournaments,
     deleteTeam,
+    matches,
+    getMatches,
   } = useTournamentContext();
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,11 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
     async function fetchTeams() {
       setLoading(true);
       try {
-        await Promise.all([getTeams(tournamentId), getPlaces(tournamentId)]);
+        await Promise.all([
+          getTeams(tournamentId),
+          getPlaces(tournamentId),
+          getMatches(tournamentId),
+        ]);
       } catch (error) {
         console.error("Error fetching teams:", error);
       } finally {
@@ -56,7 +62,7 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
     }
 
     fetchTeams();
-  }, [tournamentId, getTeams, getPlaces]);
+  }, [tournamentId, getTeams, getPlaces, getMatches]);
 
   const getPlaceName = (placeId?: string) => {
     if (!placeId) return null;
@@ -122,6 +128,9 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
           {teams.map((team) => {
+            const teamHasMatches = matches.some(
+              (m) => m.teamAId === team.id || m.teamBId === team.id
+            );
             const teamCard = (
               <Card className="group h-full transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 border-border">
                 <CardHeader className="pb-3">
@@ -153,15 +162,25 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
                   </div>
                   {!readOnly &&
                     (canManage ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => handleDeleteTeam(e, team.id)}
-                        className="h-8 text-destructive hover:text-destructive hover:bg-red-50 text-[10px] font-bold uppercase tracking-wider"
-                      >
-                        <Trash2 className="h-3 w-3 mr-1" />
-                        {tCommon("delete")}
-                      </Button>
+                      teamHasMatches ? (
+                        <span
+                          className="inline-flex items-center gap-1.5 h-8 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/60"
+                          title={t("deleteLocked")}
+                        >
+                          <Lock className="h-3 w-3" />
+                          {tCommon("delete")}
+                        </span>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => handleDeleteTeam(e, team.id)}
+                          className="h-8 text-destructive hover:text-destructive hover:bg-red-50 text-[10px] font-bold uppercase tracking-wider"
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" />
+                          {tCommon("delete")}
+                        </Button>
+                      )
                     ) : (
                       <Badge
                         variant="secondary"
