@@ -10,8 +10,8 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
-    setupFiles: ["./src/test/setup.tsx"],
-    include: ["src/**/*.test.{ts,tsx}"],
+    setupFiles: ["./src/tests/setup.tsx"],
+    include: ["src/tests/**/*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],
@@ -19,8 +19,7 @@ export default defineConfig({
       all: true,
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
-        "src/**/*.test.{ts,tsx}",
-        "src/test/**",
+        "src/tests/**",
         "src/app/**",
         "src/i18n/**",
       ],
