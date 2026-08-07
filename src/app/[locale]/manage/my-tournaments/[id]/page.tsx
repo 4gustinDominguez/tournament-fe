@@ -13,6 +13,7 @@ import MatchesSection from "@/components/MatchesSection";
 import StandingsSection from "@/components/StandingsSection";
 import { PlacesSection } from "@/components/PlacesSection";
 import RefereeSection from "@/components/RefereeSection";
+import { DangerZone } from "@/components/DangerZone";
 
 type TabType = "matches" | "standings" | "teams" | "infra" | "info";
 
@@ -107,6 +108,7 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
                 <TournamentItem id={params.id} />
               </CardContent>
             </Card>
+            <DangerZone tournamentId={params.id} />
           </TabsContent>
         </div>
       </Tabs>

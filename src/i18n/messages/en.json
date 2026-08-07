@@ -162,6 +162,22 @@
       "teams": "Teams",
       "infra": "Admin",
       "info": "Info"
+    },
+    "dangerZone": {
+      "title": "Danger zone",
+      "description": "Deleting a tournament is permanent and irreversible. Everything linked to it will be removed: matches, rounds, teams, players and places. Referees will be unassigned but kept.",
+      "deleteButton": "Delete tournament",
+      "modalTitle": "Delete this tournament?",
+      "modalDescription": "Confirm that you understand the consequences before continuing.",
+      "checks": {
+        "matches": "I understand that all matches will be permanently deleted",
+        "rounds": "I understand that all rounds (fixtures) will be permanently deleted",
+        "teams": "I understand that teams exclusive to this tournament will be permanently deleted",
+        "players": "I understand that their players will be permanently deleted",
+        "places": "I understand that all venues will be permanently deleted"
+      },
+      "confirm": "Delete permanently",
+      "deleteError": "Failed to delete the tournament"
     }
   },
   "Matches": {

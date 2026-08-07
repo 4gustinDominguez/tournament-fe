@@ -162,6 +162,22 @@
       "teams": "Equipos",
       "infra": "Admin",
       "info": "Info"
+    },
+    "dangerZone": {
+      "title": "Zona de peligro",
+      "description": "Borrar un torneo es permanente e irreversible. Se eliminará todo lo vinculado: partidos, jornadas, equipos, jugadores y sedes. Los árbitros se desvincularán pero se conservarán.",
+      "deleteButton": "Eliminar torneo",
+      "modalTitle": "¿Eliminar este torneo?",
+      "modalDescription": "Confirma que entiendes las consecuencias antes de continuar.",
+      "checks": {
+        "matches": "Entiendo que todos los partidos se eliminarán de forma permanente",
+        "rounds": "Entiendo que todas las jornadas (calendario) se eliminarán de forma permanente",
+        "teams": "Entiendo que los equipos exclusivos de este torneo se eliminarán de forma permanente",
+        "players": "Entiendo que sus jugadores se eliminarán de forma permanente",
+        "places": "Entiendo que todas las sedes se eliminarán de forma permanente"
+      },
+      "confirm": "Eliminar definitivamente",
+      "deleteError": "No se pudo eliminar el torneo"
     }
   },
   "Matches": {
