@@ -123,7 +123,7 @@ describe("MatchForm", () => {
       date: new Date("2026-08-15T18:00:00"),
       placeId: "place-1",
       refereeId: "ref-1",
-      status: "live",
+      status: "live" as const,
       result: null,
       incidents: [],
     };

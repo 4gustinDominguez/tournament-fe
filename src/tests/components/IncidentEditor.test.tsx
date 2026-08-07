@@ -7,19 +7,19 @@ import IncidentEditor from "@/components/IncidentEditor";
 const teamA = {
   id: "team-a",
   name: "Alpha FC",
-  tournamentId: "t1",
+  tournaments: ["t1"],
   player: [
-    { id: "p-a1", name: "Lucas A", teamId: "team-a" },
-    { id: "p-a2", name: "Pedro A", teamId: "team-a" },
+    { id: "p-a1", name: "Lucas A", nickname: "Luc", tournaments: ["t1"], teamId: "team-a" },
+    { id: "p-a2", name: "Pedro A", nickname: "Ped", tournaments: ["t1"], teamId: "team-a" },
   ],
 };
 
 const teamB = {
   id: "team-b",
   name: "Beta SC",
-  tournamentId: "t1",
+  tournaments: ["t1"],
   player: [
-    { id: "p-b1", name: "Juan B", teamId: "team-b" },
+    { id: "p-b1", name: "Juan B", nickname: "Juan", tournaments: ["t1"], teamId: "team-b" },
   ],
 };
 
@@ -74,7 +74,7 @@ describe("IncidentEditor", () => {
   it("removes an incident", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const incidents = [
+    const incidents: { id: string; type: "GOAL" | "YELLOW_CARD" | "RED_CARD" | "SUBSTITUTION"; minute: number; teamId: string; playerId: string }[] = [
       { id: "i1", type: "GOAL", minute: 10, teamId: "team-a", playerId: "p-a1" },
       { id: "i2", type: "YELLOW_CARD", minute: 20, teamId: "team-b", playerId: "p-b1" },
     ];

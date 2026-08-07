@@ -15,7 +15,7 @@ vi.mock("@/sections/tournaments/tournaments-context", () => ({
 const team = {
   id: "team-1",
   name: "Alpha FC",
-  tournamentId: "t1",
+  tournaments: ["t1"],
   coach: "Carlos",
   crestUrl: "",
   kitColor: "#ff0000",

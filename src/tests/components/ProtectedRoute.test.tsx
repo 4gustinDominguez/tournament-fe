@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { UserRole } from "@/sections/tournaments/auth-context";
 
 const useAuthMock = vi.hoisted(() => vi.fn());
 const pushMock = vi.hoisted(() => vi.fn());
@@ -56,7 +57,7 @@ describe("ProtectedRoute", () => {
       user: { id: "u1", role: "PLAYER" },
       isLoading: false,
     });
-    render(<ProtectedRoute allowedRoles={["SUPER_ADMIN"]}>Contenido</ProtectedRoute>);
+    render(<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>Contenido</ProtectedRoute>);
     expect(pushMock).toHaveBeenCalledWith("/");
     expect(screen.queryByText("Contenido")).not.toBeInTheDocument();
   });
@@ -67,7 +68,7 @@ describe("ProtectedRoute", () => {
       user: { id: "u1", role: "SUPER_ADMIN" },
       isLoading: false,
     });
-    render(<ProtectedRoute allowedRoles={["SUPER_ADMIN"]}>Contenido</ProtectedRoute>);
+    render(<ProtectedRoute allowedRoles={[UserRole.SUPER_ADMIN]}>Contenido</ProtectedRoute>);
     expect(pushMock).not.toHaveBeenCalled();
     expect(screen.getByText("Contenido")).toBeInTheDocument();
   });
