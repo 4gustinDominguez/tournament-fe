@@ -244,6 +244,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                   <Button
                     variant="ghost"
                     size="icon"
+                    aria-label={t("deleteRound")}
                     onClick={() => handleDeleteRound(round.id)}
                     disabled={(matchesByRound[round.id] || []).length > 0}
                     title={
@@ -314,6 +315,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                               <Button
                                 variant="ghost"
                                 size="icon"
+                                aria-label={tCommon("edit")}
                                 onClick={() => handleEdit(match)}
                                 className="h-8 w-8 text-brand-600"
                               >
@@ -322,6 +324,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                               <Button
                                 variant="ghost"
                                 size="icon"
+                                aria-label={tCommon("delete")}
                                 onClick={() => handleDelete(match.id)}
                                 disabled={
                                   match.status === "completed" ||

@@ -8,7 +8,10 @@ afterEach(() => {
 
 vi.mock("next-intl", () => ({
   useLocale: () => "es",
-  useTranslations: (namespace: string) => (key: string) => `${namespace}.${key}`,
+  useTranslations: (namespace: string) => {
+    const translate = (key: string) => `${namespace}.${key}`;
+    return Object.assign(translate, { rich: translate });
+  },
 }));
 
 vi.mock("@/navigation", () => ({
