@@ -1,5 +1,7 @@
 "use client";
 
+import { use } from "react";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +16,8 @@ import RefereeSection from "@/components/RefereeSection";
 
 type TabType = "matches" | "standings" | "teams" | "infra" | "info";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const t = useTranslations("TournamentDetail");
   const tabs = [
     { id: "matches", label: t("tabs.matches"), icon: CalendarDays },

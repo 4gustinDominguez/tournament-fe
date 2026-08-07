@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useTranslations } from "next-intl";
 import { Tournament } from "@/modules/tournament/domain/tournament";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
@@ -11,7 +11,8 @@ import TeamsSection from "@/components/TeamsSection";
 import MatchesSection from "@/components/MatchesSection";
 import StandingsSection from "@/components/StandingsSection";
 
-export default function PublicTournamentPage({ params }: { params: { id: string } }) {
+export default function PublicTournamentPage(props: { params: Promise<{ id: string }> }) {
+    const params = use(props.params);
     const t = useTranslations('PublicTournament');
     const { getTournamentById } = useTournamentContext();
     const [tournament, setTournament] = useState<Tournament | null>(null);
