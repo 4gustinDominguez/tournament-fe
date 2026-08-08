@@ -1,4 +1,4 @@
-import { test as base, Page } from "@playwright/test";
+import { test as base, Page, expect } from "@playwright/test";
 
 interface MonitoredIssues {
   pageErrors: string[];
@@ -33,19 +33,22 @@ export function monitorPage(page: Page): MonitoredIssues {
 }
 
 export function assertNoErrors(issues: MonitoredIssues): void {
-  expect(issues.pageErrors, issues.pageErrors.join("\n")).toEqual([]);
-  expect(issues.httpErrors, issues.httpErrors.join("\n")).toEqual([]);
+  const formatIssues = (arr: string[]) =>
+    arr.length > 0 ? arr.join("\n") : "no errors";
+
+  expect(issues.pageErrors, formatIssues(issues.pageErrors)).toEqual([]);
+  expect(issues.httpErrors, formatIssues(issues.httpErrors)).toEqual([]);
+  expect(issues.consoleErrors, formatIssues(issues.consoleErrors)).toEqual([]);
 }
 
 type Fixtures = {
-  monitor: (page: Page) => MonitoredIssues;
+  monitor: MonitoredIssues;
 };
 
 export const test = base.extend<Fixtures>({
-  monitor: async ({ page }, consume) => {
+  monitor: async ({ page }, use) => {
     const issues = monitorPage(page);
-    await consume(issues);
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- Playwright fixture callback
+    await use(issues);
   },
 });
-
-export { expect } from "@playwright/test";
