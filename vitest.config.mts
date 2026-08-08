@@ -5,13 +5,14 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": import.meta.dirname + "/src",
+      "@": "/home/agustin-dominguez/workspace/personal/tournament/t-form/src",
     },
   },
   test: {
     environment: "jsdom",
-    setupFiles: ["./src/tests/setup.tsx"],
-    include: ["src/tests/**/*.test.{ts,tsx}"],
+    setupFiles: ["./tests/unit/setup.tsx"],
+    include: ["tests/unit/**/*.test.{ts,tsx}"],
+    exclude: ["tests/e2e/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary", "lcov"],
@@ -19,7 +20,7 @@ export default defineConfig({
       all: true,
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
-        "src/tests/**",
+        "tests/**",
         "src/app/**",
         "src/i18n/**",
       ],
