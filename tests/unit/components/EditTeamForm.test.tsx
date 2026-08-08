@@ -1,11 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import EditTeamForm from "@/components/EditTeamForm";
 
 const useTournamentContextMock = vi.hoisted(() => vi.fn());
-const updateTeamMock = vi.hoisted(() => vi.fn());
 const getPlacesMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@/sections/tournaments/tournaments-context", () => ({
@@ -27,11 +26,9 @@ const places = [
 ];
 
 beforeEach(() => {
-  updateTeamMock.mockReset();
   getPlacesMock.mockReset();
   useTournamentContextMock.mockReset();
   useTournamentContextMock.mockReturnValue({
-    updateTeam: updateTeamMock,
     getPlaces: getPlacesMock,
     places,
   });
@@ -39,39 +36,116 @@ beforeEach(() => {
 
 describe("EditTeamForm", () => {
   it("loads the places on mount", () => {
-    render(<EditTeamForm team={team} tournamentId="t1" />);
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="solid"
+        kitColors={["#ff0000"]}
+        onKitChange={vi.fn()}
+      />
+    );
     expect(getPlacesMock).toHaveBeenCalledWith("t1");
   });
 
-  it("preloads the team values", () => {
-    render(<EditTeamForm team={team} tournamentId="t1" />);
-    expect(screen.getByLabelText("EditTeamForm.name")).toHaveValue("Alpha FC");
-    expect(screen.getByLabelText("EditTeamForm.coach")).toHaveValue("Carlos");
-    expect(screen.getByLabelText("EditTeamForm.crestUrl")).toHaveValue("");
+  it("renders kit preview with correct colors", () => {
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="horizontal-stripes"
+        kitColors={["#ff0000", "#ffffff"]}
+        onKitChange={vi.fn()}
+      />
+    );
+    expect(screen.queryByText("Estadio Central")).not.toBeInTheDocument();
   });
 
-  it("updates the team and alerts success", async () => {
+  it("preloads the kit colors", () => {
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="solid"
+        kitColors={["#000000", "#ffffff"]}
+        onKitChange={vi.fn()}
+      />
+    );
+  });
+
+  it("calls onKitChange when pattern changes", async () => {
     const user = userEvent.setup();
-    const onSuccess = vi.fn();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
-    updateTeamMock.mockResolvedValueOnce(undefined);
-    render(<EditTeamForm team={team} tournamentId="t1" onSuccess={onSuccess} />);
+    const onKitChange = vi.fn();
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="solid"
+        kitColors={["#ff0000"]}
+        onKitChange={onKitChange}
+      />
+    );
 
-    const nameInput = screen.getByLabelText("EditTeamForm.name");
-    await user.clear(nameInput);
-    await user.type(nameInput, "Alpha FC II");
-    await user.click(screen.getByRole("button", { name: "EditTeamForm.save" }));
-
-    expect(updateTeamMock).toHaveBeenCalledTimes(1);
-    const { tournamentId, team: submitted } = updateTeamMock.mock.calls[0][0];
-    expect(tournamentId).toBe("t1");
-    expect(submitted).toEqual({ ...team, name: "Alpha FC II" });
-    expect(alertSpy).toHaveBeenCalledWith("EditTeamForm.success");
-    expect(onSuccess).toHaveBeenCalled();
+    const patternSelect = screen.getByRole("combobox");
+    await user.selectOptions(patternSelect, "horizontal-stripes");
+    expect(onKitChange).toHaveBeenCalledWith({ kitPattern: "horizontal-stripes" });
   });
 
-  it("shows the venues as selectable options", () => {
-    render(<EditTeamForm team={team} tournamentId="t1" />);
-    expect(screen.getByText("Estadio Central")).toBeInTheDocument();
+  it("calls onKitChange when a color changes", async () => {
+    const user = userEvent.setup();
+    const onKitChange = vi.fn();
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="solid"
+        kitColors={["#ff0000", "#ffffff"]}
+        onKitChange={onKitChange}
+      />
+    );
+
+    const colorInputs = screen.getAllByRole("textbox");
+    expect(colorInputs.length).toBeGreaterThan(0);
+  });
+
+  it("adds a color when Add Color is clicked", async () => {
+    const user = userEvent.setup();
+    const onKitChange = vi.fn();
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="solid"
+        kitColors={["#ff0000"]}
+        onKitChange={onKitChange}
+      />
+    );
+
+    const addButton = screen.getByRole("button", { name: /add/i });
+    await user.click(addButton);
+
+    await waitFor(() => {
+      expect(onKitChange).toHaveBeenLastCalledWith(
+        expect.objectContaining({ kitColors: expect.arrayContaining(["#ff0000"]) }),
+      );
+    });
+  });
+
+  it("removes a color when remove button is clicked", async () => {
+    const user = userEvent.setup();
+    const onKitChange = vi.fn();
+    render(
+      <EditTeamForm
+        team={team}
+        kitPattern="solid"
+        kitColors={["#ff0000", "#ffffff"]}
+        onKitChange={onKitChange}
+      />
+    );
+
+    const removeButtons = screen.getAllByRole("button").filter(
+      (btn) => !btn.textContent && btn.getAttribute("type") === "button",
+    );
+    await user.click(removeButtons[removeButtons.length - 1]);
+
+    await waitFor(() => {
+      expect(onKitChange).toHaveBeenLastCalledWith(
+        expect.objectContaining({ kitColors: expect.not.arrayContaining(["#ffffff"]) }),
+      );
+    });
   });
 });

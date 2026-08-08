@@ -196,7 +196,9 @@ export function createApiTournamentRepository(): TournamentRepository {
                 placeId: team.placeId,
                 coach: team.coach,
                 crestUrl: team.crestUrl,
-                kitColor: team.kitColor,
+                kitPattern: team.kitPattern,
+                kitColors: team.kitColors,
+                formation: team.formation,
             }),
         });
 

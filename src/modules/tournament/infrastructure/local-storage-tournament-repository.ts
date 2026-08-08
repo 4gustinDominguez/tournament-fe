@@ -29,7 +29,14 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
         getRoundsByTournamentId,
         generateFixtures: async () => { },
         getStandings: async () => [],
-        updateTeam: async () => { },
+        updateTeam: async (team: Team) => {
+            const teams = getAllTeamFromLocalStorage();
+            const existing = teams.get(team.id);
+            if (existing) {
+                teams.set(team.id, { ...existing, ...team });
+                localStorage.setItem("teams", JSON.stringify(Array.from(teams.entries())));
+            }
+        },
         updatePlayer: async () => { },
         addMatchResult: async () => { },
         addMatchIncident: async () => { },

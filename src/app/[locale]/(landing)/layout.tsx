@@ -36,9 +36,15 @@ export default async function LandingLayout({
                 {t("description")}
               </p>
               <div className="flex gap-4 mt-6">
-                <div className="w-9 h-9 bg-white/5 rounded-full grid place-items-center hover:bg-brand-600 transition-colors cursor-pointer text-sm">📘</div>
-                <div className="w-9 h-9 bg-white/5 rounded-full grid place-items-center hover:bg-brand-600 transition-colors cursor-pointer text-sm">🐦</div>
-                <div className="w-9 h-9 bg-white/5 rounded-full grid place-items-center hover:bg-brand-600 transition-colors cursor-pointer text-sm">📷</div>
+                <div className="w-9 h-9 bg-white/5 rounded-full grid place-items-center hover:bg-brand-600 transition-colors cursor-pointer text-sm">
+                  📘
+                </div>
+                <div className="w-9 h-9 bg-white/5 rounded-full grid place-items-center hover:bg-brand-600 transition-colors cursor-pointer text-sm">
+                  🐦
+                </div>
+                <div className="w-9 h-9 bg-white/5 rounded-full grid place-items-center hover:bg-brand-600 transition-colors cursor-pointer text-sm">
+                  📷
+                </div>
               </div>
             </div>
             <div>
@@ -111,9 +117,7 @@ export default async function LandingLayout({
             </div>
           </div>
           <div className="pt-8 border-t border-white/10 text-center text-xs text-night-300">
-            <p>
-              {t("rights", { year: new Date().getFullYear() })}
-            </p>
+            <p>{t("rights", { year: new Date().getFullYear() })}</p>
           </div>
         </div>
       </footer>
