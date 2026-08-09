@@ -11,6 +11,10 @@ vi.mock("@/sections/tournaments/tournaments-context", () => ({
   useTournamentContext: useTournamentContextMock,
 }));
 
+vi.mock("@/components/PhotoUpload", () => ({
+  PhotoUpload: () => <div data-testid="photo-upload" />,
+}));
+
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -38,10 +42,6 @@ describe("CreatePlayerForm", () => {
       screen.getByRole("combobox"),
       "Midfielder",
     );
-    await user.type(
-      screen.getByPlaceholderText("CreatePlayerForm.photoPlaceholder"),
-      "https://example.com/tino.jpg",
-    );
     await user.click(screen.getByRole("button", { name: /CreatePlayerForm.addToTeam/ }));
 
     expect(createPlayerMock).toHaveBeenCalledTimes(1);
@@ -53,7 +53,7 @@ describe("CreatePlayerForm", () => {
       name: "Martín Díaz",
       nickname: "Tino",
       position: "Midfielder",
-      photoUrl: "https://example.com/tino.jpg",
+      photoUrl: "",
       tournaments: ["t1"],
     });
   });

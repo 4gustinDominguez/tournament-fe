@@ -4,4 +4,5 @@ export interface Referee {
     email?: string;
     tournamentIds: string[];
     userId?: string;
+    photoUrl?: string;
 }

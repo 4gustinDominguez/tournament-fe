@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import CreatePlayerForm from "@/components/CreatePlayerForm";
 import EditTeamForm from "@/components/EditTeamForm";
 import FormationBoard from "@/components/FormationBoard";
+import { CrestPicker } from "@/components/CrestPicker";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Team } from "@/modules/tournament/domain/team";
 import { Link } from "@/navigation";
@@ -278,17 +279,9 @@ export default function TeamPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-foreground mb-1">
-                      {tForm("crestUrl")}
-                    </label>
-                    <input
-                      type="url"
+                    <CrestPicker
                       value={formState.crestUrl}
-                      onChange={(e) =>
-                        handleInputChange("crestUrl", e.target.value)
-                      }
-                      placeholder={tForm("crestUrlPlaceholder")}
-                      className="w-full border border-input rounded-lg px-3 py-2 bg-white text-foreground focus:ring-2 focus:ring-ring outline-none"
+                      onChange={(crestId) => handleInputChange("crestUrl", crestId)}
                     />
                   </div>
                 </div>

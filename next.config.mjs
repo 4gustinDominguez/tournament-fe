@@ -7,6 +7,14 @@ const nextConfig = {
   experimental: {
     validateRSCRequestHeaders: false,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);

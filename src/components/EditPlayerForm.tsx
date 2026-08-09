@@ -4,6 +4,7 @@ import { Player } from "@/modules/tournament/domain/player";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
+import { PhotoUpload } from "@/components/PhotoUpload";
 
 interface EditPlayerFormProps {
   teamId: string;
@@ -188,21 +189,11 @@ const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
 
           <div>
             <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1">{t("photoUrl")}</label>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                name="photoUrl"
-                value={form.photoUrl || ""}
-                onChange={handleChange}
-                placeholder="https://..."
-                className="flex-1 border border-input rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none transition-all bg-white"
-              />
-              {form.photoUrl && (
-                <div className="w-10 h-10 rounded-lg overflow-hidden border border-border bg-neutral-100 flex-shrink-0">
-                  <img src={form.photoUrl} alt="Preview" className="w-full h-full object-cover" />
-                </div>
-              )}
-            </div>
+            <PhotoUpload
+              value={form.photoUrl || undefined}
+              onChange={(url) => setForm({ ...form, photoUrl: url || "" })}
+              folder="players"
+            />
           </div>
         </div>
 

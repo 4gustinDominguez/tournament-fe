@@ -4,6 +4,7 @@ import { Player } from '@/modules/tournament/domain/player';
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { PhotoUpload } from '@/components/PhotoUpload';
 
 const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({ teamId, tournamentId }) => {
     const t = useTranslations('CreatePlayerForm');
@@ -113,13 +114,10 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
 
                 <div className="space-y-1">
                     <label className="text-[10px] font-black text-muted-foreground uppercase ml-1">{t('photoUrl')}</label>
-                    <input
-                        type="text"
-                        name="photoUrl"
-                        value={player.photoUrl}
-                        onChange={handleChange}
-                        placeholder={t('photoPlaceholder')}
-                        className="w-full border border-input rounded-xl px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition-all bg-white"
+                    <PhotoUpload
+                        value={player.photoUrl || undefined}
+                        onChange={(url) => setPlayer({ ...player, photoUrl: url || '' })}
+                        folder="players"
                     />
                 </div>
             </div>
