@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import CreateRoundForm from "@/components/CreateRoundForm";
+import { notify } from "@/lib/notify";
 
 const useTournamentContextMock = vi.hoisted(() => vi.fn());
 const createRoundMock = vi.hoisted(() => vi.fn());
@@ -11,10 +12,21 @@ vi.mock("@/sections/tournaments/tournaments-context", () => ({
   useTournamentContext: useTournamentContextMock,
 }));
 
+vi.mock("@/lib/notify", () => ({
+  notify: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
+}));
+
 beforeEach(() => {
   createRoundMock.mockReset();
   useTournamentContextMock.mockReset();
   useTournamentContextMock.mockReturnValue({ createRound: createRoundMock });
+  vi.mocked(notify.success).mockClear();
+  vi.mocked(notify.error).mockClear();
 });
 
 describe("CreateRoundForm", () => {
@@ -31,9 +43,8 @@ describe("CreateRoundForm", () => {
     expect(screen.getByRole("button", { name: "CreateRoundForm.create" })).toBeInTheDocument();
   });
 
-  it("creates the round within the tournament and alerts on success", async () => {
+  it("creates the round within the tournament and shows success notification", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     createRoundMock.mockResolvedValueOnce(undefined);
     render(<CreateRoundForm tournamentId="t1" />);
     await user.click(screen.getByRole("button", { name: "CreateRoundForm.newRound" }));
@@ -52,7 +63,7 @@ describe("CreateRoundForm", () => {
       name: "Jornada 1",
       tournamentId: "t1",
     });
-    expect(alertSpy).toHaveBeenCalledWith("CreateRoundForm.success");
+    expect(notify.success).toHaveBeenCalledWith("CreateRoundForm.success");
   });
 
   it("goes back to the button when cancelling", async () => {

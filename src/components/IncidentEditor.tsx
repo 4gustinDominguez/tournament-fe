@@ -5,6 +5,7 @@ import { MatchIncident } from '@/modules/tournament/domain/match';
 import { Team } from '@/modules/tournament/domain/team';
 import { Plus, Trash2, CircleDot, Square, ArrowLeftRight, MapPin, Zap } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { notify } from '@/lib/notify';
 
 interface IncidentEditorProps {
     teamA: Team;
@@ -33,7 +34,7 @@ const IncidentEditor: React.FC<IncidentEditorProps> = ({ teamA, teamB, incidents
 
     const handleAdd = () => {
         if (!newIncident.playerId || !newIncident.minute || !newIncident.type || !newIncident.teamId) {
-            alert(t("incompleteAlert"));
+            notify.warning(t("incompleteAlert"));
             return;
         }
 
@@ -48,7 +49,7 @@ const IncidentEditor: React.FC<IncidentEditorProps> = ({ teamA, teamB, incidents
         if (onAdd) {
             onAdd(incidentData).catch(err => {
                 console.error("Error adding incident:", err);
-                alert(t("addError"));
+                notify.error(err instanceof Error ? err.message : t("addError"));
             });
         }
 
@@ -68,7 +69,7 @@ const IncidentEditor: React.FC<IncidentEditorProps> = ({ teamA, teamB, incidents
         if (onRemove) {
             onRemove(id).catch(err => {
                 console.error("Error removing incident:", err);
-                alert(t("removeError"));
+                notify.error(err instanceof Error ? err.message : t("removeError"));
             });
         }
         if (onChange) {

@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import QuickSetupWizard from "@/components/QuickSetupWizard";
+import { notify } from "@/lib/notify";
 
 const useTournamentContextMock = vi.hoisted(() => vi.fn());
 const generateScenarioMock = vi.hoisted(() => vi.fn());
@@ -16,6 +17,15 @@ vi.mock("@/navigation", () => ({
   useRouter: () => ({ push: pushMock, replace: vi.fn(), refresh: vi.fn() }),
 }));
 
+vi.mock("@/lib/notify", () => ({
+  notify: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
+}));
+
 beforeEach(() => {
   generateScenarioMock.mockReset();
   pushMock.mockReset();
@@ -23,6 +33,8 @@ beforeEach(() => {
   useTournamentContextMock.mockReturnValue({
     generateScenario: generateScenarioMock,
   });
+  vi.mocked(notify.success).mockClear();
+  vi.mocked(notify.error).mockClear();
 });
 
 describe("QuickSetupWizard", () => {
@@ -103,9 +115,8 @@ describe("QuickSetupWizard", () => {
     expect(pushMock).toHaveBeenCalledWith("/t/tid-123");
   });
 
-  it("alerts when generation fails", async () => {
+  it("shows an error toast when generation fails", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     generateScenarioMock.mockRejectedValueOnce(new Error("boom"));
     render(<QuickSetupWizard onClose={() => {}} />);
@@ -118,7 +129,7 @@ describe("QuickSetupWizard", () => {
     await user.click(screen.getByRole("button", { name: "Wizard.next" }));
     await user.click(screen.getByRole("button", { name: "Wizard.generateNow" }));
 
-    expect(alertSpy).toHaveBeenCalledWith("Wizard.error");
+    expect(notify.error).toHaveBeenCalledWith("boom");
     expect(errorSpy).toHaveBeenCalled();
     expect(pushMock).not.toHaveBeenCalled();
   });

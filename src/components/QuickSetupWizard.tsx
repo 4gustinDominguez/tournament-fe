@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { notify } from "@/lib/notify";
 
 interface QuickSetupWizardProps {
     onClose: () => void;
@@ -51,11 +52,12 @@ const QuickSetupWizard: React.FC<QuickSetupWizardProps> = ({ onClose }) => {
       const result = await generateScenario({
         ...formData,
       });
+      notify.success(t("success"));
       onClose();
       router.push(`/t/${result.tournamentId}`);
     } catch (err) {
       console.error("Generation error:", err);
-      alert(t("error"));
+      notify.error(err instanceof Error ? err.message : t("error"));
     } finally {
       setLoading(false);
     }

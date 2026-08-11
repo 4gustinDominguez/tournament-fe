@@ -2,6 +2,7 @@
 
 import { Player } from '@/modules/tournament/domain/player';
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
+import { notify } from '@/lib/notify';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { PhotoUpload } from '@/components/PhotoUpload';
@@ -31,7 +32,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
         event.preventDefault();
 
         if (!player.name || !player.nickname) {
-            alert(t("alertRequired"));
+            notify.warning(t("alertRequired"));
             return;
         }
 
@@ -45,8 +46,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
 
             await createPlayer({ teamId, player: newPlayer, tournamentId });
 
-            console.log("Player created successfully");
-            // Reset form
+            notify.success(t("success"));
             setPlayer({
                 name: '',
                 nickname: '',
@@ -55,7 +55,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
             });
         } catch (error) {
             console.error("Could not create player", error);
-            alert(t("alertError"));
+            notify.error(error instanceof Error ? error.message : t("alertError"));
         } finally {
             setLoading(false);
         }
@@ -116,7 +116,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
                     <label className="text-[10px] font-black text-muted-foreground uppercase ml-1">{t('photoUrl')}</label>
                     <PhotoUpload
                         value={player.photoUrl || undefined}
-                        onChange={(url) => setPlayer({ ...player, photoUrl: url || '' })}
+                        onChange={(url) => setPlayer({ ...player, photoUrl: (typeof url === "string" ? url : "") || '' })}
                         folder="players"
                     />
                 </div>

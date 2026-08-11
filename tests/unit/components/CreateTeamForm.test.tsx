@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import CreateTeamForm from "@/components/CreateTeamForm";
+import { notify } from "@/lib/notify";
 
 const useTournamentContextMock = vi.hoisted(() => vi.fn());
 const createTeamMock = vi.hoisted(() => vi.fn());
@@ -10,6 +11,16 @@ const getPlacesMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@/sections/tournaments/tournaments-context", () => ({
   useTournamentContext: useTournamentContextMock,
+}));
+
+vi.mock("@/lib/notify", () => ({
+  notify: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+    promise: vi.fn((promise: Promise<unknown>) => promise),
+  },
 }));
 
 const places = [
@@ -29,6 +40,9 @@ beforeEach(() => {
     getPlaces: getPlacesMock,
     createTeam: createTeamMock,
   });
+  vi.mocked(notify.success).mockClear();
+  vi.mocked(notify.error).mockClear();
+  vi.mocked(notify.warning).mockClear();
 });
 
 describe("CreateTeamForm", () => {
@@ -62,9 +76,8 @@ describe("CreateTeamForm", () => {
     );
   });
 
-  it("alerts when no tournament can be resolved", async () => {
+  it("shows a warning toast when no tournament can be resolved", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     render(<CreateTeamForm />);
 
     await user.type(
@@ -73,7 +86,7 @@ describe("CreateTeamForm", () => {
     );
     await user.click(screen.getByRole("button", { name: "CreateTeamForm.submit" }));
 
-    expect(alertSpy).toHaveBeenCalledWith("CreateTeamForm.selectTournamentAlert");
+    expect(notify.warning).toHaveBeenCalledWith("CreateTeamForm.selectTournamentAlert");
     expect(createTeamMock).not.toHaveBeenCalled();
   });
 });

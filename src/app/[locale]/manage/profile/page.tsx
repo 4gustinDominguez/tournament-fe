@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@/sections/tournaments/auth-context';
 import { useTranslations } from 'next-intl';
 import { UserRound, LockKeyhole } from 'lucide-react';
+import { notify } from '@/lib/notify';
 
 export default function ProfilePage() {
     const t = useTranslations('Profile');
@@ -24,9 +25,9 @@ export default function ProfilePage() {
         setSavingInfo(true);
         try {
             await updateProfile({ firstName, lastName });
-            alert(t('infoUpdated'));
+            notify.success(t('infoUpdated'));
         } catch (error: any) {
-            alert(error?.message || tCommon('error'));
+            notify.error(error?.message || tCommon('error'));
         } finally {
             setSavingInfo(false);
         }
@@ -35,7 +36,7 @@ export default function ProfilePage() {
     const handleSavePassword = async (e: React.FormEvent) => {
         e.preventDefault();
         if (newPassword !== confirmPassword) {
-            alert(t('passwordMismatch'));
+            notify.warning(t('passwordMismatch'));
             return;
         }
         setSavingPassword(true);
@@ -44,9 +45,9 @@ export default function ProfilePage() {
             setCurrentPassword('');
             setNewPassword('');
             setConfirmPassword('');
-            alert(t('passwordUpdated'));
+            notify.success(t('passwordUpdated'));
         } catch (error: any) {
-            alert(error?.message || tCommon('error'));
+            notify.error(error?.message || tCommon('error'));
         } finally {
             setSavingPassword(false);
         }

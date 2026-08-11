@@ -3,6 +3,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import IncidentEditor from "@/components/IncidentEditor";
+import { notify } from "@/lib/notify";
+
+vi.mock("@/lib/notify", () => ({
+  notify: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
+}));
 
 const teamA = {
   id: "team-a",
@@ -35,9 +45,8 @@ describe("IncidentEditor", () => {
     expect(screen.getByText("Juan B")).toBeInTheDocument();
   });
 
-  it("alerts when trying to add an incident without a player", async () => {
+  it("warns when trying to add an incident without a player", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     const onChange = vi.fn();
     render(
       <IncidentEditor teamA={teamA} teamB={teamB} incidents={[]} onChange={onChange} />,
@@ -45,7 +54,7 @@ describe("IncidentEditor", () => {
 
     await user.click(screen.getByRole("button", { name: "IncidentEditor.add" }));
 
-    expect(alertSpy).toHaveBeenCalledWith("IncidentEditor.incompleteAlert");
+    expect(notify.warning).toHaveBeenCalledWith("IncidentEditor.incompleteAlert");
     expect(onChange).not.toHaveBeenCalled();
   });
 

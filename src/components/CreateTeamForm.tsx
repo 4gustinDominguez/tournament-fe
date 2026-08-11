@@ -2,6 +2,7 @@
 
 import { Team } from '@/modules/tournament/domain/team';
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
+import { notify } from '@/lib/notify';
 import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 
@@ -54,14 +55,19 @@ const CreateTeamForm: React.FC<{ tournamentId?: string }> = ({ tournamentId }) =
         const targetTournamentId = tournamentId || team.tournaments[0];
 
         if (!targetTournamentId) {
-            alert(t("selectTournamentAlert"));
+            notify.warning(t("selectTournamentAlert"));
             return;
         }
 
-        createTeam({ tournamentId: targetTournamentId, team: { ...team, id: crypto.randomUUID() } })
+        notify.promise(
+            createTeam({ tournamentId: targetTournamentId, team: { ...team, id: crypto.randomUUID() } }),
+            {
+                loading: t("creating"),
+                success: t("success"),
+                error: (err) => err instanceof Error ? err.message : t("error"),
+            },
+        )
             .then(() => {
-                console.log("Team created successfully");
-                // Reset form
                 setTeam(prev => ({
                     ...prev,
                     id: '',
@@ -69,9 +75,7 @@ const CreateTeamForm: React.FC<{ tournamentId?: string }> = ({ tournamentId }) =
                     placeId: '',
                 }));
             })
-            .catch((error) => {
-                console.error("Could not create team", error);
-            });
+            .catch(() => {});
     }
 
     return (

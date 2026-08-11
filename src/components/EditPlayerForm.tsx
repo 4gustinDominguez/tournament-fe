@@ -2,6 +2,7 @@
 
 import { Player } from "@/modules/tournament/domain/player";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
+import { notify } from "@/lib/notify";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import { PhotoUpload } from "@/components/PhotoUpload";
@@ -84,7 +85,7 @@ const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
     event.preventDefault();
 
     if (!form.name || !form.nickname) {
-      alert(t("alertRequired"));
+      notify.warning(t("alertRequired"));
       return;
     }
 
@@ -95,11 +96,11 @@ const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
         player: form,
       });
 
-      console.log("Player updated successfully");
+      notify.success(t("success"));
       onSuccess?.();
     } catch (error) {
       console.error("Could not update player", error);
-      alert(t("alertError"));
+      notify.error(error instanceof Error ? error.message : t("alertError"));
     } finally {
       setLoading(false);
     }
@@ -191,7 +192,7 @@ const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
             <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1">{t("photoUrl")}</label>
             <PhotoUpload
               value={form.photoUrl || undefined}
-              onChange={(url) => setForm({ ...form, photoUrl: url || "" })}
+              onChange={(url) => setForm({ ...form, photoUrl: (typeof url === "string" ? url : "") || "" })}
               folder="players"
             />
           </div>

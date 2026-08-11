@@ -205,7 +205,10 @@
     "deleteRoundConfirm": "¿Estás seguro de que quieres eliminar esta jornada?",
     "deleteRoundError": "Esta jornada no se puede eliminar porque tiene partidos programados.",
     "deleteRoundLocked": "Esta jornada no se puede eliminar porque tiene partidos programados",
-    "deleteMatchLocked": "Un partido en juego o ya jugado no se puede eliminar"
+    "deleteMatchLocked": "Un partido en juego o ya jugado no se puede eliminar",
+    "deleteSuccess": "Partido eliminado correctamente",
+    "deleteRoundSuccess": "Jornada eliminada correctamente",
+    "generateSuccess": "Fixture generado correctamente"
   },
   "Standings": {
     "title": "Tabla de Posiciones",
@@ -238,7 +241,8 @@
     "unknownPlace": "Lugar desconocido",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar este equipo? Sus jugadores también se eliminarán.",
     "deleteError": "Este equipo no se puede eliminar porque tiene partidos programados.",
-    "deleteLocked": "Este equipo no se puede eliminar porque tiene partidos programados"
+    "deleteLocked": "Este equipo no se puede eliminar porque tiene partidos programados",
+    "deleteSuccess": "Equipo eliminado correctamente"
   },
   "Places": {
     "title": "Lugares & Estadios",
@@ -249,7 +253,8 @@
     "spectators": "{count} espectadores",
     "officialVenue": "Sede Oficial",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar esta sede?",
-    "deleteError": "Esta sede no se puede eliminar porque está en uso."
+    "deleteError": "Esta sede no se puede eliminar porque está en uso.",
+    "deleteSuccess": "Lugar eliminado correctamente"
   },
   "Referees": {
     "title": "Equipo de Arbitraje",
@@ -269,7 +274,15 @@
     "noAccount": "Sin Cuenta",
     "registerNew": "Registrar Nuevo Árbitro",
     "deleteConfirm": "¿Estás seguro de que quieres desvincular a este árbitro del torneo?",
-    "deleteError": "Este árbitro no se puede eliminar porque está asignado a partidos."
+    "deleteError": "Este árbitro no se puede eliminar porque está asignado a partidos.",
+    "editReferee": "Editar Árbitro",
+    "deleteSuccess": "Árbitro eliminado correctamente"
+  },
+  "RefereeSection": {
+    "name": "Nombre",
+    "cancel": "Cancelar",
+    "saving": "Guardando...",
+    "save": "Guardar"
   },
   "CreateTournamentForm": {
     "name": "Nombre del Torneo",
@@ -288,7 +301,10 @@
     "selectPlace": "Seleccionar Sede (Opcional)",
     "tournaments": "Torneos:",
     "submit": "Añadir Equipo",
-    "selectTournamentAlert": "Por favor, selecciona un torneo"
+    "selectTournamentAlert": "Por favor, selecciona un torneo",
+    "creating": "Creando equipo...",
+    "success": "Equipo creado correctamente",
+    "error": "No se pudo crear el equipo"
   },
   "CreateRoundForm": {
     "newRound": "Nueva Jornada",
@@ -314,7 +330,8 @@
     "namePlaceholder": "Nombre del árbitro",
     "adding": "Agregando...",
     "add": "Agregar",
-    "error": "Error al crear el árbitro"
+    "error": "Error al crear el árbitro",
+    "success": "Árbitro agregado correctamente"
   },
   "MatchForm": {
     "defaultTitle": "Programar Nuevo Partido",
@@ -335,7 +352,8 @@
     "saving": "Guardando...",
     "sameTeamsAlert": "Selecciona dos equipos diferentes",
     "noRoundAlert": "Error: No se ha especificado la Jornada para el partido.",
-    "saveError": "Error al guardar el partido"
+    "saveError": "Error al guardar el partido",
+    "success": "Partido guardado correctamente"
   },
   "IncidentEditor": {
     "title": "Registrar Nuevo Incidente",
@@ -372,7 +390,8 @@
     "adding": "Añadiendo...",
     "addToTeam": "Añadir al Equipo",
     "alertRequired": "Por favor, completa los campos obligatorios",
-    "alertError": "Error al crear el jugador"
+    "alertError": "Error al crear el jugador",
+    "success": "Jugador creado correctamente"
   },
   "EditPlayerForm": {
     "basicInfo": "Información Básica",
@@ -400,7 +419,8 @@
     "saving": "Guardando...",
     "saveChanges": "Guardar Cambios",
     "alertRequired": "Por favor, completa los campos obligatorios",
-    "alertError": "Error al actualizar el jugador"
+    "alertError": "Error al actualizar el jugador",
+    "success": "Jugador actualizado correctamente"
   },
   "EditTeamForm": {
     "title": "Editar Equipo",
@@ -470,7 +490,8 @@
     "viewCalendar": "Ver Calendario",
     "backToTeamName": "Volver al equipo {team}",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar a este jugador?",
-    "deleteError": "Este jugador no se puede eliminar porque aparece en incidencias de partidos."
+    "deleteError": "Este jugador no se puede eliminar porque aparece en incidencias de partidos.",
+    "deleteSuccess": "Jugador eliminado correctamente"
   },
   "Referee": {
     "title": "Panel del Árbitro",
@@ -491,7 +512,8 @@
     "hideIncidents": "Ocultar Incidencias",
     "manageIncidents": "Gestionar Incidencias",
     "notes": "Acta del Partido / Notas",
-    "notesPlaceholder": "Observaciones, expulsiones, campo en mal estado..."
+    "notesPlaceholder": "Observaciones, expulsiones, campo en mal estado...",
+    "photo": "Foto de Perfil"
   },
   "Contact": {
     "title": "Contáctanos",
@@ -585,9 +607,16 @@
     "generating": "Generando Magia...",
     "generateNow": "¡Generar Torneo Ahora!",
     "close": "Cerrar",
-    "error": "Error al generar el torneo assistido."
+    "error": "Error al generar el torneo assistido.",
+    "success": "Torneo generado correctamente"
   },
   "FooterCopyright": {
     "copyright": "Copyright © {year}. Todos los derechos reservados."
+  },
+  "Toast": {
+    "success": "Éxito",
+    "error": "Error",
+    "info": "Información",
+    "warning": "Advertencia"
   }
 }

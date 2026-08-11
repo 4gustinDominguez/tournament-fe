@@ -205,7 +205,10 @@
     "deleteRoundConfirm": "Are you sure you want to delete this round?",
     "deleteRoundError": "This round cannot be deleted because it has scheduled matches.",
     "deleteRoundLocked": "This round cannot be deleted because it has scheduled matches",
-    "deleteMatchLocked": "A match that is live or already played cannot be deleted"
+    "deleteMatchLocked": "A match that is live or already played cannot be deleted",
+    "deleteSuccess": "Match removed successfully",
+    "deleteRoundSuccess": "Round removed successfully",
+    "generateSuccess": "Fixtures generated successfully"
   },
   "Standings": {
     "title": "Standings Table",
@@ -238,7 +241,8 @@
     "unknownPlace": "Unknown venue",
     "deleteConfirm": "Are you sure you want to delete this team? Its players will be removed too.",
     "deleteError": "This team cannot be deleted because it has scheduled matches.",
-    "deleteLocked": "This team cannot be deleted because it has scheduled matches"
+    "deleteLocked": "This team cannot be deleted because it has scheduled matches",
+    "deleteSuccess": "Team removed successfully"
   },
   "Places": {
     "title": "Venues & Stadiums",
@@ -249,7 +253,8 @@
     "spectators": "{count} spectators",
     "officialVenue": "Official Venue",
     "deleteConfirm": "Are you sure you want to delete this venue?",
-    "deleteError": "This venue cannot be deleted because it is in use."
+    "deleteError": "This venue cannot be deleted because it is in use.",
+    "deleteSuccess": "Place removed successfully"
   },
   "Referees": {
     "title": "Refereeing Team",
@@ -269,7 +274,15 @@
     "noAccount": "No Account",
     "registerNew": "Register New Referee",
     "deleteConfirm": "Are you sure you want to unassign this referee from the tournament?",
-    "deleteError": "This referee cannot be removed because they are assigned to matches."
+    "deleteError": "This referee cannot be removed because they are assigned to matches.",
+    "editReferee": "Edit Referee",
+    "deleteSuccess": "Referee removed successfully"
+  },
+  "RefereeSection": {
+    "name": "Name",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save"
   },
   "CreateTournamentForm": {
     "name": "Tournament Name",
@@ -288,7 +301,10 @@
     "selectPlace": "Select Venue (Optional)",
     "tournaments": "Tournaments:",
     "submit": "Add Team",
-    "selectTournamentAlert": "Please select a tournament"
+    "selectTournamentAlert": "Please select a tournament",
+    "creating": "Creating team...",
+    "success": "Team created successfully",
+    "error": "Could not create team"
   },
   "CreateRoundForm": {
     "newRound": "New Round",
@@ -314,7 +330,8 @@
     "namePlaceholder": "Referee name",
     "adding": "Adding...",
     "add": "Add",
-    "error": "Error creating the referee"
+    "error": "Error creating the referee",
+    "success": "Referee added successfully"
   },
   "MatchForm": {
     "defaultTitle": "Schedule New Match",
@@ -335,7 +352,8 @@
     "saving": "Saving...",
     "sameTeamsAlert": "Select two different teams",
     "noRoundAlert": "Error: No Round specified for the match.",
-    "saveError": "Error saving the match"
+    "saveError": "Error saving the match",
+    "success": "Match saved successfully"
   },
   "IncidentEditor": {
     "title": "Register New Incident",
@@ -372,7 +390,8 @@
     "adding": "Adding...",
     "addToTeam": "Add to Team",
     "alertRequired": "Please complete the required fields",
-    "alertError": "Error creating the player"
+    "alertError": "Error creating the player",
+    "success": "Player created successfully"
   },
   "EditPlayerForm": {
     "basicInfo": "Basic Information",
@@ -400,7 +419,8 @@
     "saving": "Saving...",
     "saveChanges": "Save Changes",
     "alertRequired": "Please complete the required fields",
-    "alertError": "Error updating the player"
+    "alertError": "Error updating the player",
+    "success": "Player updated successfully"
   },
   "EditTeamForm": {
     "title": "Edit Team",
@@ -470,7 +490,8 @@
     "viewCalendar": "View Schedule",
     "backToTeamName": "Back to team {team}",
     "deleteConfirm": "Are you sure you want to delete this player?",
-    "deleteError": "This player cannot be deleted because they are involved in match incidents."
+    "deleteError": "This player cannot be deleted because they are involved in match incidents.",
+    "deleteSuccess": "Player removed successfully"
   },
   "Referee": {
     "title": "Referee Panel",
@@ -491,7 +512,8 @@
     "hideIncidents": "Hide Incidents",
     "manageIncidents": "Manage Incidents",
     "notes": "Match Report / Notes",
-    "notesPlaceholder": "Observations, send-offs, poor pitch conditions..."
+    "notesPlaceholder": "Observations, send-offs, poor pitch conditions...",
+    "photo": "Profile Photo"
   },
   "Contact": {
     "title": "Contact Us",
@@ -585,9 +607,16 @@
     "generating": "Generating Magic...",
     "generateNow": "Generate Tournament Now!",
     "close": "Close",
-    "error": "Error generating the assisted tournament."
+    "error": "Error generating the assisted tournament.",
+    "success": "Tournament generated successfully"
   },
   "FooterCopyright": {
     "copyright": "Copyright © {year}. All rights reserved."
+  },
+  "Toast": {
+    "success": "Success",
+    "error": "Error",
+    "info": "Info",
+    "warning": "Warning"
   }
 }

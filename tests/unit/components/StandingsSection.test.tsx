@@ -62,6 +62,10 @@ describe("StandingsSection", () => {
     useTournamentContextMock.mockReturnValue({
       getStandings: getStandingsMock,
       standings,
+      teams: [
+        { id: "1", name: "Los Rayos", tournaments: [] },
+        { id: "2", name: "Las Águilas", tournaments: [] },
+      ],
     });
     render(<StandingsSection tournamentId="t1" />);
 

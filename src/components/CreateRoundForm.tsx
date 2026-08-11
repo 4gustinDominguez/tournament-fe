@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Round } from "@/modules/tournament/domain/round";
 import { useTranslations } from "next-intl";
+import { notify } from "@/lib/notify";
 
 interface CreateRoundFormProps {
     tournamentId: string;
@@ -28,10 +29,10 @@ const CreateRoundForm: React.FC<CreateRoundFormProps> = ({ tournamentId }) => {
             });
             setName("");
             setIsCreating(false);
-            alert(t("success"));
+            notify.success(t("success"));
         } catch (error) {
             console.error("Error creating round:", error);
-            alert(t("error"));
+            notify.error(t("error"));
         }
     };
 

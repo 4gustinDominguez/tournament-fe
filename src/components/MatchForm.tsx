@@ -1,6 +1,7 @@
 'use client';
 
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
+import { notify } from '@/lib/notify';
 import React, { useState, useEffect } from 'react';
 import { Match } from '@/modules/tournament/domain/match';
 import IncidentEditor from './IncidentEditor';
@@ -63,7 +64,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!match.teamAId || !match.teamBId || match.teamAId === match.teamBId) {
-            alert(t("sameTeamsAlert"));
+            notify.warning(t("sameTeamsAlert"));
             return;
         }
 
@@ -86,7 +87,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                 await updateMatch(updatedMatch);
             } else {
                 if (!roundId) {
-                    alert(t("noRoundAlert"));
+                    notify.warning(t("noRoundAlert"));
                     setLoading(false);
                     return;
                 }
@@ -107,6 +108,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                 await createMatch({ tournamentId, match: newMatch });
             }
 
+            notify.success(t("success"));
             if (onSubmit) {
                 onSubmit();
             }
@@ -127,7 +129,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
             }
         } catch (error) {
             console.error("Error saving match:", error);
-            alert(t("saveError"));
+            notify.error(error instanceof Error ? error.message : t("saveError"));
         } finally {
             setLoading(false);
         }

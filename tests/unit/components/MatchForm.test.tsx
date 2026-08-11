@@ -3,11 +3,21 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import MatchForm from "@/components/MatchForm";
+import { notify } from "@/lib/notify";
 
 const useTournamentContextMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@/sections/tournaments/tournaments-context", () => ({
   useTournamentContext: useTournamentContextMock,
+}));
+
+vi.mock("@/lib/notify", () => ({
+  notify: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
 }));
 
 const teams = [
@@ -40,6 +50,9 @@ beforeEach(() => {
     createMatch,
     updateMatch,
   });
+  vi.mocked(notify.success).mockClear();
+  vi.mocked(notify.error).mockClear();
+  vi.mocked(notify.warning).mockClear();
 });
 
 describe("MatchForm", () => {
@@ -50,9 +63,8 @@ describe("MatchForm", () => {
     expect(getReferees).toHaveBeenCalledWith("t1");
   });
 
-  it("alerts when both teams are the same", async () => {
+  it("warns when both teams are the same", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     render(<MatchForm tournamentId="t1" roundId="r1" submitLabel="Save" />);
 
     const selects = screen.getAllByRole("combobox");
@@ -60,13 +72,12 @@ describe("MatchForm", () => {
     await user.selectOptions(selects[1], "team-a");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(alertSpy).toHaveBeenCalledWith("MatchForm.sameTeamsAlert");
+    expect(notify.warning).toHaveBeenCalledWith("MatchForm.sameTeamsAlert");
     expect(createMatch).not.toHaveBeenCalled();
   });
 
-  it("alerts when no round is provided in create mode", async () => {
+  it("warns when no round is provided in create mode", async () => {
     const user = userEvent.setup();
-    const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
     render(<MatchForm tournamentId="t1" submitLabel="Save" />);
 
     const selects = screen.getAllByRole("combobox");
@@ -74,7 +85,7 @@ describe("MatchForm", () => {
     await user.selectOptions(selects[1], "team-b");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(alertSpy).toHaveBeenCalledWith("MatchForm.noRoundAlert");
+    expect(notify.warning).toHaveBeenCalledWith("MatchForm.noRoundAlert");
     expect(createMatch).not.toHaveBeenCalled();
   });
 

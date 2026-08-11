@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
 import { Referee } from '@/modules/referees/domain/referee';
 import { useTranslations } from 'next-intl';
-import { PhotoUpload } from '@/components/PhotoUpload';
+import { notify } from '@/lib/notify';
 
 interface CreateRefereeFormProps {
     tournamentId: string;
@@ -14,7 +14,6 @@ const CreateRefereeForm: React.FC<CreateRefereeFormProps> = ({ tournamentId }) =
     const t = useTranslations('CreateRefereeForm');
     const { createReferee } = useTournamentContext();
     const [name, setName] = useState('');
-    const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -27,13 +26,13 @@ const CreateRefereeForm: React.FC<CreateRefereeFormProps> = ({ tournamentId }) =
                 id: crypto.randomUUID(),
                 name: name.trim(),
                 tournamentIds: [tournamentId],
-                photoUrl: photoUrl || undefined,
             };
             await createReferee({ tournamentId, referee: newReferee });
+            notify.success(t("success"));
             setName('');
         } catch (error) {
             console.error("Error creating referee:", error);
-            alert(t("error"));
+            notify.error(error instanceof Error ? error.message : t("error"));
         } finally {
             setLoading(false);
         }
@@ -58,13 +57,6 @@ const CreateRefereeForm: React.FC<CreateRefereeFormProps> = ({ tournamentId }) =
                 >
                     {loading ? t('adding') : t('add')}
                 </button>
-            </div>
-            <div className="mt-3">
-                <PhotoUpload
-                    value={photoUrl || undefined}
-                    onChange={setPhotoUrl}
-                    folder="referees"
-                />
             </div>
         </form>
     );
