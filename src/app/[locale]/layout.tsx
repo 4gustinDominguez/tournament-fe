@@ -4,6 +4,7 @@ import { AuthProvider } from '@/sections/tournaments/auth-context';
 import { TournamentProvider } from '@/sections/tournaments/tournament-provider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { Toaster } from '@/components/ui/toaster';
 
 import '@/styles/globals.css';
 
@@ -48,6 +49,7 @@ export default async function RootLayout(
               {children}
             </TournamentProvider>
           </AuthProvider>
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>
