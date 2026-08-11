@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
 import { Trophy, Target, Shield } from 'lucide-react';
 import StandingsTable from './StandingsTable';
+import { TeamCrest } from './TeamCrest';
 import { useTranslations } from 'next-intl';
 
 interface StandingsSectionProps {
@@ -14,7 +15,7 @@ interface StandingsSectionProps {
 
 const StandingsSection: React.FC<StandingsSectionProps> = ({ tournamentId }) => {
     const t = useTranslations('Standings');
-    const { getStandings, standings } = useTournamentContext();
+    const { getStandings, standings, teams } = useTournamentContext();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -60,7 +61,7 @@ const StandingsSection: React.FC<StandingsSectionProps> = ({ tournamentId }) => 
 
             <div className="animate-in fade-in zoom-in-95 duration-500">
                 {standings.length > 0 ? (
-                    <StandingsTable standings={standings} />
+                    <StandingsTable standings={standings} teams={teams} />
                 ) : (
                     <p className="text-sm text-muted-foreground">{t('empty')}</p>
                 )}
@@ -72,7 +73,13 @@ const StandingsSection: React.FC<StandingsSectionProps> = ({ tournamentId }) => 
                         <CardTitle className="eyebrow text-brand-600">{t('leader')}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-3">
-                        <Trophy className="h-6 w-6 text-amber-500 fill-amber-400" />
+                        {standings[0] && (
+                            <TeamCrest
+                                crestId={teams.find(t => t.id === standings[0].teamId)?.crestUrl}
+                                teamName={standings[0].teamName}
+                                size={36}
+                            />
+                        )}
                         <div className="font-display text-2xl font-bold text-foreground">{standings[0]?.teamName || '-'}</div>
                     </CardContent>
                 </Card>
@@ -82,7 +89,16 @@ const StandingsSection: React.FC<StandingsSectionProps> = ({ tournamentId }) => 
                         <CardTitle className="eyebrow text-amber-600">{t('topScorer')}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-3">
-                        <Target className="h-6 w-6 text-amber-500" />
+                        {(() => {
+                            const topScorer = [...standings].sort((a, b) => b.goalsFor - a.goalsFor)[0];
+                            return topScorer ? (
+                                <TeamCrest
+                                    crestId={teams.find(t => t.id === topScorer.teamId)?.crestUrl}
+                                    teamName={topScorer.teamName}
+                                    size={36}
+                                />
+                            ) : null;
+                        })()}
                         <div className="font-display text-2xl font-bold text-foreground">
                             {[...standings].sort((a, b) => b.goalsFor - a.goalsFor)[0]?.teamName || '-'}
                         </div>
@@ -94,7 +110,16 @@ const StandingsSection: React.FC<StandingsSectionProps> = ({ tournamentId }) => 
                         <CardTitle className="eyebrow text-muted-foreground">{t('bestDefense')}</CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-3">
-                        <Shield className="h-6 w-6 text-neutral-400" />
+                        {(() => {
+                            const bestDefense = [...standings].filter(t => t.played > 0).sort((a, b) => a.goalsAgainst - b.goalsAgainst)[0];
+                            return bestDefense ? (
+                                <TeamCrest
+                                    crestId={teams.find(t => t.id === bestDefense.teamId)?.crestUrl}
+                                    teamName={bestDefense.teamName}
+                                    size={36}
+                                />
+                            ) : null;
+                        })()}
                         <div className="font-display text-2xl font-bold text-foreground">
                             {[...standings].filter(t => t.played > 0).sort((a, b) => a.goalsAgainst - b.goalsAgainst)[0]?.teamName || '-'}
                         </div>

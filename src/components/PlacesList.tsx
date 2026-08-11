@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Users, Info, Navigation, Building2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { notify } from "@/lib/notify";
 
 export const PlacesList = ({
   refreshTrigger,
@@ -50,11 +51,12 @@ export const PlacesList = ({
     if (confirm(t("deleteConfirm"))) {
       try {
         await deletePlace({ placeId, tournamentId });
+        notify.success(t("deleteSuccess"));
         const repository = createApiPlaceRepository();
         const updated = await repository.getAll(tournamentId);
         setPlaces(updated);
       } catch (error: any) {
-        alert(error?.message || t("deleteError"));
+        notify.error(error?.message || t("deleteError"));
       }
     }
   };

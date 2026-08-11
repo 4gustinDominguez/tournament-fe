@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from "next/image";
 import { useTournamentContext } from '@/sections/tournaments/tournaments-context';
 import CreateRefereeForm from './CreateRefereeForm';
+import { EditRefereeForm } from './EditRefereeForm';
 import { useAuth, UserRole } from '@/sections/tournaments/auth-context';
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -33,9 +35,12 @@ import {
     ShieldCheck,
     Search,
     AlertCircle,
-    Trash2
+    Trash2,
+    Pencil,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Referee } from "@/modules/referees/domain/referee";
+import { notify } from "@/lib/notify";
 
 interface RefereeSectionProps {
     tournamentId: string;
@@ -51,6 +56,7 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
     const [showLinkModal, setShowLinkModal] = useState(false);
     const [selectedRefereeId, setSelectedRefereeId] = useState('');
     const [linking, setLinking] = useState(false);
+    const [editingReferee, setEditingReferee] = useState<Referee | null>(null);
 
     const tournament = tournaments.find(t => t.id === tournamentId);
     const isOwner = tournament?.ownerId === user?.id;
@@ -114,10 +120,17 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
         if (confirm(t('deleteConfirm'))) {
             try {
                 await deleteReferee({ refereeId, tournamentId });
+                notify.success(t('deleteSuccess'));
             } catch (error: any) {
-                alert(error?.message || t('deleteError'));
+                notify.error(error?.message || t('deleteError'));
             }
         }
+    };
+
+    const handleSaveEdit = async (updates: Partial<Referee>) => {
+        if (!editingReferee) return;
+        await updateReferee({ ...editingReferee, ...updates });
+        setEditingReferee(null);
     };
 
     if (loading && !showLinkModal) {
@@ -232,9 +245,21 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
                                 <div className="p-6 space-y-4">
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="h-10 w-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-display font-bold">
-                                                {referee.name.charAt(0).toUpperCase()}
-                                            </div>
+                                            {referee.photoUrl ? (
+                                                <div className="h-10 w-10 rounded-xl overflow-hidden flex-shrink-0">
+                                                    <Image
+                                                        src={referee.photoUrl}
+                                                        alt={referee.name}
+                                                        width={40}
+                                                        height={40}
+                                                        className="h-full w-full object-cover"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="h-10 w-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-display font-bold">
+                                                    {referee.name.charAt(0).toUpperCase()}
+                                                </div>
+                                            )}
                                             <div>
                                                 <h3 className="font-bold text-foreground group-hover:text-brand-600 transition-colors line-clamp-1">
                                                     {referee.name}
@@ -260,9 +285,14 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
                                             )}
                                         </div>
                                         {canManage && (
-                                            <Button variant="ghost" size="sm" onClick={() => handleDeleteReferee(referee.id)} className="h-8 text-destructive font-bold text-[10px] tracking-wider uppercase hover:text-destructive hover:bg-red-50">
-                                                <Trash2 className="h-3 w-3 mr-1" /> {tCommon('delete')}
-                                            </Button>
+                                            <div className="flex items-center gap-1">
+                                                <Button variant="ghost" size="sm" onClick={() => setEditingReferee(referee)} className="h-8 font-bold text-[10px] tracking-wider uppercase hover:bg-brand-50 hover:text-brand-600">
+                                                    <Pencil className="h-3 w-3 mr-1" /> {tCommon('edit')}
+                                                </Button>
+                                                <Button variant="ghost" size="sm" onClick={() => handleDeleteReferee(referee.id)} className="h-8 text-destructive font-bold text-[10px] tracking-wider uppercase hover:text-destructive hover:bg-red-50">
+                                                    <Trash2 className="h-3 w-3 mr-1" /> {tCommon('delete')}
+                                                </Button>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -287,6 +317,21 @@ const RefereeSection: React.FC<RefereeSectionProps> = ({ tournamentId }) => {
                     </div>
                 </div>
             )}
+
+            <Dialog open={!!editingReferee} onOpenChange={(open) => !open && setEditingReferee(null)}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold">{t('editReferee')}</DialogTitle>
+                    </DialogHeader>
+                    {editingReferee && (
+                        <EditRefereeForm
+                            referee={editingReferee}
+                            onSave={handleSaveEdit}
+                            onCancel={() => setEditingReferee(null)}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

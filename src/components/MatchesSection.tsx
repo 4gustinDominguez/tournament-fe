@@ -24,11 +24,13 @@ import {
 } from "lucide-react";
 import MatchForm from "./MatchForm";
 import CreateRoundForm from "./CreateRoundForm";
+import { TeamCrest } from "./TeamCrest";
 import { Match } from "@/modules/tournament/domain/match";
 import { Round } from "@/modules/tournament/domain/round";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import MatchTimeline from "./MatchTimeline";
 import { useTranslations } from "next-intl";
+import { notify } from "@/lib/notify";
 
 interface MatchesSectionProps {
   tournamentId: string;
@@ -85,6 +87,10 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     return teams.find((t) => t.id === teamId)?.name || t("unknownTeam");
   };
 
+  const getTeam = (teamId: string) => {
+    return teams.find((t) => t.id === teamId);
+  };
+
   const getPlaceName = (placeId?: string) => {
     if (!placeId) return null;
     return places.find((p) => p.id === placeId)?.name || t("unknownPlace");
@@ -101,8 +107,9 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     if (confirm(t("deleteConfirm"))) {
       try {
         await deleteMatch({ matchId, tournamentId });
+        notify.success(t("deleteSuccess"));
       } catch (error: any) {
-        alert(error?.message || t("deleteError"));
+        notify.error(error?.message || t("deleteError"));
       }
     }
   };
@@ -111,8 +118,9 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     if (confirm(t("deleteRoundConfirm"))) {
       try {
         await deleteRound({ roundId, tournamentId });
+        notify.success(t("deleteRoundSuccess"));
       } catch (error: any) {
-        alert(error?.message || t("deleteRoundError"));
+        notify.error(error?.message || t("deleteRoundError"));
       }
     }
   };
@@ -121,8 +129,9 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
     if (confirm(t("generateConfirm"))) {
       try {
         await generateFixtures(tournamentId);
-      } catch (error) {
-        console.error("Error generating fixtures:", error);
+        notify.success(t("generateSuccess"));
+      } catch (error: any) {
+        notify.error(error?.message || tCommon("error"));
       }
     }
   };
@@ -346,10 +355,15 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
 
                         {/* Score / Teams */}
                         <div className="w-full grid grid-cols-[1fr,auto,1fr] items-center gap-4 md:gap-12">
-                          <div className="text-right">
-                            <h4 className="font-display text-xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors">
+                          <div className="flex items-center justify-end gap-2">
+                            <h4 className="font-display text-xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors text-right">
                               {getTeamName(match.teamAId)}
                             </h4>
+                            <TeamCrest
+                              crestId={getTeam(match.teamAId)?.crestUrl}
+                              teamName={getTeamName(match.teamAId)}
+                              size={36}
+                            />
                           </div>
 
                           <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-neutral-100 border border-border">
@@ -364,7 +378,12 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                             </span>
                           </div>
 
-                          <div className="text-left">
+                          <div className="flex items-center gap-2">
+                            <TeamCrest
+                              crestId={getTeam(match.teamBId)?.crestUrl}
+                              teamName={getTeamName(match.teamBId)}
+                              size={36}
+                            />
                             <h4 className="font-display text-xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors">
                               {getTeamName(match.teamBId)}
                             </h4>

@@ -9,15 +9,16 @@ import { validateImageFile, uploadImage } from "@/services/imageService";
 
 interface PhotoUploadProps {
 	value?: string;
-	onChange: (url: string | null) => void;
+	onChange: (value: string | File | null) => void;
 	folder?: string;
-	accept?: string;
+	deferUpload?: boolean;
 }
 
-export function PhotoUpload({ value, onChange, folder = "tournament" }: PhotoUploadProps) {
+export function PhotoUpload({ value, onChange, folder = "tournament", deferUpload = false }: PhotoUploadProps) {
 	const [preview, setPreview] = useState<string | null>(value ?? null);
 	const [uploading, setUploading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [pendingFile, setPendingFile] = useState<File | null>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleFileChange = useCallback(
@@ -32,27 +33,32 @@ export function PhotoUpload({ value, onChange, folder = "tournament" }: PhotoUpl
 			}
 
 			setError(null);
-			setUploading(true);
+			const localPreview = URL.createObjectURL(file);
+			setPreview(localPreview);
 
-			try {
-				const localPreview = URL.createObjectURL(file);
-				setPreview(localPreview);
-
-				const result = await uploadImage(file, folder);
-				onChange(result.url);
-			} catch {
-				setError("Upload failed. Try again.");
-				setPreview(null);
-			} finally {
-				setUploading(false);
+			if (deferUpload) {
+				setPendingFile(file);
+				onChange(file);
+			} else {
+				setUploading(true);
+				try {
+					const result = await uploadImage(file, folder);
+					onChange(result.url);
+				} catch {
+					setError("Upload failed. Try again.");
+					setPreview(null);
+				} finally {
+					setUploading(false);
+				}
 			}
 		},
-		[onChange, folder],
+		[onChange, folder, deferUpload],
 	);
 
 	const handleRemove = useCallback(() => {
 		setPreview(null);
 		setError(null);
+		setPendingFile(null);
 		onChange(null);
 		if (inputRef.current) {
 			inputRef.current.value = "";

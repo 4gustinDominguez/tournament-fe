@@ -6,6 +6,7 @@ import CreatePlayerForm from "@/components/CreatePlayerForm";
 import EditTeamForm from "@/components/EditTeamForm";
 import FormationBoard from "@/components/FormationBoard";
 import { CrestPicker } from "@/components/CrestPicker";
+import { TeamCrest } from "@/components/TeamCrest";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Team } from "@/modules/tournament/domain/team";
 import { Link } from "@/navigation";
@@ -13,6 +14,7 @@ import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import { useTranslations } from "next-intl";
 import { Users } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { notify } from "@/lib/notify";
 
 type KitPattern =
   | "solid"
@@ -119,10 +121,10 @@ export default function TeamPage() {
       };
       await updateTeam({ tournamentId, team: updatedTeam });
       await getTeams(tournamentId);
-      alert(tForm("success"));
-    } catch (error) {
+      notify.success(tForm("success"));
+    } catch (error: any) {
       console.error("Error saving team:", error);
-      alert(tForm("error"));
+      notify.error(error?.message || tForm("error"));
     } finally {
       setSaving(false);
     }
@@ -144,9 +146,7 @@ export default function TeamPage() {
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="display-title text-3xl md:text-4xl text-foreground flex items-center gap-3">
-            <span className="h-10 w-10 rounded-xl bg-brand-50 text-brand-600 grid place-items-center">
-              <Users className="h-5 w-5" />
-            </span>
+            <TeamCrest crestId={team.crestUrl} teamName={team.name} size={48} />
             {team.name}
           </h1>
           <p className="text-sm text-muted-foreground font-medium">

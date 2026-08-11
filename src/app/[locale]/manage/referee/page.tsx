@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Referee } from "@/modules/referees/domain/referee";
@@ -8,6 +9,10 @@ import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
 import { useTranslations } from "next-intl";
 import IncidentEditor from "@/components/IncidentEditor";
+import { PhotoUpload } from "@/components/PhotoUpload";
+import { Button } from "@/components/ui/button";
+import { uploadImage } from "@/services/imageService";
+import { notify } from "@/lib/notify";
 
 export default function RefereePage() {
   const t = useTranslations("Referee");
@@ -27,6 +32,10 @@ export default function RefereePage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [pendingPhotoFile, setPendingPhotoFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [savingPhoto, setSavingPhoto] = useState(false);
+  const { updateReferee } = useTournamentContext();
 
   useEffect(() => {
     if (!isAuthenticated || user?.role !== "REFEREE") {
@@ -76,7 +85,7 @@ export default function RefereePage() {
   const handleMatchUpdate = async (updatedMatch: Match) => {
     try {
       await updateMatch(updatedMatch);
-      alert(t("matchSaved"));
+      notify.success(t("matchSaved"));
 
       // Reload matches if needed, though context should handle it
       if (referee) {
@@ -85,7 +94,7 @@ export default function RefereePage() {
       }
     } catch (err) {
       console.error("Error updating match:", err);
-      alert(t("matchError"));
+      notify.error(err instanceof Error ? err.message : t("matchError"));
     }
   };
 
@@ -106,7 +115,9 @@ export default function RefereePage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center text-muted-foreground">{tCommon("loading")}</div>
+        <div className="text-center text-muted-foreground">
+          {tCommon("loading")}
+        </div>
       </div>
     );
   }
@@ -123,20 +134,87 @@ export default function RefereePage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="font-display text-3xl font-black text-foreground mb-6">{t("title")}</h1>
+      <h1 className="font-display text-3xl font-black text-foreground mb-6">
+        {t("title")}
+      </h1>
 
       {referee && (
         <div className="bg-white p-4 rounded-xl border border-border shadow-card mb-6">
-          <h2 className="font-display text-xl font-bold text-foreground mb-2">
-            {t("welcome", { name: referee.name })}
-          </h2>
-          <p className="text-muted-foreground">
-            {t("assignedTournaments", { count: referee.tournamentIds.length })}
-          </p>
+          <div className="flex items-center gap-4">
+            {(previewUrl || referee.photoUrl) ? (
+              <div className="h-16 w-16 rounded-xl overflow-hidden flex-shrink-0">
+                <Image
+                  src={previewUrl || referee.photoUrl || ""}
+                  alt={referee.name}
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="h-16 w-16 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-display font-bold text-2xl flex-shrink-0">
+                {referee.name.charAt(0).toUpperCase()}
+              </div>
+            )}
+            <div className="flex-1">
+              <h2 className="font-display text-xl font-bold text-foreground mb-1">
+                {t("welcome", { name: referee.name })}
+              </h2>
+              <p className="text-muted-foreground text-sm">
+                {t("assignedTournaments", {
+                  count: referee.tournamentIds.length,
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">
+              {t("photo")}
+            </p>
+            <div className="flex items-end gap-4">
+              <PhotoUpload
+                value={previewUrl || referee.photoUrl || undefined}
+                onChange={(value) => {
+                  if (value instanceof File) {
+                    setPendingPhotoFile(value);
+                    setPreviewUrl(URL.createObjectURL(value));
+                  } else {
+                    setPendingPhotoFile(null);
+                    setPreviewUrl(null);
+                  }
+                }}
+                folder="referees"
+                deferUpload
+              />
+              {pendingPhotoFile && (
+                <Button
+                  size="sm"
+                  onClick={async () => {
+                    setSavingPhoto(true);
+                    try {
+                      const result = await uploadImage(pendingPhotoFile, "referees");
+                      const updated = { ...referee, photoUrl: result.url };
+                      await updateReferee(updated);
+                      setReferee(updated);
+                      setPendingPhotoFile(null);
+                      setPreviewUrl(null);
+                    } finally {
+                      setSavingPhoto(false);
+                    }
+                  }}
+                  disabled={savingPhoto}
+                >
+                  {savingPhoto ? tCommon("saving") : tCommon("save")}
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
-      <h2 className="font-display text-2xl font-black text-foreground mb-4">{t("myMatches")}</h2>
+      <h2 className="font-display text-2xl font-black text-foreground mb-4">
+        {t("myMatches")}
+      </h2>
 
       {matches.length === 0 ? (
         <div className="bg-neutral-100 p-4 rounded-lg text-muted-foreground">
@@ -153,14 +231,18 @@ export default function RefereePage() {
               onAddIncident={async (incident) => {
                 await addMatchIncident(match.id, incident);
                 if (referee) {
-                  const updatedMatches = await getMatchesByRefereeId(referee.id);
+                  const updatedMatches = await getMatchesByRefereeId(
+                    referee.id,
+                  );
                   setMatches(updatedMatches);
                 }
               }}
               onRemoveIncident={async (incidentId) => {
                 await deleteMatchIncident(match.id, incidentId);
                 if (referee) {
-                  const updatedMatches = await getMatchesByRefereeId(referee.id);
+                  const updatedMatches = await getMatchesByRefereeId(
+                    referee.id,
+                  );
                   setMatches(updatedMatches);
                 }
               }}
@@ -215,12 +297,13 @@ function MatchCard({
     e.preventDefault();
     setSubmitting(true);
     try {
-      const matchDate = typeof match.date === 'string' ? new Date(match.date) : match.date;
+      const matchDate =
+        typeof match.date === "string" ? new Date(match.date) : match.date;
 
       // Auto-live if scores added and it was scheduled, but respect manual status if it was changed
       let finalStatus = status;
-      if (status === 'scheduled' && (scoreA > 0 || scoreB > 0)) {
-        finalStatus = 'live';
+      if (status === "scheduled" && (scoreA > 0 || scoreB > 0)) {
+        finalStatus = "live";
       }
 
       const updatedMatch: Match = {
@@ -242,7 +325,8 @@ function MatchCard({
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="font-display text-xl font-bold text-foreground">
-            {teamA?.name || t("fallbackTeamA")} vs {teamB?.name || t("fallbackTeamB")}
+            {teamA?.name || t("fallbackTeamA")} vs{" "}
+            {teamB?.name || t("fallbackTeamB")}
           </h3>
           <p className="text-sm text-muted-foreground">
             {new Date(match.date).toLocaleString("es-ES", {
@@ -253,12 +337,13 @@ function MatchCard({
         </div>
         <div className="flex flex-col items-end gap-2">
           <span
-            className={`px-3 py-1 rounded-full text-xs font-bold ${match.status === "completed"
-              ? "bg-brand-100 text-brand-700"
-              : match.status === "live"
-                ? "bg-amber-100 text-amber-700"
-                : "bg-sky-100 text-sky-700"
-              }`}
+            className={`px-3 py-1 rounded-full text-xs font-bold ${
+              match.status === "completed"
+                ? "bg-brand-100 text-brand-700"
+                : match.status === "live"
+                  ? "bg-amber-100 text-amber-700"
+                  : "bg-sky-100 text-sky-700"
+            }`}
           >
             {match.status === "completed"
               ? tCommon("status.completed")
@@ -268,18 +353,19 @@ function MatchCard({
           </span>
 
           <div className="flex gap-1">
-            {(['scheduled', 'live', 'completed'] as const).map((s) => (
+            {(["scheduled", "live", "completed"] as const).map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setStatus(s)}
-                className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${status === s
-                  ? 'bg-brand-600 border-brand-600 text-white font-bold'
-                  : 'bg-neutral-50 border-border text-muted-foreground hover:bg-neutral-100'
-                  }`}
+                className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
+                  status === s
+                    ? "bg-brand-600 border-brand-600 text-white font-bold"
+                    : "bg-neutral-50 border-border text-muted-foreground hover:bg-neutral-100"
+                }`}
                 title={t("changeStatus", { status: tCommon(`status.${s}`) })}
               >
-                {s === 'scheduled' ? '📅' : s === 'live' ? '⚽' : '🏆'}
+                {s === "scheduled" ? "📅" : s === "live" ? "⚽" : "🏆"}
               </button>
             ))}
           </div>
@@ -300,7 +386,9 @@ function MatchCard({
               className="w-full p-2 border border-input rounded-lg focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
             />
           </div>
-          <div className="font-display text-2xl font-bold text-neutral-400 mt-6">VS</div>
+          <div className="font-display text-2xl font-bold text-neutral-400 mt-6">
+            VS
+          </div>
           <div className="flex-1">
             <label className="block text-sm font-medium text-foreground mb-1">
               {t("scoreB")}
@@ -321,7 +409,9 @@ function MatchCard({
             onClick={() => setShowIncidents(!showIncidents)}
             className="text-sm font-bold text-foreground flex items-center gap-2 hover:text-brand-600 transition-colors"
           >
-            {showIncidents ? `🔽 ${t("hideIncidents")}` : `🔼 ${t("manageIncidents")}`}
+            {showIncidents
+              ? `🔽 ${t("hideIncidents")}`
+              : `🔼 ${t("manageIncidents")}`}
             {(match.incidents || []).length > 0 && (
               <span className="bg-brand-100 text-brand-700 text-[10px] px-2 py-0.5 rounded-full">
                 {(match.incidents || []).length}
@@ -358,10 +448,11 @@ function MatchCard({
         <button
           type="submit"
           disabled={submitting}
-          className={`mt-4 w-full py-2.5 px-4 rounded-lg text-white font-bold transition-colors ${submitting
-            ? "bg-neutral-400 cursor-not-allowed"
-            : "bg-brand-600 hover:bg-brand-700"
-            }`}
+          className={`mt-4 w-full py-2.5 px-4 rounded-lg text-white font-bold transition-colors ${
+            submitting
+              ? "bg-neutral-400 cursor-not-allowed"
+              : "bg-brand-600 hover:bg-brand-700"
+          }`}
         >
           {submitting ? tCommon("loading") : t("enterResult")}
         </button>

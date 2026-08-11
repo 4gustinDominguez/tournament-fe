@@ -5,6 +5,7 @@ import { Link } from "@/navigation";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import CreateTeamForm from "./CreateTeamForm";
+import { TeamCrest } from "./TeamCrest";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
@@ -17,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, Plus, ChevronRight, MapPin, Trash2, Lock } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { notify } from "@/lib/notify";
 
 interface TeamsSectionProps {
   tournamentId: string;
@@ -75,8 +77,9 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
     if (confirm(t("deleteConfirm"))) {
       try {
         await deleteTeam({ teamId, tournamentId });
+        notify.success(t("deleteSuccess"));
       } catch (error: any) {
-        alert(error?.message || t("deleteError"));
+        notify.error(error?.message || t("deleteError"));
       }
     }
   };
@@ -135,11 +138,14 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
               <Card className="group h-full transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 border-border">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-4">
-                    <CardTitle className="display-title text-xl text-foreground tracking-tight group-hover:text-brand-600 transition-colors line-clamp-1">
-                      {team.name}
-                    </CardTitle>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <TeamCrest crestId={team.crestUrl} teamName={team.name} size={40} />
+                      <CardTitle className="display-title text-xl text-foreground tracking-tight group-hover:text-brand-600 transition-colors line-clamp-1">
+                        {team.name}
+                      </CardTitle>
+                    </div>
                     {!readOnly && (
-                      <div className="p-2 rounded-lg bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition-all">
+                      <div className="p-2 rounded-lg bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition-all flex-shrink-0">
                         <ChevronRight className="h-4 w-4" />
                       </div>
                     )}

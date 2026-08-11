@@ -10,6 +10,7 @@ import { Link, useRouter } from '@/navigation';
 import { Button } from "@/components/ui/button";
 import { useTranslations } from 'next-intl';
 import { UserRound, Trash2 } from 'lucide-react';
+import { notify } from '@/lib/notify';
 
 export default function PlayerPage() {
     const t = useTranslations('PlayerPage');
@@ -56,9 +57,10 @@ export default function PlayerPage() {
         if (confirm(t('deleteConfirm'))) {
             try {
                 await deletePlayer({ playerId, tournamentId });
+                notify.success(t('deleteSuccess'));
                 router.push(`/manage/my-tournaments/${tournamentId}/${teamId}`);
             } catch (error: any) {
-                alert(error?.message || t('deleteError'));
+                notify.error(error?.message || t('deleteError'));
             }
         }
     };

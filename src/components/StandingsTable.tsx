@@ -10,10 +10,13 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { TeamStats } from '@/modules/tournament/domain/standings';
+import { Team } from '@/modules/tournament/domain/team';
+import { TeamCrest } from './TeamCrest';
 import { useTranslations } from 'next-intl';
 
 interface StandingsTableProps {
     standings: TeamStats[];
+    teams?: Team[];
 }
 
 const positionBadge = (index: number) => {
@@ -23,8 +26,12 @@ const positionBadge = (index: number) => {
     return "bg-neutral-100 text-muted-foreground";
 };
 
-const StandingsTable: React.FC<StandingsTableProps> = ({ standings }) => {
+const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams = [] }) => {
     const t = useTranslations('Standings');
+
+    const getTeamCrest = (teamId: string) => {
+        return teams.find(t => t.id === teamId)?.crestUrl;
+    };
     return (
         <div className="rounded-xl border border-border bg-card shadow-card overflow-hidden">
             <Table>
@@ -54,7 +61,10 @@ const StandingsTable: React.FC<StandingsTableProps> = ({ standings }) => {
                                 </span>
                             </TableCell>
                             <TableCell className="font-bold tracking-tight text-foreground">
-                                {team.teamName}
+                                <div className="flex items-center gap-2">
+                                    <TeamCrest crestId={getTeamCrest(team.teamId)} teamName={team.teamName} size={28} />
+                                    {team.teamName}
+                                </div>
                             </TableCell>
                             <TableCell className="text-center font-medium text-muted-foreground">{team.played}</TableCell>
                             <TableCell className="text-center font-bold text-brand-600">{team.won}</TableCell>
