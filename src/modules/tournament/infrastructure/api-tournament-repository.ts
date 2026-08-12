@@ -396,6 +396,17 @@ export function createApiTournamentRepository(): TournamentRepository {
         return response.json();
     }
 
+    async function getPlayerMe(): Promise<Player | null> {
+        const response = await fetch(`${baseUrl}/players/me`, {
+            headers: getHeaders()
+        });
+        if (response.status === 404) return null;
+        if (!response.ok) {
+            throw new Error("Failed to fetch current player profile");
+        }
+        return response.json();
+    }
+
     async function saveReferee({ tournamentId, referee }: { tournamentId: string; referee: Referee }) {
         const response = await fetch(`${baseUrl}/referees`, {
             method: "POST",
@@ -525,6 +536,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         getRefereesByTournamentId,
         getAllReferees,
         getRefereeMe,
+        getPlayerMe,
         saveReferee,
         updateReferee,
         getStandings,

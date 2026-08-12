@@ -10,7 +10,7 @@ const teamA: Team = {
   name: "Los Rayos",
   tournaments: ["t1"],
   player: [
-    { id: "p1", name: "Juan", nickname: "Juan", tournaments: ["t1"] },
+    { id: "p1", name: "Juan", nickname: "Juan", tournaments: ["t1"], fullRegistered: false },
   ],
 };
 
@@ -19,7 +19,7 @@ const teamB: Team = {
   name: "Las Águilas",
   tournaments: ["t1"],
   player: [
-    { id: "p2", name: "Carlos", nickname: "Carlos", tournaments: ["t1"] },
+    { id: "p2", name: "Carlos", nickname: "Carlos", tournaments: ["t1"], fullRegistered: false },
   ],
 };
 

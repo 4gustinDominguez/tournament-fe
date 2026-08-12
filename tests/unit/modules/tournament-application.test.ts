@@ -63,7 +63,7 @@ const tournament: Tournament = {
   endDate: "",
 };
 const team: Team = { id: "team-1", name: "Los Rayos", tournaments: ["t1"] };
-const player: Player = { id: "p1", name: "Juan", nickname: "Juan", tournaments: ["t1"] };
+const player: Player = { id: "p1", name: "Juan", nickname: "Juan", tournaments: ["t1"], fullRegistered: false };
 const round: Round = { id: "r1", name: "Jornada 1", tournamentId: "t1" };
 const match: Match = {
   id: "m1",

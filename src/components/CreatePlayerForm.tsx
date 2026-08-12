@@ -15,6 +15,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
     const [player, setPlayer] = useState<Partial<Player>>({
         name: '',
         nickname: '',
+        dorsal: undefined,
         position: '',
         photoUrl: '',
     });
@@ -50,6 +51,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
             setPlayer({
                 name: '',
                 nickname: '',
+                dorsal: undefined,
                 position: '',
                 photoUrl: '',
             });
@@ -82,7 +84,7 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                     <div className="space-y-1">
                         <label className="text-[10px] font-black text-muted-foreground uppercase ml-1">{t('nickname')}</label>
                         <input
@@ -93,6 +95,19 @@ const CreatePlayerForm: React.FC<{ teamId: string, tournamentId?: string }> = ({
                             placeholder={t('nicknamePlaceholder')}
                             className="w-full border border-input rounded-xl px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition-all bg-white"
                             required
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black text-muted-foreground uppercase ml-1">{t('dorsal')}</label>
+                        <input
+                            type="number"
+                            name="dorsal"
+                            value={player.dorsal ?? ''}
+                            onChange={handleChange}
+                            placeholder="10"
+                            min="0"
+                            max="99"
+                            className="w-full border border-input rounded-xl px-4 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition-all bg-white"
                         />
                     </div>
                     <div className="space-y-1">

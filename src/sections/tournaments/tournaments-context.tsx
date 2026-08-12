@@ -131,6 +131,7 @@ export interface ContextState {
   getReferees: (tournamentId: string) => Promise<Referee[]>;
   getAllReferees: () => Promise<Referee[]>;
   getRefereeMe: () => Promise<Referee | null>;
+  getPlayerMe: () => Promise<Player | null>;
   getMatchesByRefereeId: (refereeId: string) => Promise<Match[]>;
   getStandings: (tournamentId: string) => Promise<TeamStats[]>;
   createReferee: ({
@@ -382,6 +383,7 @@ export const TournamentContextProvider = ({
         getReferees,
         getAllReferees: async () => repository.getAllReferees(),
         getRefereeMe: async () => repository.getRefereeMe(),
+        getPlayerMe: async () => repository.getPlayerMe(),
         getMatchesByRefereeId: async (refereeId: string) => {
           const matches = await repository.getMatchesByRefereeId(refereeId);
           setMatches(matches);

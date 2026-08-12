@@ -2,6 +2,7 @@ export interface Player {
   id: string;
   name: string;
   nickname: string;
+  dorsal?: number;
   tournaments: string[];
 
   // Profile fields
@@ -11,6 +12,8 @@ export interface Player {
   photoUrl?: string; // URL to player photo
   socialMedia?: SocialMedia;
   statistics?: PlayerStatistics;
+  userId?: string;
+  fullRegistered: boolean;
 }
 
 export interface SocialMedia {

@@ -19,8 +19,8 @@ const teamA = {
   name: "Alpha FC",
   tournaments: ["t1"],
   player: [
-    { id: "p-a1", name: "Lucas A", nickname: "Luc", tournaments: ["t1"], teamId: "team-a" },
-    { id: "p-a2", name: "Pedro A", nickname: "Ped", tournaments: ["t1"], teamId: "team-a" },
+    { id: "p-a1", name: "Lucas A", nickname: "Luc", tournaments: ["t1"], teamId: "team-a", fullRegistered: false },
+    { id: "p-a2", name: "Pedro A", nickname: "Ped", tournaments: ["t1"], teamId: "team-a", fullRegistered: false },
   ],
 };
 
@@ -29,7 +29,7 @@ const teamB = {
   name: "Beta SC",
   tournaments: ["t1"],
   player: [
-    { id: "p-b1", name: "Juan B", nickname: "Juan", tournaments: ["t1"], teamId: "team-b" },
+    { id: "p-b1", name: "Juan B", nickname: "Juan", tournaments: ["t1"], teamId: "team-b", fullRegistered: false },
   ],
 };
 

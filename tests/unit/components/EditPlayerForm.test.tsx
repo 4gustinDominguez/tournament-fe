@@ -19,6 +19,7 @@ const basePlayer = {
   position: "Midfielder",
   photoUrl: "",
   tournaments: ["t1"],
+  fullRegistered: false,
 };
 
 beforeEach(() => {
@@ -69,8 +70,8 @@ describe("EditPlayerForm", () => {
     );
 
     const spinbuttons = screen.getAllByRole("spinbutton");
-    await user.type(spinbuttons[0], "182");
-    await user.type(spinbuttons[1], "74");
+    await user.type(spinbuttons[1], "182");
+    await user.type(spinbuttons[2], "74");
     await user.click(screen.getByRole("button", { name: "EditPlayerForm.saveChanges" }));
 
     const { player } = updatePlayerMock.mock.calls[0][0];
@@ -103,7 +104,7 @@ describe("EditPlayerForm", () => {
     );
 
     const spinbuttons = screen.getAllByRole("spinbutton");
-    await user.type(spinbuttons[2], "3");
+    await user.type(spinbuttons[3], "3");
     await user.click(screen.getByRole("button", { name: "EditPlayerForm.saveChanges" }));
 
     const { player } = updatePlayerMock.mock.calls[0][0];

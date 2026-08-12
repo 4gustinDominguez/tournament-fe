@@ -44,7 +44,7 @@ const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
 
     setForm((prev) => ({
       ...prev,
-      [name]: name === "height" || name === "weight" ? Number(value) || undefined : value,
+      [name]: name === "height" || name === "weight" || name === "dorsal" ? Number(value) || undefined : value,
     }));
   }
 
@@ -142,20 +142,35 @@ const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1">{t("position")}</label>
-            <select
-              name="position"
-              value={form.position || ""}
-              onChange={handleChange}
-              className="w-full border border-input rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none transition-all bg-white"
-            >
-              <option value="">{t("selectPosition")}</option>
-              <option value="Goalkeeper">{t("goalkeeper")}</option>
-              <option value="Defender">{t("defender")}</option>
-              <option value="Midfielder">{t("midfielder")}</option>
-              <option value="Forward">{t("forward")}</option>
-            </select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1">{t("dorsal")}</label>
+              <input
+                type="number"
+                name="dorsal"
+                value={form.dorsal ?? ""}
+                onChange={handleChange}
+                placeholder="10"
+                min="0"
+                max="99"
+                className="w-full border border-input rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none transition-all bg-white"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1">{t("position")}</label>
+              <select
+                name="position"
+                value={form.position || ""}
+                onChange={handleChange}
+                className="w-full border border-input rounded-lg px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none transition-all bg-white"
+              >
+                <option value="">{t("selectPosition")}</option>
+                <option value="Goalkeeper">{t("goalkeeper")}</option>
+                <option value="Defender">{t("defender")}</option>
+                <option value="Midfielder">{t("midfielder")}</option>
+                <option value="Forward">{t("forward")}</option>
+              </select>
+            </div>
           </div>
         </div>
 
