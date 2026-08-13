@@ -16,6 +16,8 @@ export interface TournamentRepository {
   getDashboardStats: () => Promise<DashboardStats>;
   deleteTournament: (tournamentId: string) => Promise<void>;
   deleteTeam: (teamId: string) => Promise<void>;
+  getTeamPublicInfo: (teamId: string) => Promise<{ team: Team; players: Array<{ id: string; name: string; nickname: string; dorsal?: number; registered: boolean }> } | null>;
+  claimPlayer: (playerId: string) => Promise<void>;
   deletePlayer: (playerId: string) => Promise<void>;
   deletePlace: (placeId: string) => Promise<void>;
   deleteRound: (roundId: string) => Promise<void>;
@@ -73,6 +75,8 @@ export interface TournamentRepository {
   getAllReferees: () => Promise<Referee[]>;
   getRefereeMe: () => Promise<Referee | null>;
   getPlayerMe: () => Promise<Player | null>;
+  getMyTeams: () => Promise<Team[]>;
+  getMyMatches: () => Promise<Match[]>;
   saveReferee: ({
     tournamentId,
     referee,

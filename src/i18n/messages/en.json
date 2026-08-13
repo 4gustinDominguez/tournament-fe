@@ -3,6 +3,9 @@
     "home": "Home",
     "tournaments": "Tournaments",
     "myTournaments": "My Tournaments",
+    "myTeams": "My Teams",
+    "myMatches": "My Matches",
+    "myProfile": "My Profile",
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
@@ -26,6 +29,8 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
+    "login": "Sign in",
+    "register": "Sign up",
     "official": "Official Tournament",
     "teams": "Teams",
     "status": {
@@ -454,6 +459,9 @@
     "success": "Team updated successfully",
     "error": "Error updating the team",
     "details": "Details",
+    "publicRegistration": "Public Registration",
+    "publicRegistrationDesc": "Allow players to register themselves",
+    "shareLink": "Share this link with your players:",
     "crestUrlPlaceholder": "https://example.com/crest.png"
   },
   "PlayerStats": {
@@ -518,6 +526,26 @@
     "saveChanges": "Save Changes",
     "saveSuccess": "Profile saved successfully",
     "saveError": "Error saving profile"
+  },
+  "PlayerTeams": {
+    "title": "My Teams",
+    "noTeams": "You are not registered in any team yet.",
+    "noProfile": "Player profile not found",
+    "coach": "Coach",
+    "tournaments": "Tournaments",
+    "dorsal": "Dorsal",
+    "position": "Position"
+  },
+  "PlayerMatches": {
+    "title": "My Matches",
+    "noMatches": "You have no matches scheduled yet.",
+    "liveMatches": "Live",
+    "upcomingMatches": "Upcoming",
+    "completedMatches": "Completed",
+    "scheduled": "Scheduled",
+    "live": "Live",
+    "completed": "Completed",
+    "unknownTeam": "Unknown Team"
   },
   "Referee": {
     "title": "Referee Panel",
@@ -592,7 +620,9 @@
   "Auth": {
     "loginTitle": "Login",
     "loginSubtitle": "Sign in to your account",
+    "loginLink": "Sign in",
     "registerLink": "register if you don't have an account",
+    "alreadyHaveAccount": "Already have an account?",
     "registerTitle": "Register",
     "registerSubtitle": "Create your account",
     "email": "Email address",
@@ -644,5 +674,16 @@
     "error": "Error",
     "info": "Info",
     "warning": "Warning"
+  },
+  "TeamRegister": {
+    "subtitle": "Register as a player",
+    "playerList": "Players",
+    "thisIsMe": "This is me",
+    "registered": "Registered",
+    "loginToClaim": "Log in to claim your spot",
+    "loginRequired": "You must be logged in to claim a player",
+    "claimSuccess": "Player claimed successfully",
+    "claimError": "Error claiming player",
+    "notFound": "Team not found or registration is not enabled"
   }
 }

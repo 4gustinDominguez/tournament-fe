@@ -1,18 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 import { API_BASE_URL } from "@/config/api";
 
 export default function RegisterPage() {
     const t = useTranslations('Auth');
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get("redirect") || "";
+    const roleParam = searchParams.get("role");
+    const isPublicFlow = roleParam === "PLAYER";
+
     const [formData, setFormData] = useState({
         email: "",
         password: "",
         firstName: "",
         lastName: "",
-        role: "TOURNAMENT_ADMIN",
+        role: isPublicFlow ? "PLAYER" : "TOURNAMENT_ADMIN",
     });
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -35,7 +41,11 @@ export default function RegisterPage() {
                 throw new Error(data.message || t('registrationError'));
             }
 
-            router.push("/login?registered=true");
+            if (redirect) {
+                router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
+            } else {
+                router.push("/login?registered=true");
+            }
         } catch (err: any) {
             setError(err.message || t('registrationError'));
         } finally {
@@ -53,6 +63,15 @@ export default function RegisterPage() {
                 <h2 className="mt-6 text-center font-display text-4xl font-black tracking-tight text-foreground">
                     {t('registerSubtitle')}
                 </h2>
+                <p className="mt-2 text-center text-sm text-muted-foreground">
+                    {t('alreadyHaveAccount')}{" "}
+                    <Link
+                        href={`/login${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`}
+                        className="font-semibold text-brand-600 hover:text-brand-700"
+                    >
+                        {t('loginLink')}
+                    </Link>
+                </p>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -113,19 +132,21 @@ export default function RegisterPage() {
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-foreground">{t('role')}</label>
-                            <select
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                className="mt-1 block w-full px-3 py-2.5 border border-input rounded-lg shadow-sm focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 sm:text-sm bg-white"
-                            >
-                                <option value="TOURNAMENT_ADMIN">{t('adminRole')}</option>
-                                <option value="REFEREE">{t('refereeRole')}</option>
-                                <option value="PLAYER">{t('playerRole')}</option>
-                            </select>
-                        </div>
+                        {!isPublicFlow && (
+                            <div>
+                                <label className="block text-sm font-medium text-foreground">{t('role')}</label>
+                                <select
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleChange}
+                                    className="mt-1 block w-full px-3 py-2.5 border border-input rounded-lg shadow-sm focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 sm:text-sm bg-white"
+                                >
+                                    <option value="TOURNAMENT_ADMIN">{t('adminRole')}</option>
+                                    <option value="REFEREE">{t('refereeRole')}</option>
+                                    <option value="PLAYER">{t('playerRole')}</option>
+                                </select>
+                            </div>
+                        )}
 
                         <div className="pt-4">
                             <button

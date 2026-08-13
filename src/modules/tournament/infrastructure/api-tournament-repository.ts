@@ -118,6 +118,26 @@ export function createApiTournamentRepository(): TournamentRepository {
         }
     }
 
+    async function getTeamPublicInfo(teamId: string): Promise<{ team: Team; players: Array<{ id: string; name: string; nickname: string; dorsal?: number; registered: boolean }> } | null> {
+        const response = await fetch(`${baseUrl}/teams/${teamId}/public`);
+        if (response.status === 404) return null;
+        if (!response.ok) {
+            throw new Error("Failed to fetch team public info");
+        }
+        return response.json();
+    }
+
+    async function claimPlayer(playerId: string): Promise<void> {
+        const response = await fetch(`${baseUrl}/teams/claim`, {
+            method: "POST",
+            headers: getHeaders(),
+            body: JSON.stringify({ playerId }),
+        });
+        if (!response.ok) {
+            throw await errorMessage(response, "Failed to claim player");
+        }
+    }
+
     async function deletePlayer(playerId: string) {
         const response = await fetch(`${baseUrl}/players/${playerId}`, {
             method: "DELETE",
@@ -199,6 +219,7 @@ export function createApiTournamentRepository(): TournamentRepository {
                 kitPattern: team.kitPattern,
                 kitColors: team.kitColors,
                 formation: team.formation,
+                publicRegistration: team.publicRegistration,
             }),
         });
 
@@ -407,6 +428,26 @@ export function createApiTournamentRepository(): TournamentRepository {
         return response.json();
     }
 
+    async function getMyTeams(): Promise<Team[]> {
+        const response = await fetch(`${baseUrl}/players/me/teams`, {
+            headers: getHeaders()
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch player teams");
+        }
+        return response.json();
+    }
+
+    async function getMyMatches(): Promise<Match[]> {
+        const response = await fetch(`${baseUrl}/players/me/matches`, {
+            headers: getHeaders()
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch player matches");
+        }
+        return response.json();
+    }
+
     async function saveReferee({ tournamentId, referee }: { tournamentId: string; referee: Referee }) {
         const response = await fetch(`${baseUrl}/referees`, {
             method: "POST",
@@ -513,6 +554,8 @@ export function createApiTournamentRepository(): TournamentRepository {
         getDashboardStats,
         deleteTournament,
         deleteTeam,
+        getTeamPublicInfo,
+        claimPlayer,
         deletePlayer,
         deletePlace,
         deleteRound,
@@ -537,6 +580,8 @@ export function createApiTournamentRepository(): TournamentRepository {
         getAllReferees,
         getRefereeMe,
         getPlayerMe,
+        getMyTeams,
+        getMyMatches,
         saveReferee,
         updateReferee,
         getStandings,

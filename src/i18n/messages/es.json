@@ -3,6 +3,9 @@
     "home": "Inicio",
     "tournaments": "Torneos",
     "myTournaments": "Mis Torneos",
+    "myTeams": "Mis Equipos",
+    "myMatches": "Mis Partidos",
+    "myProfile": "Mi Perfil",
     "login": "Iniciar Sesión",
     "register": "Registrarse",
     "logout": "Cerrar Sesión",
@@ -26,6 +29,8 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "edit": "Editar",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
     "official": "Torneo Oficial",
     "teams": "Equipos",
     "status": {
@@ -33,8 +38,8 @@
       "ongoing": "En curso",
       "finished": "Finalizado",
       "scheduled": "Programado",
-      "live": "En Vivo",
-      "completed": "Finalizado"
+      "live": "En vivo",
+      "completed": "Completado"
     }
   },
   "Landing": {
@@ -454,6 +459,9 @@
     "success": "Equipo actualizado correctamente",
     "error": "Error al actualizar el equipo",
     "details": "Detalles",
+    "publicRegistration": "Registro Público",
+    "publicRegistrationDesc": "Permitir que los jugadores se registren",
+    "shareLink": "Comparte este link con tus jugadores:",
     "crestUrlPlaceholder": "https://ejemplo.com/escudo.png"
   },
   "PlayerStats": {
@@ -518,6 +526,26 @@
     "saveChanges": "Guardar Cambios",
     "saveSuccess": "Perfil guardado correctamente",
     "saveError": "Error al guardar el perfil"
+  },
+  "PlayerTeams": {
+    "title": "Mis Equipos",
+    "noTeams": "Aún no estás registrado en ningún equipo.",
+    "noProfile": "No se encontró el perfil del jugador",
+    "coach": "Entrenador",
+    "tournaments": "Torneos",
+    "dorsal": "Dorsal",
+    "position": "Posición"
+  },
+  "PlayerMatches": {
+    "title": "Mis Partidos",
+    "noMatches": "Aún no tienes partidos programados.",
+    "liveMatches": "En Vivo",
+    "upcomingMatches": "Próximos",
+    "completedMatches": "Finalizados",
+    "scheduled": "Programado",
+    "live": "En Vivo",
+    "completed": "Finalizado",
+    "unknownTeam": "Equipo Desconocido"
   },
   "Referee": {
     "title": "Panel del Árbitro",
@@ -592,7 +620,9 @@
   "Auth": {
     "loginTitle": "Iniciar Sesión",
     "loginSubtitle": "Ingresa a tu cuenta",
+    "loginLink": "Iniciar sesión",
     "registerLink": "regístrate si no tienes cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "registerTitle": "Registrarse",
     "registerSubtitle": "Crea tu cuenta",
     "email": "Correo electrónico",
@@ -644,5 +674,16 @@
     "error": "Error",
     "info": "Información",
     "warning": "Advertencia"
+  },
+  "TeamRegister": {
+    "subtitle": "Regístrate como jugador",
+    "playerList": "Jugadores",
+    "thisIsMe": "Este soy yo",
+    "registered": "Registrado",
+    "loginToClaim": "Inicia sesión para reclamar tu lugar",
+    "loginRequired": "Debes iniciar sesión para reclamar un jugador",
+    "claimSuccess": "Jugador reclamado correctamente",
+    "claimError": "Error al reclamar jugador",
+    "notFound": "Equipo no encontrado o registro no habilitado"
   }
 }

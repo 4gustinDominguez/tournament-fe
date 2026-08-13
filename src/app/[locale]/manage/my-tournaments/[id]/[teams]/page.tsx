@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import CreatePlayerForm from "@/components/CreatePlayerForm";
 import EditTeamForm from "@/components/EditTeamForm";
@@ -50,12 +50,14 @@ export default function TeamPage() {
     kitPattern: KitPattern;
     kitColors: string[];
     formation: Team["formation"];
+    publicRegistration: boolean;
   }>({
     coach: "",
     crestUrl: "",
     kitPattern: "solid",
     kitColors: ["#000000"],
     formation: undefined,
+    publicRegistration: false,
   });
 
   useEffect(() => {
@@ -84,28 +86,23 @@ export default function TeamPage() {
               ? [team.kitColor]
               : ["#000000"],
         formation: team.formation,
+        publicRegistration: team.publicRegistration ?? false,
       });
       setLoading(false);
     }
   }, [tournamentId, team, getTeams]);
 
-  const handleInputChange = useCallback(
-    (field: "coach" | "crestUrl", value: string) => {
-      setFormState((prev) => ({ ...prev, [field]: value }));
-    },
-    [],
-  );
+  const handleInputChange = (field: "coach" | "crestUrl", value: string) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const handleKitChange = useCallback(
-    (patch: Partial<Pick<Team, "kitPattern" | "kitColors">>) => {
-      setFormState((prev) => ({ ...prev, ...patch }));
-    },
-    [],
-  );
+  const handleKitChange = (patch: Partial<Pick<Team, "kitPattern" | "kitColors">>) => {
+    setFormState((prev) => ({ ...prev, ...patch }));
+  };
 
-  const handleFormationChange = useCallback((formation: Team["formation"]) => {
+  const handleFormationChange = (formation: Team["formation"]) => {
     setFormState((prev) => ({ ...prev, formation }));
-  }, []);
+  };
 
   async function handleSave() {
     if (!team || saving) return;
@@ -118,6 +115,7 @@ export default function TeamPage() {
         kitPattern: formState.kitPattern,
         kitColors: formState.kitColors,
         formation: formState.formation,
+        publicRegistration: formState.publicRegistration,
       };
       await updateTeam({ tournamentId, team: updatedTeam });
       await getTeams(tournamentId);
@@ -284,6 +282,33 @@ export default function TeamPage() {
                       onChange={(crestId) => handleInputChange("crestUrl", crestId)}
                     />
                   </div>
+                  <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg border border-border">
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{tForm("publicRegistration")}</p>
+                      <p className="text-xs text-muted-foreground">{tForm("publicRegistrationDesc")}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormState((prev) => ({ ...prev, publicRegistration: !prev.publicRegistration }))}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                        formState.publicRegistration ? "bg-brand-600" : "bg-neutral-300"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          formState.publicRegistration ? "translate-x-6" : "translate-x-1"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  {formState.publicRegistration && (
+                    <div className="p-3 bg-brand-50 rounded-lg border border-brand-200">
+                      <p className="text-xs font-semibold text-brand-700 mb-1">{tForm("shareLink")}</p>
+                      <p className="text-xs text-brand-600 break-all">
+                        {typeof window !== "undefined" ? `${window.location.origin}/t/${tournamentId}/register/${teamId}` : ""}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
               <TabsContent value="kit">

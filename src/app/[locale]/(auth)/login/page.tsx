@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/sections/tournaments/auth-context";
 import { Link, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
@@ -12,7 +13,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations("Auth");
+
+  const redirect = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +25,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      router.push("/");
+      router.push(redirect);
     } catch (err: any) {
       setError(err.message || t("invalidCredentials"));
     } finally {
@@ -53,7 +57,7 @@ export default function LoginPage() {
         <p className="mt-2 text-center text-sm text-muted-foreground">
           O{" "}
           <Link
-            href="/register"
+            href={`/register${redirect !== "/" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`}
             className="font-semibold text-brand-600 hover:text-brand-700"
           >
             {t("registerLink")}

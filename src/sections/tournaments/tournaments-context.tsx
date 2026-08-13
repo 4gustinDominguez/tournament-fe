@@ -88,6 +88,8 @@ export interface ContextState {
     teamId: string;
     tournamentId: string;
   }) => Promise<void>;
+  getTeamPublicInfo: (teamId: string) => Promise<{ team: any; players: Array<{ id: string; name: string; nickname: string; dorsal?: number; registered: boolean }> } | null>;
+  claimPlayer: (playerId: string) => Promise<void>;
   deletePlayer: ({
     playerId,
     tournamentId,
@@ -132,6 +134,8 @@ export interface ContextState {
   getAllReferees: () => Promise<Referee[]>;
   getRefereeMe: () => Promise<Referee | null>;
   getPlayerMe: () => Promise<Player | null>;
+  getMyTeams: () => Promise<Team[]>;
+  getMyMatches: () => Promise<Match[]>;
   getMatchesByRefereeId: (refereeId: string) => Promise<Match[]>;
   getStandings: (tournamentId: string) => Promise<TeamStats[]>;
   createReferee: ({
@@ -384,6 +388,8 @@ export const TournamentContextProvider = ({
         getAllReferees: async () => repository.getAllReferees(),
         getRefereeMe: async () => repository.getRefereeMe(),
         getPlayerMe: async () => repository.getPlayerMe(),
+        getMyTeams: async () => repository.getMyTeams(),
+        getMyMatches: async () => repository.getMyMatches(),
         getMatchesByRefereeId: async (refereeId: string) => {
           const matches = await repository.getMatchesByRefereeId(refereeId);
           setMatches(matches);
@@ -443,6 +449,8 @@ export const TournamentContextProvider = ({
           await repository.deleteTeam(teamId);
           await getTeams(tournamentId);
         },
+        getTeamPublicInfo: async (teamId: string) => repository.getTeamPublicInfo(teamId),
+        claimPlayer: async (playerId: string) => repository.claimPlayer(playerId),
         deletePlayer: async ({
           playerId,
           tournamentId,
