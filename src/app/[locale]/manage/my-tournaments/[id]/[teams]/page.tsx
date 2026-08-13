@@ -190,8 +190,15 @@ export default function TeamPage() {
                           )}
                         </div>
                         <div>
-                          <div className="font-bold text-foreground group-hover:text-brand-700 transition-colors">
+                          <div className="font-bold text-foreground group-hover:text-brand-700 transition-colors flex items-center gap-2">
                             {player.name}
+                            {player.userId && (
+                              <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-green-100" title={t("registered")}>
+                                <svg className="h-3 w-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                </svg>
+                              </span>
+                            )}
                           </div>
                           <div className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">
                             {player.position || t("noPosition")} • @

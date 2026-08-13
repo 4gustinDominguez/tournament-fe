@@ -481,6 +481,7 @@
     "players": "Jugadores",
     "noPlayers": "Aún no hay jugadores en este equipo.",
     "noPosition": "Sin posición",
+    "registered": "Registrado",
     "teamConfig": "Configuración del Equipo",
     "back": "Volver al torneo"
   },
