@@ -6,8 +6,6 @@ import { cn } from '@/lib/utils';
 import {
     Trophy,
     ShieldCheck,
-    Users,
-    Calendar,
     User,
     ChevronRight,
     type LucideIcon
@@ -52,18 +50,8 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onNavigate }) => {
 
         if (user.role === UserRole.PLAYER) {
             items.push({
-                href: '/manage/player/teams',
-                label: t('myTeams'),
-                icon: Users,
-            });
-            items.push({
-                href: '/manage/player/matches',
-                label: t('myMatches'),
-                icon: Calendar,
-            });
-            items.push({
                 href: '/manage/player',
-                label: t('myProfile'),
+                label: t('myDashboard'),
                 icon: User,
             });
         }

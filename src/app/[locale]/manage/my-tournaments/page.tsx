@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from '@/navigation';
 import CreateTournamentForm from "@/components/CreateTournamentForm";
 import { TournamentList } from "@/components/TournamentList";
 import { useTranslations } from "next-intl";
@@ -24,12 +25,19 @@ export default function TournamentsPage() {
     const t = useTranslations('MyTournaments');
     const tTr = useTranslations('Tournaments');
     const { user } = useAuth();
+    const router = useRouter();
     const { getDashboardStats } = useTournamentContext();
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [showWizard, setShowWizard] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
 
     const canManage = user?.role === UserRole.SUPER_ADMIN || user?.role === UserRole.TOURNAMENT_ADMIN;
+
+    useEffect(() => {
+        if (user && user.role === UserRole.PLAYER) {
+            router.push("/manage/player");
+        }
+    }, [user, router]);
 
     useEffect(() => {
         getDashboardStats().then(setStats).catch(() => setStats(null));

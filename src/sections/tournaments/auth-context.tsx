@@ -27,7 +27,7 @@ interface AuthContextType {
     user: User | null;
     token: string | null;
     isAuthenticated: boolean;
-    login: (email: string, pass: string) => Promise<void>;
+    login: (email: string, pass: string) => Promise<{ user: User; token: string }>;
     logout: () => void;
     updateProfile: (data: {
         firstName?: string;
@@ -73,6 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(data.user);
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("auth_user", JSON.stringify(data.user));
+        return { user: data.user as User, token: data.token as string };
     }, []);
 
     const logout = useCallback(() => {

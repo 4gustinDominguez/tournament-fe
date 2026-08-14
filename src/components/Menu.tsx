@@ -16,7 +16,11 @@ const Menu = ({ mobile = false, onNavigate }: MenuProps) => {
   const { user, isAuthenticated, logout } = useAuth();
   const t = useTranslations("Menu");
   const dashboardHref =
-    user?.role === UserRole.REFEREE ? "/manage/referee" : "/manage/my-tournaments";
+    user?.role === UserRole.REFEREE
+      ? "/manage/referee"
+      : user?.role === UserRole.PLAYER
+        ? "/manage/player"
+        : "/manage/my-tournaments";
 
   if (mobile) {
     return (

@@ -2,21 +2,33 @@
 
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useAuth } from "@/sections/tournaments/auth-context";
+import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import { Link, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
+
+function defaultRouteForRole(role: UserRole): string {
+  switch (role) {
+    case UserRole.SUPER_ADMIN:
+    case UserRole.TOURNAMENT_ADMIN:
+      return "/manage/my-tournaments";
+    case UserRole.REFEREE:
+      return "/manage/referee";
+    case UserRole.PLAYER:
+      return "/manage/player";
+  }
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations("Auth");
 
-  const redirect = searchParams.get("redirect") || "/";
+  const requestedRedirect = searchParams.get("redirect");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +36,10 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
-      router.push(redirect);
+      const loggedIn = await login(email, password);
+      const role = loggedIn?.user?.role ?? user?.role;
+      const target = requestedRedirect || (role ? defaultRouteForRole(role) : "/");
+      router.push(target);
     } catch (err: any) {
       setError(err.message || t("invalidCredentials"));
     } finally {
@@ -57,7 +71,7 @@ export default function LoginPage() {
         <p className="mt-2 text-center text-sm text-muted-foreground">
           O{" "}
           <Link
-            href={`/register${redirect !== "/" ? `?redirect=${encodeURIComponent(redirect)}` : ""}`}
+            href={`/register${requestedRedirect ? `?redirect=${encodeURIComponent(requestedRedirect)}` : ""}`}
             className="font-semibold text-brand-600 hover:text-brand-700"
           >
             {t("registerLink")}
