@@ -448,6 +448,16 @@ export function createApiTournamentRepository(): TournamentRepository {
         return response.json();
     }
 
+    async function getMyStats(): Promise<Record<string, { team: Team; statistics: Player["statistics"] }>> {
+        const response = await fetch(`${baseUrl}/players/me/stats`, {
+            headers: getHeaders()
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch player stats");
+        }
+        return response.json();
+    }
+
     async function saveReferee({ tournamentId, referee }: { tournamentId: string; referee: Referee }) {
         const response = await fetch(`${baseUrl}/referees`, {
             method: "POST",
@@ -582,6 +592,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         getPlayerMe,
         getMyTeams,
         getMyMatches,
+        getMyStats,
         saveReferee,
         updateReferee,
         getStandings,

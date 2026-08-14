@@ -40,7 +40,7 @@ export default function PlayerPage() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated || user?.role !== "PLAYER") {
+    if (!isAuthenticated || user?.role !== UserRole.PLAYER) {
       setLoading(false);
       return;
     }

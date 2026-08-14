@@ -535,7 +535,13 @@
     "coach": "Coach",
     "tournaments": "Tournaments",
     "dorsal": "Dorsal",
-    "position": "Position"
+    "position": "Position",
+    "statMatches": "Matches",
+    "statGoals": "Goals",
+    "statAssists": "Assists",
+    "statYellow": "Yellow",
+    "statRed": "Red",
+    "statMinutes": "Minutes"
   },
   "PlayerMatches": {
     "title": "My Matches",

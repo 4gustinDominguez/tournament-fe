@@ -74,9 +74,10 @@ export interface TournamentRepository {
   getRefereesByTournamentId: (tournamentId: string) => Promise<Referee[]>;
   getAllReferees: () => Promise<Referee[]>;
   getRefereeMe: () => Promise<Referee | null>;
-  getPlayerMe: () => Promise<Player | null>;
-  getMyTeams: () => Promise<Team[]>;
-  getMyMatches: () => Promise<Match[]>;
+	getPlayerMe: () => Promise<Player | null>;
+	getMyTeams: () => Promise<Team[]>;
+	getMyMatches: () => Promise<Match[]>;
+	getMyStats: () => Promise<Record<string, { team: Team; statistics: Player["statistics"] }>>;
   saveReferee: ({
     tournamentId,
     referee,

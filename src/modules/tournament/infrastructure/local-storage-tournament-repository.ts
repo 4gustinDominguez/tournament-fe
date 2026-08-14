@@ -50,6 +50,7 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
         getPlayerMe: async () => null,
         getMyTeams: async () => [],
         getMyMatches: async () => [],
+        getMyStats: async () => ({}),
         saveReferee: async () => { },
         updateReferee: async () => { },
         getMatchesByRefereeId: async () => [],

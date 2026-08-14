@@ -535,7 +535,13 @@
     "coach": "Entrenador",
     "tournaments": "Torneos",
     "dorsal": "Dorsal",
-    "position": "Posición"
+    "position": "Posición",
+    "statMatches": "Partidos",
+    "statGoals": "Goles",
+    "statAssists": "Asistencias",
+    "statYellow": "Amarillas",
+    "statRed": "Rojas",
+    "statMinutes": "Minutos"
   },
   "PlayerMatches": {
     "title": "Mis Partidos",
