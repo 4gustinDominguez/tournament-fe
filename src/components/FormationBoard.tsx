@@ -158,9 +158,12 @@ const FORMATION_PRESETS: Record<GameFormat, FormationPreset[]> = {
 };
 
 function getPlayerInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  return name
+    .trim()
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
 }
 
 interface FormationBoardProps {
@@ -264,7 +267,11 @@ const FormationBoard: React.FC<FormationBoardProps> = ({
     onFormationChange({ gameFormat, formationType, positions: next });
   }
 
-  const maxColsByFormat: Record<GameFormat, number> = { "5": 2, "7": 3, "11": 5 };
+  const maxColsByFormat: Record<GameFormat, number> = {
+    "5": 2,
+    "7": 3,
+    "11": 5,
+  };
   const totalCols = maxColsByFormat[gameFormat];
 
   const rows = currentPreset.positions.reduce<number[][]>((acc, pos) => {
@@ -272,15 +279,6 @@ const FormationBoard: React.FC<FormationBoardProps> = ({
     if (!acc[pos.row].includes(pos.col)) acc[pos.row].push(pos.col);
     return acc;
   }, []);
-
-  function getRowJustify(rowIdx: number): string {
-    const rowPositions = currentPreset.positions.filter((p) => p.row === rowIdx);
-    if (rowPositions.length === 1) return "justify-center";
-    const minCol = Math.min(...rowPositions.map((p) => p.col));
-    const maxCol = Math.max(...rowPositions.map((p) => p.col));
-    if (maxCol - minCol < totalCols - 1) return "justify-center";
-    return "justify-between";
-  }
 
   return (
     <div className="space-y-4" ref={dropdownRef}>
@@ -328,19 +326,18 @@ const FormationBoard: React.FC<FormationBoardProps> = ({
         </div>
 
         <div
-          className="relative flex flex-col items-center justify-center gap-2"
+          className="relative flex flex-col items-center justify-center gap-4"
           style={{ minHeight: "320px" }}
         >
           {rows.map((cols, rowIndex) => {
             const rowPositions = currentPreset.positions.filter(
               (p) => p.row === rowIndex,
             );
-            const justifyClass = getRowJustify(rowIndex);
 
             return (
               <div
                 key={rowIndex}
-                className={`flex ${cols.length > 1 ? "gap-6" : "gap-2"} items-center ${justifyClass} w-full px-4`}
+                className={`flex ${cols.length > 1 ? "gap-12" : "gap-8"} items-center justify-center w-full px-4`}
               >
                 {cols.map((_, colIndex) => {
                   const pos = rowPositions.find((p) => p.col === colIndex);
@@ -358,17 +355,17 @@ const FormationBoard: React.FC<FormationBoardProps> = ({
                         onClick={() =>
                           setOpenDropdownFor(isOpen ? null : pos.id)
                         }
-                        className={`w-12 h-12 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all ${
+                        className={`w-16 h-16 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all ${
                           assignedPlayer
                             ? "bg-brand-600 border-brand-600 text-white shadow-lg cursor-pointer"
                             : "bg-white/20 border-dashed border-white text-white/60 cursor-pointer"
                         }`}
                       >
-                        {assignedPlayer ? (
-                          <span>{getPlayerInitials(assignedPlayer.name)}</span>
-                        ) : (
-                          <span className="text-[8px]">{pos.label}</span>
-                        )}
+                        <span className="text-white w-full text-center">
+                          {assignedPlayer
+                            ? getPlayerInitials(assignedPlayer.name)
+                            : pos.label}
+                        </span>
                       </button>
 
                       {isOpen && (
