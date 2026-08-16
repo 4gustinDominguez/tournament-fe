@@ -691,6 +691,8 @@
     "liTeamsOnly": "{count} teams with placeholder names",
     "liNoPlayers": "No players created (add them later)",
     "liNoFixtures": "No fixtures generated (create them from the tournament)",
+    "randomPurposeTitle": "What happens next?",
+    "randomPurposeBody": "A complete tournament will be generated with random data. After that, you can go into the tournament and edit each team, player, venue and referee with real information. This mode is useful for quickly testing the platform or creating demos.",
     "back": "Back",
     "next": "Next",
     "generating": "Generating Magic...",

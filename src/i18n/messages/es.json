@@ -691,6 +691,8 @@
     "liTeamsOnly": "{count} equipos con nombres placeholder",
     "liNoPlayers": "Sin jugadores creados (agrégalos después)",
     "liNoFixtures": "Sin fixture generado (créalo desde el torneo)",
+    "randomPurposeTitle": "¿Qué sigue después?",
+    "randomPurposeBody": "Se generará un torneo completo con datos aleatorios. Después podrás entrar al torneo y editar cada equipo, jugador, sede y árbitro con información real. Este modo es útil para probar la plataforma rápidamente o crear demos.",
     "back": "Atrás",
     "next": "Siguiente",
     "generating": "Generando Magia...",

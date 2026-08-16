@@ -383,6 +383,17 @@ export default function SetupWizardPage() {
                   )}
                 </ul>
               </div>
+
+              {mode === "random" && (
+                <div className="mt-4 p-4 bg-amber-50 rounded-2xl border border-amber-100 text-left">
+                  <h4 className="text-xs font-black text-amber-800 uppercase mb-1">
+                    {t("randomPurposeTitle")}
+                  </h4>
+                  <p className="text-xs text-amber-700">
+                    {t("randomPurposeBody")}
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
