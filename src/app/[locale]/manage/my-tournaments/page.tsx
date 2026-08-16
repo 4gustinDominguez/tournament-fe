@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from '@/navigation';
-import CreateTournamentForm from "@/components/CreateTournamentForm";
 import { TournamentList } from "@/components/TournamentList";
 import { useTranslations } from "next-intl";
 import {
@@ -16,7 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import QuickSetupWizard from "@/components/QuickSetupWizard";
+import CreateTournamentForm from "@/components/CreateTournamentForm";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { DashboardStats } from "@/modules/tournament/domain/dashboard-stats";
@@ -28,7 +27,6 @@ export default function TournamentsPage() {
     const router = useRouter();
     const { getDashboardStats } = useTournamentContext();
     const [stats, setStats] = useState<DashboardStats | null>(null);
-    const [showWizard, setShowWizard] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
 
     const canManage = user?.role === UserRole.SUPER_ADMIN || user?.role === UserRole.TOURNAMENT_ADMIN;
@@ -88,7 +86,7 @@ export default function TournamentsPage() {
                     <div className="flex items-center gap-3">
                         <Button
                             variant="outline"
-                            onClick={() => setShowWizard(true)}
+                            onClick={() => router.push("/manage/setup-wizard")}
                             className="h-11 px-6 rounded-lg border-brand-200 bg-brand-50/50 text-brand-700 hover:bg-brand-100 hover:text-brand-800 font-semibold gap-2"
                         >
                             <Sparkles className="h-4 w-4" /> {t('quickSetup')}
@@ -128,7 +126,6 @@ export default function TournamentsPage() {
             </div>
 
             {/* Modal Components */}
-            {showWizard && <QuickSetupWizard onClose={() => setShowWizard(false)} />}
             {showCreateForm && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-night-900/50 backdrop-blur-sm p-4">
                     <Card className="w-full max-w-2xl shadow-elevated rounded-2xl overflow-hidden border-border animate-enter">

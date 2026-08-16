@@ -96,5 +96,6 @@ export interface TournamentRepository {
     playersPerTeam: number;
     placesCount: number;
     refereesCount: number;
+    mode?: "random" | "guided";
   }) => Promise<{ tournamentId: string }>;
 }
