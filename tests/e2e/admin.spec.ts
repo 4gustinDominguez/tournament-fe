@@ -59,24 +59,27 @@ test.describe("admin happy path", () => {
     await page.locator('#password').fill(password);
     await page.locator('button[type="submit"]').click();
 
-    await page.waitForURL("/");
+    await page.waitForURL(/\/manage\/my-tournaments/);
 
-    await page.goto("/manage/my-tournaments");
     await expect(
       page.getByRole("heading", { name: "Mis Torneos" })
     ).toBeVisible();
 
     await page.getByRole("button", { name: /quick setup|configuración rápida/i }).click();
 
-    const wizardTitle = page.getByText(/✨|configuración rápida/i);
+    await page.waitForURL(/\/manage\/setup-wizard/);
+
+    const wizardTitle = page.getByRole("heading", { name: /setup wizard|asistente de configuración/i });
     await expect(wizardTitle.first()).toBeVisible();
+
+    await page.getByRole("button", { name: /quick.*random|rápido.*aleatorio/i }).click();
 
     const tournamentName = `E2E Tournament ${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     await page.locator('input[name="tournamentName"]').fill(tournamentName);
 
-    await page.locator('.fixed.inset-0.z-50 button:has-text("Siguiente")').click();
+    await page.getByRole("button", { name: "Siguiente" }).click();
 
-    await page.locator('.fixed.inset-0.z-50 button:has-text("Siguiente")').click();
+    await page.getByRole("button", { name: "Siguiente" }).click();
 
     page.on("dialog", async dialog => {
       if (dialog.message().includes("error") || dialog.message().includes("Error")) {
@@ -84,7 +87,7 @@ test.describe("admin happy path", () => {
       }
     });
 
-    await page.locator('.fixed.inset-0.z-50 button:has-text("Generar")').click();
+    await page.getByRole("button", { name: /generar|generate/i }).click();
 
     try {
       await page.waitForURL(/\/t\/.+/, { timeout: 10000 });

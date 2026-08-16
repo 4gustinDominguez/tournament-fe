@@ -57,9 +57,8 @@ test.describe("auth smoke", () => {
     await page.locator('#password').fill(password);
     await page.locator('button[type="submit"]').click();
 
-    await page.waitForURL("/");
+    await page.waitForURL(/\/manage\/my-tournaments/);
 
-    await page.goto("/manage/my-tournaments");
     await expect(
       page.getByRole("heading", { name: "Mis Torneos" })
     ).toBeVisible();

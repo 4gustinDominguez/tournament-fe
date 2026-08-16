@@ -63,19 +63,23 @@ test.describe("public landing page", () => {
     await page.locator('#password').fill(password);
     await page.locator('button[type="submit"]').click();
 
-    await page.waitForURL("/");
+    await page.waitForURL(/\/manage\/my-tournaments/);
 
     await page.goto("/manage/my-tournaments");
     await page.getByRole("button", { name: /quick setup|configuración rápida/i }).click();
 
+    await page.waitForURL(/\/manage\/setup-wizard/);
+
+    await page.getByRole("button", { name: /quick.*random|rápido.*aleatorio/i }).click();
+
     const tournamentName = `Public Tournament ${Date.now()}`;
     await page.locator('input[name="tournamentName"]').fill(tournamentName);
 
-    await page.locator('.fixed.inset-0.z-50 button:has-text("Siguiente")').click();
+    await page.getByRole("button", { name: "Siguiente" }).click();
 
-    await page.locator('.fixed.inset-0.z-50 button:has-text("Siguiente")').click();
+    await page.getByRole("button", { name: "Siguiente" }).click();
 
-    await page.locator('.fixed.inset-0.z-50 button:has-text("Generar")').click();
+    await page.getByRole("button", { name: /generar|generate/i }).click();
 
     await page.waitForURL(/\/t\/.+/);
     const currentUrl = page.url();

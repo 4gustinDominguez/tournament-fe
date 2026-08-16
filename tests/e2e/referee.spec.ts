@@ -57,9 +57,8 @@ test.describe("referee flow", () => {
     await page.locator('#password').fill(password);
     await page.locator('button[type="submit"]').click();
 
-    await page.waitForURL("/");
+    await page.waitForURL(/\/manage\/referee/);
 
-    await page.goto("/manage/referee");
     await expect(
       page.getByRole("heading", { name: /bienvenido/i })
     ).toBeVisible();
@@ -91,7 +90,7 @@ test.describe("referee RBAC", () => {
     await page.locator('#password').fill(password);
     await page.locator('button[type="submit"]').click();
 
-    await page.waitForURL("/");
+    await page.waitForURL(/\/manage\/referee/);
 
     await page.goto("/manage/referee");
 
