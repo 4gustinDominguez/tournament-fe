@@ -33,7 +33,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         return new Error(fallback);
     }
 
-    async function save(tournament: Tournament) {
+    async function save(tournament: Tournament): Promise<Tournament> {
         const response = await fetch(`${baseUrl}/tournaments`, {
             method: "POST",
             headers: getHeaders(),
@@ -46,6 +46,8 @@ export function createApiTournamentRepository(): TournamentRepository {
         if (!response.ok) {
             throw new Error("Failed to save tournament");
         }
+
+        return response.json();
     }
 
     async function get(id: string): Promise<Tournament | null> {
@@ -57,6 +59,20 @@ export function createApiTournamentRepository(): TournamentRepository {
 
         if (!response.ok) {
             throw new Error(`Failed to get tournament with id ${id}`);
+        }
+
+        return response.json();
+    }
+
+    async function getBySlug(slug: string): Promise<Tournament | null> {
+        const response = await fetch(`${baseUrl}/tournaments/slug/${slug}`);
+
+        if (response.status === 404) {
+            return null;
+        }
+
+        if (!response.ok) {
+            throw new Error(`Failed to get tournament with slug ${slug}`);
         }
 
         return response.json();
@@ -306,6 +322,7 @@ export function createApiTournamentRepository(): TournamentRepository {
                 result: match.result,
                 incidents: match.incidents,
                 notes: match.notes,
+                presentPlayerIds: match.presentPlayerIds ?? [],
             }),
         });
 
@@ -350,6 +367,18 @@ export function createApiTournamentRepository(): TournamentRepository {
             ...m,
             date: new Date(m.date)
         }));
+    }
+    async function getMatchById(id: string): Promise<Match | null> {
+        const response = await fetch(`${baseUrl}/matches/${id}`, {
+            headers: getHeaders(),
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+            if (response.status === 404) return null;
+            throw new Error("Failed to fetch match");
+        }
+        const m = await response.json();
+        return { ...m, date: new Date(m.date) };
     }
     async function addMatchResult(matchId: string, result: { scoreA: number; scoreB: number }) {
         const response = await fetch(`${baseUrl}/matches/${matchId}/result`, {
@@ -491,7 +520,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         }
     }
 
-    async function generateScenario(params: any): Promise<{ tournamentId: string }> {
+    async function generateScenario(params: any): Promise<{ tournamentId: string; tournament: Tournament }> {
         const response = await fetch(`${baseUrl}/scenarios/generate`, {
             method: 'POST',
             headers: getHeaders(),
@@ -559,6 +588,7 @@ export function createApiTournamentRepository(): TournamentRepository {
     return {
         save,
         get,
+        getBySlug,
         getAll,
         getMyTournaments,
         getDashboardStats,
@@ -582,6 +612,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         deleteMatch,
         getMatchesByTournamentId,
         getMatchesByRefereeId,
+        getMatchById,
         addMatchResult,
         addMatchIncident,
         deleteMatchIncident,

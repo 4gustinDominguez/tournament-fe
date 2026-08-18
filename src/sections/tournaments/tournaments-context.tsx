@@ -23,6 +23,7 @@ export interface ContextState {
   rounds: Round[];
   standings: TeamStats[];
   getTournamentById: (id: string) => Promise<Tournament | null>;
+  getTournamentBySlug: (slug: string) => Promise<Tournament | null>;
   getTeams: (tournamentId: string) => Promise<Team[]>;
   getMatches: (tournamentId: string) => Promise<Match[]>;
   getRounds: (tournamentId: string) => Promise<Round[]>;
@@ -138,6 +139,7 @@ export interface ContextState {
 	getMyMatches: () => Promise<Match[]>;
 	getMyStats: () => Promise<Record<string, { team: Team; statistics: Player["statistics"] }>>;
   getMatchesByRefereeId: (refereeId: string) => Promise<Match[]>;
+  getMatchById: (id: string) => Promise<Match | null>;
   getStandings: (tournamentId: string) => Promise<TeamStats[]>;
   createReferee: ({
     tournamentId,
@@ -148,7 +150,7 @@ export interface ContextState {
   }) => Promise<void>;
   updateReferee: (referee: Referee) => Promise<void>;
   generateFixtures: (tournamentId: string) => Promise<void>;
-  generateScenario: (params: any) => Promise<{ tournamentId: string }>;
+  generateScenario: (params: any) => Promise<{ tournamentId: string; tournament: import("@/modules/tournament/domain/tournament").Tournament }>;
 }
 
 export const TournamentContext = React.createContext({} as ContextState);
@@ -181,7 +183,7 @@ export const TournamentContextProvider = ({
     async ({ name, location, startDate, endDate }: Tournament) => {
       let id = crypto.randomUUID();
 
-      await createTournament(repository, {
+      const created = await createTournament(repository, {
         id,
         name,
         location,
@@ -189,6 +191,7 @@ export const TournamentContextProvider = ({
         endDate,
       });
       getTournaments();
+      return created;
     },
     [repository, getTournaments],
   );
@@ -361,6 +364,13 @@ export const TournamentContextProvider = ({
     [repository],
   );
 
+  const getTournamentBySlug = useCallback(
+    async (slug: string) => {
+      return repository.getBySlug(slug);
+    },
+    [repository],
+  );
+
   useEffect(() => {
     getTournaments();
   }, [getTournaments]);
@@ -397,6 +407,7 @@ export const TournamentContextProvider = ({
           setMatches(matches);
           return matches;
         },
+        getMatchById: async (id: string) => repository.getMatchById(id),
         getStandings,
         generateFixtures,
         createReferee,
@@ -499,6 +510,7 @@ export const TournamentContextProvider = ({
         },
         getDashboardStats: async () => repository.getDashboardStats(),
         getTournamentById,
+        getTournamentBySlug,
       }}
     >
       {children}

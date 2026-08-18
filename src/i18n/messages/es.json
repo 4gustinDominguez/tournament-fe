@@ -359,7 +359,7 @@
     "success": "Partido guardado correctamente"
   },
   "IncidentEditor": {
-    "title": "Registrar Nuevo Incidente",
+    "title": "Registrar Evento",
     "minute": "Minuto",
     "team": "Equipo",
     "type": "Tipo",
@@ -369,7 +369,7 @@
     "redCard": "Tarjeta Roja",
     "substitution": "Cambio",
     "selectPlayer": "Seleccionar...",
-    "add": "AGREGAR INCIDENTE",
+    "add": "AGREGAR EVENTO",
     "event": "Evento",
     "action": "Acción",
     "unknownPlayer": "Jugador desconocido",
@@ -585,11 +585,13 @@
     "fallbackTeamA": "Equipo A",
     "fallbackTeamB": "Equipo B",
     "changeStatus": "Cambiar a {status}",
-    "hideIncidents": "Ocultar Incidencias",
-    "manageIncidents": "Gestionar Incidencias",
+    "hideIncidents": "Ocultar Eventos",
+    "manageIncidents": "Gestionar Eventos",
     "notes": "Acta del Partido / Notas",
     "notesPlaceholder": "Observaciones, expulsiones, campo en mal estado...",
-    "photo": "Foto de Perfil"
+    "photo": "Foto de Perfil",
+    "startMatch": "Iniciar Partido",
+    "controlMatch": "Controlar Partido"
   },
   "Contact": {
     "title": "Contáctanos",

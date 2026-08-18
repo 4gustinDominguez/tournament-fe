@@ -359,7 +359,7 @@
     "success": "Match saved successfully"
   },
   "IncidentEditor": {
-    "title": "Register New Incident",
+    "title": "Register Event",
     "minute": "Minute",
     "team": "Team",
     "type": "Type",
@@ -369,7 +369,7 @@
     "redCard": "Red Card",
     "substitution": "Substitution",
     "selectPlayer": "Select...",
-    "add": "ADD INCIDENT",
+    "add": "ADD EVENT",
     "event": "Event",
     "action": "Action",
     "unknownPlayer": "Unknown player",
@@ -585,11 +585,13 @@
     "fallbackTeamA": "Team A",
     "fallbackTeamB": "Team B",
     "changeStatus": "Change to {status}",
-    "hideIncidents": "Hide Incidents",
-    "manageIncidents": "Manage Incidents",
+    "hideIncidents": "Hide Events",
+    "manageIncidents": "Manage Events",
     "notes": "Match Report / Notes",
     "notesPlaceholder": "Observations, send-offs, poor pitch conditions...",
-    "photo": "Profile Photo"
+    "photo": "Profile Photo",
+    "startMatch": "Start Match",
+    "controlMatch": "Control Match"
   },
   "Contact": {
     "title": "Contact Us",

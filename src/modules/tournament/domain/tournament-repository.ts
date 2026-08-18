@@ -9,8 +9,9 @@ import { TeamStats } from "./standings";
 import { DashboardStats } from "./dashboard-stats";
 
 export interface TournamentRepository {
-  save: (tournament: Tournament) => Promise<void>;
+  save: (tournament: Tournament) => Promise<Tournament>;
   get: (id: string) => Promise<Tournament | null>;
+  getBySlug: (slug: string) => Promise<Tournament | null>;
   getAll: () => Promise<Tournament[]>;
   getMyTournaments: () => Promise<Tournament[]>;
   getDashboardStats: () => Promise<DashboardStats>;
@@ -61,6 +62,7 @@ export interface TournamentRepository {
   deleteMatch: (matchId: string) => Promise<void>;
   getMatchesByTournamentId: (tournamentId: string) => Promise<Match[]>;
   getMatchesByRefereeId: (refereeId: string) => Promise<Match[]>;
+  getMatchById: (id: string) => Promise<Match | null>;
   addMatchResult: (
     matchId: string,
     result: { scoreA: number; scoreB: number },
@@ -97,5 +99,5 @@ export interface TournamentRepository {
     placesCount: number;
     refereesCount: number;
     mode?: "random" | "guided";
-  }) => Promise<{ tournamentId: string }>;
+  }) => Promise<{ tournamentId: string; tournament: Tournament }>;
 }

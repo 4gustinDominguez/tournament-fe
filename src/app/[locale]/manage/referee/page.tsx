@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Referee } from "@/modules/referees/domain/referee";
 import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
+import { Place } from "@/modules/places/domain/place";
 import { useTranslations } from "next-intl";
-import IncidentEditor from "@/components/IncidentEditor";
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { Button } from "@/components/ui/button";
 import { uploadImage } from "@/services/imageService";
@@ -17,15 +18,15 @@ import { notify } from "@/lib/notify";
 export default function RefereePage() {
   const t = useTranslations("Referee");
   const tCommon = useTranslations("Common");
+  const router = useRouter();
   const { user, isAuthenticated } = useAuth();
   const {
     getRefereeMe,
     getMatchesByRefereeId,
-    updateMatch,
-    addMatchIncident,
-    deleteMatchIncident,
     teams,
     getTeams,
+    places,
+    getPlaces,
   } = useTournamentContext();
 
   const [referee, setReferee] = useState<Referee | null>(null);
@@ -56,13 +57,12 @@ export default function RefereePage() {
 
         setReferee(refereeProfile);
 
-        // Load matches for this referee
         const refereeMatches = await getMatchesByRefereeId(refereeProfile.id);
         setMatches(refereeMatches);
 
-        // Load teams for all tournaments this referee is involved in
         for (const tournamentId of refereeProfile.tournamentIds) {
           await getTeams(tournamentId);
+          await getPlaces(tournamentId);
         }
       } catch (err) {
         console.error("Error loading referee data:", err);
@@ -73,36 +73,9 @@ export default function RefereePage() {
     };
 
     loadRefereeData();
-  }, [
-    isAuthenticated,
-    user,
-    // Dependencies removed to prevent infinite loop as they are not memoized in context
-    // getRefereeMe,
-    // getMatchesByRefereeId,
-    // getTeams,
-  ]);
+  }, [isAuthenticated, user]);
 
-  const handleMatchUpdate = async (updatedMatch: Match) => {
-    try {
-      await updateMatch(updatedMatch);
-      notify.success(t("matchSaved"));
-
-      // Reload matches if needed, though context should handle it
-      if (referee) {
-        const updatedMatches = await getMatchesByRefereeId(referee.id);
-        setMatches(updatedMatches);
-      }
-    } catch (err) {
-      console.error("Error updating match:", err);
-      notify.error(err instanceof Error ? err.message : t("matchError"));
-    }
-  };
-
-  if (
-    !isAuthenticated ||
-    user?.role !== UserRole.REFEREE
-    // || user.role !== UserRole.SUPER_ADMIN
-  ) {
+  if (!isAuthenticated || user?.role !== UserRole.REFEREE) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
@@ -131,6 +104,11 @@ export default function RefereePage() {
       </div>
     );
   }
+
+  const getPlaceName = (placeId?: string) => {
+    if (!placeId) return null;
+    return places.find((p) => p.id === placeId)?.name ?? null;
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -227,27 +205,10 @@ export default function RefereePage() {
               key={match.id}
               match={match}
               teams={teams}
-              onUpdateMatch={handleMatchUpdate}
-              onAddIncident={async (incident) => {
-                await addMatchIncident(match.id, incident);
-                if (referee) {
-                  const updatedMatches = await getMatchesByRefereeId(
-                    referee.id,
-                  );
-                  setMatches(updatedMatches);
-                }
-              }}
-              onRemoveIncident={async (incidentId) => {
-                await deleteMatchIncident(match.id, incidentId);
-                if (referee) {
-                  const updatedMatches = await getMatchesByRefereeId(
-                    referee.id,
-                  );
-                  setMatches(updatedMatches);
-                }
-              }}
+              getPlaceName={getPlaceName}
               t={t}
               tCommon={tCommon}
+              onControl={() => router.push(`/manage/referee/match/${match.id}`)}
             />
           ))}
         </div>
@@ -259,83 +220,53 @@ export default function RefereePage() {
 interface MatchCardProps {
   match: Match;
   teams: Team[];
-  onUpdateMatch: (updatedMatch: Match) => Promise<void>;
-  onAddIncident: (incident: Omit<Match["incidents"][0], "id">) => Promise<void>;
-  onRemoveIncident: (incidentId: string) => Promise<void>;
+  getPlaceName: (placeId?: string) => string | null;
   t: any;
   tCommon: any;
+  onControl: () => void;
 }
 
 function MatchCard({
   match,
   teams,
-  onUpdateMatch,
-  onAddIncident,
-  onRemoveIncident,
+  getPlaceName,
   t,
   tCommon,
+  onControl,
 }: MatchCardProps) {
-  const [scoreA, setScoreA] = useState(match.result?.scoreA ?? 0);
-  const [scoreB, setScoreB] = useState(match.result?.scoreB ?? 0);
-  const [status, setStatus] = useState(match.status);
-  const [notes, setNotes] = useState(match.notes || "");
-  const [showIncidents, setShowIncidents] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
   const teamA = teams.find((t) => t.id === match.teamAId);
   const teamB = teams.find((t) => t.id === match.teamBId);
+  const placeName = getPlaceName(match.placeId);
 
-  // Sync state if match prop changes from parent
-  useEffect(() => {
-    setScoreA(match.result?.scoreA ?? 0);
-    setScoreB(match.result?.scoreB ?? 0);
-    setStatus(match.status);
-    setNotes(match.notes || "");
-  }, [match]);
+  const matchDate = typeof match.date === "string" ? new Date(match.date) : match.date;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const matchDate =
-        typeof match.date === "string" ? new Date(match.date) : match.date;
-
-      // Auto-live if scores added and it was scheduled, but respect manual status if it was changed
-      let finalStatus = status;
-      if (status === "scheduled" && (scoreA > 0 || scoreB > 0)) {
-        finalStatus = "live";
-      }
-
-      const updatedMatch: Match = {
-        ...match,
-        date: matchDate,
-        result: { scoreA, scoreB },
-        incidents: match.incidents || [],
-        status: finalStatus,
-        notes,
-      };
-      await onUpdateMatch(updatedMatch);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const ctaLabel =
+    match.status === "scheduled"
+      ? t("startMatch")
+      : t("controlMatch");
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-card border border-border">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="font-display text-xl font-bold text-foreground">
+    <div className="bg-white p-5 rounded-2xl shadow-card border border-border">
+      <div className="flex justify-between items-start gap-4">
+        <div className="flex-1 min-w-0">
+          <h3 className="font-display text-lg font-bold text-foreground truncate">
             {teamA?.name || t("fallbackTeamA")} vs{" "}
             {teamB?.name || t("fallbackTeamB")}
           </h3>
           <p className="text-sm text-muted-foreground">
-            {new Date(match.date).toLocaleString("es-ES", {
+            {matchDate.toLocaleString("es-ES", {
               dateStyle: "medium",
               timeStyle: "short",
             })}
           </p>
+          {placeName && (
+            <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+              <span className="inline-block">📍</span> {placeName}
+            </p>
+          )}
         </div>
-        <div className="flex flex-col items-end gap-2">
+
+        <div className="flex flex-col items-end gap-2 flex-shrink-0">
           <span
             className={`px-3 py-1 rounded-full text-xs font-bold ${
               match.status === "completed"
@@ -352,111 +283,33 @@ function MatchCard({
                 : tCommon("status.scheduled")}
           </span>
 
-          <div className="flex gap-1">
-            {(["scheduled", "live", "completed"] as const).map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setStatus(s)}
-                className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
-                  status === s
-                    ? "bg-brand-600 border-brand-600 text-white font-bold"
-                    : "bg-neutral-50 border-border text-muted-foreground hover:bg-neutral-100"
-                }`}
-                title={t("changeStatus", { status: tCommon(`status.${s}`) })}
-              >
-                {s === "scheduled" ? "📅" : s === "live" ? "⚽" : "🏆"}
-              </button>
-            ))}
-          </div>
+          {match.result && (
+            <span className="font-display text-xl font-black text-foreground">
+              {match.result.scoreA} - {match.result.scoreB}
+            </span>
+          )}
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-4">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-foreground mb-1">
-              {t("scoreA")}
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={scoreA}
-              onChange={(e) => setScoreA(parseInt(e.target.value) || 0)}
-              className="w-full p-2 border border-input rounded-lg focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
-            />
-          </div>
-          <div className="font-display text-2xl font-bold text-neutral-400 mt-6">
-            VS
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-foreground mb-1">
-              {t("scoreB")}
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={scoreB}
-              onChange={(e) => setScoreB(parseInt(e.target.value) || 0)}
-              className="w-full p-2 border border-input rounded-lg focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 border-t border-border pt-4">
-          <button
-            type="button"
-            onClick={() => setShowIncidents(!showIncidents)}
-            className="text-sm font-bold text-foreground flex items-center gap-2 hover:text-brand-600 transition-colors"
-          >
-            {showIncidents
-              ? `🔽 ${t("hideIncidents")}`
-              : `🔼 ${t("manageIncidents")}`}
-            {(match.incidents || []).length > 0 && (
-              <span className="bg-brand-100 text-brand-700 text-[10px] px-2 py-0.5 rounded-full">
-                {(match.incidents || []).length}
-              </span>
-            )}
-          </button>
-
-          {showIncidents && teamA && teamB && (
-            <div className="mt-4 bg-neutral-50 p-4 rounded-xl border border-border">
-              <IncidentEditor
-                teamA={teamA}
-                teamB={teamB}
-                incidents={match.incidents || []}
-                onAdd={onAddIncident}
-                onRemove={onRemoveIncident}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-foreground mb-1">
-            {t("notes")}
-          </label>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="w-full p-2 border border-input rounded-lg shadow-sm focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
-            rows={3}
-            placeholder={t("notesPlaceholder")}
-          />
-        </div>
-
+      <div className="mt-4 flex items-center gap-2">
+        {(match.incidents || []).length > 0 && (
+          <span className="text-xs text-muted-foreground">
+            {(match.incidents || []).length} eventos
+          </span>
+        )}
+        <div className="flex-1" />
         <button
-          type="submit"
-          disabled={submitting}
-          className={`mt-4 w-full py-2.5 px-4 rounded-lg text-white font-bold transition-colors ${
-            submitting
-              ? "bg-neutral-400 cursor-not-allowed"
-              : "bg-brand-600 hover:bg-brand-700"
+          type="button"
+          onClick={onControl}
+          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm ${
+            match.status === "scheduled"
+              ? "bg-brand-600 hover:bg-brand-700 text-white"
+              : "bg-white border border-brand-600 text-brand-700 hover:bg-brand-50"
           }`}
         >
-          {submitting ? tCommon("loading") : t("enterResult")}
+          {ctaLabel}
         </button>
-      </form>
+      </div>
     </div>
   );
 }

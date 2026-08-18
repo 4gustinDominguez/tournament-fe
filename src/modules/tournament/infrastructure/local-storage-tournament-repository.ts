@@ -9,6 +9,7 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
     return {
         save,
         get,
+        getBySlug,
         getAll,
         getMyTournaments: async () => [],
         getDashboardStats: async () => ({ tournaments: 0, teams: 0, players: 0, matches: 0 }),
@@ -54,17 +55,18 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
         saveReferee: async () => { },
         updateReferee: async () => { },
         getMatchesByRefereeId: async () => [],
-        generateScenario: async () => ({ tournamentId: "" }),
+        getMatchById: async () => null,
+        generateScenario: async () => ({ tournamentId: "", tournament: {} as Tournament }),
     }
 
     // save tournament 
-    async function save(tournament: Tournament) {
+    async function save(tournament: Tournament): Promise<Tournament> {
         const tournaments = getAllFromLocalStorage();
 
         tournaments.set(tournament.id, tournament);
         localStorage.setItem("tournaments", JSON.stringify(Array.from(tournaments.entries())));
 
-        await Promise.resolve();
+        return tournament;
     }
 
     async function get(id: string) {
@@ -76,6 +78,13 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
         }
 
         return Promise.resolve(tournament);
+    }
+
+    async function getBySlug(slug: string) {
+        const tournaments = getAllFromLocalStorage();
+        const tournament = Array.from(tournaments.values()).find((t) => t.slug === slug);
+
+        return Promise.resolve(tournament ?? null);
     }
 
     // get all tournaments

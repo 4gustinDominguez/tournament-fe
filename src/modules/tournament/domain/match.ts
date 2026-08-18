@@ -25,4 +25,5 @@ export interface Match {
     refereeId?: string;
     incidents: MatchIncident[];
     notes?: string;
+    presentPlayerIds?: string[];
 }
