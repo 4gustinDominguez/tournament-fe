@@ -89,7 +89,7 @@ describe("QuickSetupWizard", () => {
   it("generates the scenario and navigates to the tournament", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    generateScenarioMock.mockResolvedValueOnce({ tournamentId: "tid-123" });
+    generateScenarioMock.mockResolvedValueOnce({ tournamentId: "tid-123", tournament: { slug: "test-tournament" } });
     render(<QuickSetupWizard onClose={onClose} />);
 
     await user.type(
@@ -112,7 +112,7 @@ describe("QuickSetupWizard", () => {
       }),
     );
     expect(onClose).toHaveBeenCalled();
-    expect(pushMock).toHaveBeenCalledWith("/t/tid-123");
+    expect(pushMock).toHaveBeenCalledWith("/t/test-tournament");
   });
 
   it("shows an error toast when generation fails", async () => {

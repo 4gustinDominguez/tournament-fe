@@ -54,7 +54,7 @@ const QuickSetupWizard: React.FC<QuickSetupWizardProps> = ({ onClose }) => {
       });
       notify.success(t("success"));
       onClose();
-      router.push(`/t/${result.tournamentId}`);
+      router.push(`/t/${result.tournament.slug ?? result.tournamentId}`);
     } catch (err) {
       console.error("Generation error:", err);
       notify.error(err instanceof Error ? err.message : t("error"));

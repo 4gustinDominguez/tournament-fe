@@ -31,7 +31,7 @@ export default function TournamentItem({ id }: { id: string }) {
                 {tCommon("official")}
               </Badge>
               <Link
-                href={`/t/${id}`}
+                href={`/t/${tournament.slug || id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors"

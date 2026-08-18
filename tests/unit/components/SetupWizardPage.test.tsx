@@ -71,7 +71,7 @@ describe("SetupWizardPage", () => {
 
   it("generates a random scenario and navigates to the tournament", async () => {
     const user = userEvent.setup();
-    generateScenarioMock.mockResolvedValueOnce({ tournamentId: "tid-456" });
+    generateScenarioMock.mockResolvedValueOnce({ tournamentId: "tid-456", tournament: { slug: "liga-2026" } });
     render(<SetupWizardPage />);
 
     // Select random mode
@@ -98,12 +98,12 @@ describe("SetupWizardPage", () => {
         mode: "random",
       }),
     );
-    expect(pushMock).toHaveBeenCalledWith("/t/tid-456");
+    expect(pushMock).toHaveBeenCalledWith("/t/liga-2026");
   });
 
   it("generates a guided scenario with fewer steps", async () => {
     const user = userEvent.setup();
-    generateScenarioMock.mockResolvedValueOnce({ tournamentId: "tid-789" });
+    generateScenarioMock.mockResolvedValueOnce({ tournamentId: "tid-789", tournament: { slug: "mi-torneo" } });
     render(<SetupWizardPage />);
 
     // Select guided mode
@@ -127,6 +127,6 @@ describe("SetupWizardPage", () => {
         mode: "guided",
       }),
     );
-    expect(pushMock).toHaveBeenCalledWith("/t/tid-789");
+    expect(pushMock).toHaveBeenCalledWith("/t/mi-torneo");
   });
 });

@@ -14,7 +14,7 @@ import StandingsSection from "@/components/StandingsSection";
 export default function PublicTournamentPage(props: { params: Promise<{ id: string }> }) {
     const params = use(props.params);
     const t = useTranslations('PublicTournament');
-    const { getTournamentById } = useTournamentContext();
+    const { getTournamentBySlug, getTournamentById } = useTournamentContext();
     const [tournament, setTournament] = useState<Tournament | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,10 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
         async function loadTournament() {
             setLoading(true);
             try {
-                const data = await getTournamentById(params.id);
+                let data = await getTournamentBySlug(params.id);
+                if (!data) {
+                    data = await getTournamentById(params.id);
+                }
                 setTournament(data);
             } catch (error) {
                 console.error("Error loading tournament:", error);
@@ -31,7 +34,7 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
             }
         }
         loadTournament();
-    }, [params.id, getTournamentById]);
+    }, [params.id, getTournamentBySlug, getTournamentById]);
 
     if (loading) {
         return (
@@ -103,7 +106,7 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
                         <h2 className="eyebrow text-brand-600 mb-3">{t('standingsEyebrow')}</h2>
                         <h3 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight">{t('standingsTitle')}</h3>
                     </div>
-                    <StandingsSection tournamentId={params.id} />
+                    <StandingsSection tournamentId={tournament.id} />
                 </section>
 
                 {/* Matches */}
@@ -112,7 +115,7 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
                         <h2 className="eyebrow text-amber-600 mb-3">{t('calendarEyebrow')}</h2>
                         <h3 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight">{t('calendarTitle')}</h3>
                     </div>
-                    <MatchesSection tournamentId={params.id} readOnly />
+                    <MatchesSection tournamentId={tournament.id} readOnly />
                 </section>
 
                 {/* Teams */}
@@ -121,7 +124,7 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
                         <h2 className="eyebrow text-sky-600 mb-3">{t('teamsEyebrow')}</h2>
                         <h3 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight">{t('teamsTitle')}</h3>
                     </div>
-                    <TeamsSection tournamentId={params.id} readOnly />
+                    <TeamsSection tournamentId={tournament.id} readOnly />
                 </section>
 
             </main>

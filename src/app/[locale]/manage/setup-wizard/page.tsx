@@ -56,7 +56,7 @@ export default function SetupWizardPage() {
         mode,
       });
       notify.success(t("success"));
-      router.push(`/t/${result.tournamentId}`);
+      router.push(`/t/${result.tournament.slug ?? result.tournamentId}`);
     } catch (err) {
       console.error("Generation error:", err);
       notify.error(err instanceof Error ? err.message : t("error"));

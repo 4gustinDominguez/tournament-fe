@@ -137,7 +137,7 @@ export default function TournamentsPage() {
                     </div>
 
                     <div className="pt-4 border-t border-border">
-                      <Link href={`/t/${tournament.id}`}>
+                      <Link href={`/t/${tournament.slug || tournament.id}`}>
                         <Button className="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold shadow-card transform hover:scale-[1.02] transition-all">
                           <Eye className="mr-2 h-4 w-4" />
                           {t("viewDetails")}
