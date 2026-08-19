@@ -9,7 +9,16 @@ import { Team } from "@/modules/tournament/domain/team";
 import { Tournament } from "@/modules/tournament/domain/tournament";
 import IncidentEditor from "@/components/IncidentEditor";
 import { notify } from "@/lib/notify";
-import { MapPin, Clock, Play, Pause, RotateCcw, UserCheck, Save, AlertTriangle } from "lucide-react";
+import {
+  MapPin,
+  Clock,
+  Play,
+  Pause,
+  RotateCcw,
+  UserCheck,
+  Save,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function MatchControlPage() {
   const { matchId } = useParams<{ matchId: string }>();
@@ -37,26 +46,23 @@ export default function MatchControlPage() {
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<Match["status"]>("scheduled");
 
-  // Timer state: base elapsed (checkpoint) + running flag + started timestamp
   const [baseElapsedSeconds, setBaseElapsedSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [startedAtMs, setStartedAtMs] = useState<number | null>(null);
-  // tick counter to force re-render each second while running
-  const [tick, setTick] = useState(0);
+  const [effectiveElapsedSeconds, setEffectiveElapsedSeconds] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Cap warning state
   const [timeUpWarned, setTimeUpWarned] = useState(false);
 
   // Presence state
-  const [presentPlayerIds, setPresentPlayerIds] = useState<Set<string>>(new Set());
+  const [presentPlayerIds, setPresentPlayerIds] = useState<Set<string>>(
+    new Set(),
+  );
   const [savingPresence, setSavingPresence] = useState(false);
 
   // Save indicator
   const [saving, setSaving] = useState(false);
-
-  // Effective elapsed: base + (running ? now - started : 0)
-  const effectiveElapsedSeconds = baseElapsedSeconds + (isRunning && startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
 
   const formatTime = (totalSeconds: number) => {
     const mins = Math.floor(totalSeconds / 60);
@@ -64,11 +70,11 @@ export default function MatchControlPage() {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
-  // Timer tick effect
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = setInterval(() => {
-        setTick((t) => t + 1);
+        const now = Date.now();
+        setEffectiveElapsedSeconds(baseElapsedSeconds + (startedAtMs ? Math.floor((now - startedAtMs) / 1000) : 0));
       }, 1000);
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -77,11 +83,15 @@ export default function MatchControlPage() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isRunning]);
+  }, [isRunning, baseElapsedSeconds, startedAtMs]);
 
   // Check cap warning
   useEffect(() => {
-    if (tournament?.matchDurationMinutes && effectiveElapsedSeconds >= tournament.matchDurationMinutes * 60 && !timeUpWarned) {
+    if (
+      tournament?.matchDurationMinutes &&
+      effectiveElapsedSeconds >= tournament.matchDurationMinutes * 60 &&
+      !timeUpWarned
+    ) {
       setTimeUpWarned(true);
       notify.warning("Tiempo cumplido");
     }
@@ -105,7 +115,16 @@ export default function MatchControlPage() {
       // Initialize timer state from persisted match
       setBaseElapsedSeconds(foundMatch.timerElapsedSeconds ?? 0);
       setIsRunning(foundMatch.timerRunning ?? false);
-      setStartedAtMs(foundMatch.timerStartedAt ? new Date(foundMatch.timerStartedAt).getTime() : null);
+      const started = foundMatch.timerStartedAt
+        ? new Date(foundMatch.timerStartedAt).getTime()
+        : null;
+      setStartedAtMs(started);
+      setEffectiveElapsedSeconds(
+        foundMatch.timerRunning && started
+          ? (foundMatch.timerElapsedSeconds ?? 0) +
+            Math.floor((Date.now() - started) / 1000)
+          : foundMatch.timerElapsedSeconds ?? 0,
+      );
 
       await getTeams(foundMatch.tournamentId);
       await getPlaces(foundMatch.tournamentId);
@@ -129,7 +148,11 @@ export default function MatchControlPage() {
     loadData();
   }, [isAuthenticated, user]);
 
-  const persistTimer = async (base: number, running: boolean, started: number | null) => {
+  const persistTimer = async (
+    base: number,
+    running: boolean,
+    started: number | null,
+  ) => {
     if (!match) return;
     const updated: Match = {
       ...match,
@@ -145,11 +168,18 @@ export default function MatchControlPage() {
     if (!match) return;
     const now = Date.now();
     setBaseElapsedSeconds(0);
+    setEffectiveElapsedSeconds(0);
     setIsRunning(true);
     setStartedAtMs(now);
     setTimeUpWarned(false);
     try {
-      const updated: Match = { ...match, status: "live", timerElapsedSeconds: 0, timerRunning: true, timerStartedAt: new Date(now).toISOString() };
+      const updated: Match = {
+        ...match,
+        status: "live",
+        timerElapsedSeconds: 0,
+        timerRunning: true,
+        timerStartedAt: new Date(now).toISOString(),
+      };
       await updateMatch(updated);
       setMatch(updated);
       setStatus("live");
@@ -161,8 +191,11 @@ export default function MatchControlPage() {
 
   const handlePauseMatch = async () => {
     if (!match) return;
-    const currentElapsed = baseElapsedSeconds + (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+    const currentElapsed =
+      baseElapsedSeconds +
+      (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
     setBaseElapsedSeconds(currentElapsed);
+    setEffectiveElapsedSeconds(currentElapsed);
     setIsRunning(false);
     setStartedAtMs(null);
     try {
@@ -187,6 +220,7 @@ export default function MatchControlPage() {
   const handleResetTimer = async () => {
     if (!match) return;
     setBaseElapsedSeconds(0);
+    setEffectiveElapsedSeconds(0);
     setIsRunning(false);
     setStartedAtMs(null);
     setTimeUpWarned(false);
@@ -205,7 +239,9 @@ export default function MatchControlPage() {
       if (status === "scheduled" && (scoreA > 0 || scoreB > 0)) {
         finalStatus = "live";
       }
-      const currentElapsed = baseElapsedSeconds + (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+      const currentElapsed =
+        baseElapsedSeconds +
+        (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
       const updated: Match = {
         ...match,
         result: { scoreA, scoreB },
@@ -221,6 +257,7 @@ export default function MatchControlPage() {
       setIsRunning(false);
       setStartedAtMs(null);
       setBaseElapsedSeconds(currentElapsed);
+      setEffectiveElapsedSeconds(currentElapsed);
       notify.success("Resultado guardado");
     } catch (err) {
       notify.error("Error al guardar");
@@ -249,9 +286,12 @@ export default function MatchControlPage() {
 
   const handleFinishMatch = async () => {
     if (!match) return;
-    const currentElapsed = baseElapsedSeconds + (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+    const currentElapsed =
+      baseElapsedSeconds +
+      (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
     setIsRunning(false);
     setStartedAtMs(null);
+    setEffectiveElapsedSeconds(currentElapsed);
     try {
       const updated: Match = {
         ...match,
@@ -283,7 +323,9 @@ export default function MatchControlPage() {
     });
   };
 
-  const handleAddIncident = async (incident: Omit<Match["incidents"][0], "id">) => {
+  const handleAddIncident = async (
+    incident: Omit<Match["incidents"][0], "id">,
+  ) => {
     if (!match) return;
     await addMatchIncident(match.id, incident);
     const updated = await getMatchById(match.id);
@@ -341,7 +383,9 @@ export default function MatchControlPage() {
       : match.date
     : null;
 
-  const isTimeUp = tournament?.matchDurationMinutes ? effectiveElapsedSeconds >= tournament.matchDurationMinutes * 60 : false;
+  const isTimeUp = tournament?.matchDurationMinutes
+    ? effectiveElapsedSeconds >= tournament.matchDurationMinutes * 60
+    : false;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
@@ -384,7 +428,11 @@ export default function MatchControlPage() {
                     : "bg-sky-100 text-sky-700"
               }`}
             >
-              {status === "completed" ? "Finalizado" : status === "live" ? "En Vivo" : "Programado"}
+              {status === "completed"
+                ? "Finalizado"
+                : status === "live"
+                  ? "En Vivo"
+                  : "Programado"}
             </span>
           </div>
         </div>
@@ -392,7 +440,9 @@ export default function MatchControlPage() {
         {/* Score */}
         <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
           <div className="flex-1 text-right">
-            <p className="font-bold text-foreground text-sm">{teamA?.name || "A"}</p>
+            <p className="font-bold text-foreground text-sm">
+              {teamA?.name || "A"}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <input
@@ -402,7 +452,9 @@ export default function MatchControlPage() {
               onChange={(e) => setScoreA(parseInt(e.target.value) || 0)}
               className="w-16 p-2 border border-input rounded-lg text-center font-display text-lg font-bold focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
             />
-            <span className="font-display text-xl font-bold text-muted-foreground">-</span>
+            <span className="font-display text-xl font-bold text-muted-foreground">
+              -
+            </span>
             <input
               type="number"
               min="0"
@@ -412,16 +464,26 @@ export default function MatchControlPage() {
             />
           </div>
           <div className="flex-1 text-left">
-            <p className="font-bold text-foreground text-sm">{teamB?.name || "B"}</p>
+            <p className="font-bold text-foreground text-sm">
+              {teamB?.name || "B"}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Timer */}
-      <div className={`bg-white p-5 rounded-2xl shadow-card border mb-6 ${isTimeUp ? "border-amber-400" : "border-border"}`}>
+      <div
+        className={`bg-white p-5 rounded-2xl shadow-card border mb-6 ${isTimeUp ? "border-amber-400" : "border-border"}`}
+      >
         <div className="flex items-center gap-3 mb-3">
-          <Clock className={`h-4 w-4 ${isTimeUp ? "text-amber-500" : "text-muted-foreground"}`} />
-          <h2 className={`text-sm font-bold uppercase tracking-wider ${isTimeUp ? "text-amber-700" : "text-foreground"}`}>Tiempo</h2>
+          <Clock
+            className={`h-4 w-4 ${isTimeUp ? "text-amber-500" : "text-muted-foreground"}`}
+          />
+          <h2
+            className={`text-sm font-bold uppercase tracking-wider ${isTimeUp ? "text-amber-700" : "text-foreground"}`}
+          >
+            Tiempo
+          </h2>
           {isTimeUp && (
             <span className="flex items-center gap-1 text-amber-600 text-xs font-bold">
               <AlertTriangle className="h-3 w-3" /> Tiempo cumplido
@@ -429,7 +491,9 @@ export default function MatchControlPage() {
           )}
         </div>
         <div className="flex items-center justify-between">
-          <div className={`font-display text-4xl font-black tabular-nums ${isTimeUp ? "text-amber-600" : "text-foreground"}`}>
+          <div
+            className={`font-display text-4xl font-black tabular-nums ${isTimeUp ? "text-amber-600" : "text-foreground"}`}
+          >
             {formatTime(effectiveElapsedSeconds)}
           </div>
           <div className="flex items-center gap-2">
@@ -453,9 +517,13 @@ export default function MatchControlPage() {
                   }`}
                 >
                   {isRunning ? (
-                    <><Pause className="h-3.5 w-3.5" /> Pausar</>
+                    <>
+                      <Pause className="h-3.5 w-3.5" /> Pausar
+                    </>
                   ) : (
-                    <><Play className="h-3.5 w-3.5" /> Reanudar</>
+                    <>
+                      <Play className="h-3.5 w-3.5" /> Reanudar
+                    </>
                   )}
                 </button>
                 <button
@@ -512,7 +580,9 @@ export default function MatchControlPage() {
                     <span className="text-sm text-foreground">
                       {player.name}
                       {player.dorsal != null && (
-                        <span className="text-muted-foreground ml-1">#{player.dorsal}</span>
+                        <span className="text-muted-foreground ml-1">
+                          #{player.dorsal}
+                        </span>
                       )}
                     </span>
                   </label>
