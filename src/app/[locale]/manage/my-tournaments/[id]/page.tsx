@@ -5,8 +5,10 @@ import { use } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { CalendarDays, BarChart3, Users, Settings2, Info } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/navigation";
 import TournamentItem from "@/components/TournamentItem";
 import TeamsSection from "@/components/TeamsSection";
 import MatchesSection from "@/components/MatchesSection";
@@ -48,6 +50,12 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
         >
           {t("id", { id: params.id.slice(0, 8) })}
         </Badge>
+        <Link href={`/manage/my-tournaments/${params.id}/settings`}>
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <Settings2 className="h-4 w-4" />
+            {t("settings")}
+          </Button>
+        </Link>
       </header>
 
       <Tabs defaultValue="matches" className="w-full">

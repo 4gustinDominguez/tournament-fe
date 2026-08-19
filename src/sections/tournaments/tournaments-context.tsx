@@ -149,6 +149,7 @@ export interface ContextState {
     referee: Referee;
   }) => Promise<void>;
   updateReferee: (referee: Referee) => Promise<void>;
+  updateTournament: (tournament: Tournament) => Promise<Tournament>;
   generateFixtures: (tournamentId: string) => Promise<void>;
   generateScenario: (params: any) => Promise<{ tournamentId: string; tournament: import("@/modules/tournament/domain/tournament").Tournament }>;
 }
@@ -415,6 +416,11 @@ export const TournamentContextProvider = ({
           await repository.updateReferee(referee);
           // We might need to refresh referees list if we are in a context where it matters
           // But usually getReferees is called by the component
+        },
+        updateTournament: async (tournament: Tournament) => {
+          const updated = await repository.updateTournament(tournament);
+          await getTournaments();
+          return updated;
         },
         createMatch,
         addMatchResult: async (

@@ -323,6 +323,9 @@ export function createApiTournamentRepository(): TournamentRepository {
                 incidents: match.incidents,
                 notes: match.notes,
                 presentPlayerIds: match.presentPlayerIds ?? [],
+                timerElapsedSeconds: match.timerElapsedSeconds ?? 0,
+                timerRunning: match.timerRunning ?? false,
+                timerStartedAt: match.timerStartedAt ?? null,
             }),
         });
 
@@ -585,6 +588,25 @@ export function createApiTournamentRepository(): TournamentRepository {
         }
     }
 
+    async function updateTournament(tournament: Tournament): Promise<Tournament> {
+        const response = await fetch(`${baseUrl}/tournaments/${tournament.id}`, {
+            method: "PUT",
+            headers: getHeaders(),
+            body: JSON.stringify({
+                name: tournament.name,
+                location: tournament.location,
+                startDate: typeof tournament.startDate === 'string' ? tournament.startDate : tournament.startDate.toISOString().split('T')[0],
+                endDate: typeof tournament.endDate === 'string' ? tournament.endDate : tournament.endDate.toISOString().split('T')[0],
+                matchDurationMinutes: tournament.matchDurationMinutes ?? undefined,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update tournament with id ${tournament.id}`);
+        }
+        return response.json();
+    }
+
     return {
         save,
         get,
@@ -626,6 +648,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         getMyStats,
         saveReferee,
         updateReferee,
+        updateTournament,
         getStandings,
         generateFixtures,
         generateScenario,

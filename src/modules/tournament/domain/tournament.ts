@@ -10,4 +10,5 @@ export interface Tournament {
     status?: string;
     category?: string;
     description?: string;
+    matchDurationMinutes?: number;
 }

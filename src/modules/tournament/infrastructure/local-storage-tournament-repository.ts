@@ -54,6 +54,7 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
         getMyStats: async () => ({}),
         saveReferee: async () => { },
         updateReferee: async () => { },
+        updateTournament,
         getMatchesByRefereeId: async () => [],
         getMatchById: async () => null,
         generateScenario: async () => ({ tournamentId: "", tournament: {} as Tournament }),
@@ -191,5 +192,11 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
     async function deleteMatch(matchId: string) {
         console.log("Deleting match in local storage", matchId);
         await Promise.resolve();
+    }
+
+    async function updateTournament(tournament: Tournament): Promise<Tournament> {
+        console.log("Updating tournament in local storage", tournament);
+        await Promise.resolve();
+        return tournament;
     }
 }

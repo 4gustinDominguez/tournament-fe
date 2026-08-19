@@ -158,6 +158,7 @@
     "title": "Tournament",
     "subtitle": "Tournament management and tracking",
     "id": "ID: {id}",
+    "settings": "Settings",
     "publicLink": "View public page",
     "tabs": {
       "matches": "Matches",
@@ -722,5 +723,22 @@
     "claimSuccess": "Player claimed successfully",
     "claimError": "Error claiming player",
     "notFound": "Team not found or registration is not enabled"
+  },
+  "TournamentSettings": {
+    "title": "Tournament Settings",
+    "subtitle": "Configure match duration and other details",
+    "name": "Tournament name",
+    "location": "Location",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "matchDuration": "Match duration",
+    "matchDurationPlaceholder": "90",
+    "matchDurationHelp": "Minutes. If empty, the timer has no cap.",
+    "minutes": "minutes",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "saved": "Changes saved",
+    "back": "Back",
+    "errorSaving": "Error saving"
   }
 }

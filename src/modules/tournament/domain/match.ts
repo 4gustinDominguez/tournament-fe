@@ -26,4 +26,7 @@ export interface Match {
     incidents: MatchIncident[];
     notes?: string;
     presentPlayerIds?: string[];
+    timerElapsedSeconds?: number;
+    timerRunning?: boolean;
+    timerStartedAt?: string | null;
 }

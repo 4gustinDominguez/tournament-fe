@@ -88,6 +88,7 @@ export interface TournamentRepository {
     referee: Referee;
   }) => Promise<void>;
   updateReferee: (referee: Referee) => Promise<void>;
+  updateTournament: (tournament: Tournament) => Promise<Tournament>;
   getStandings: (tournamentId: string) => Promise<TeamStats[]>;
   generateFixtures: (tournamentId: string) => Promise<void>;
   generateScenario: (params: {

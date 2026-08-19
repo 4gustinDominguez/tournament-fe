@@ -2,15 +2,14 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
 import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
-import { Place } from "@/modules/places/domain/place";
+import { Tournament } from "@/modules/tournament/domain/tournament";
 import IncidentEditor from "@/components/IncidentEditor";
 import { notify } from "@/lib/notify";
-import { MapPin, Clock, Play, Pause, RotateCcw, UserCheck, Save } from "lucide-react";
+import { MapPin, Clock, Play, Pause, RotateCcw, UserCheck, Save, AlertTriangle } from "lucide-react";
 
 export default function MatchControlPage() {
   const { matchId } = useParams<{ matchId: string }>();
@@ -23,11 +22,13 @@ export default function MatchControlPage() {
     updateMatch,
     addMatchIncident,
     deleteMatchIncident,
+    getTournamentById,
     teams,
     places,
   } = useTournamentContext();
 
   const [match, setMatch] = useState<Match | null>(null);
+  const [tournament, setTournament] = useState<Tournament | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,10 +37,16 @@ export default function MatchControlPage() {
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState<Match["status"]>("scheduled");
 
-  // Timer state
-  const [timerRunning, setTimerRunning] = useState(false);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Timer state: base elapsed (checkpoint) + running flag + started timestamp
+  const [baseElapsedSeconds, setBaseElapsedSeconds] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [startedAtMs, setStartedAtMs] = useState<number | null>(null);
+  // tick counter to force re-render each second while running
+  const [tick, setTick] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Cap warning state
+  const [timeUpWarned, setTimeUpWarned] = useState(false);
 
   // Presence state
   const [presentPlayerIds, setPresentPlayerIds] = useState<Set<string>>(new Set());
@@ -47,6 +54,38 @@ export default function MatchControlPage() {
 
   // Save indicator
   const [saving, setSaving] = useState(false);
+
+  // Effective elapsed: base + (running ? now - started : 0)
+  const effectiveElapsedSeconds = baseElapsedSeconds + (isRunning && startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+
+  const formatTime = (totalSeconds: number) => {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  };
+
+  // Timer tick effect
+  useEffect(() => {
+    if (isRunning) {
+      intervalRef.current = setInterval(() => {
+        setTick((t) => t + 1);
+      }, 1000);
+    } else if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isRunning]);
+
+  // Check cap warning
+  useEffect(() => {
+    if (tournament?.matchDurationMinutes && effectiveElapsedSeconds >= tournament.matchDurationMinutes * 60 && !timeUpWarned) {
+      setTimeUpWarned(true);
+      notify.warning("Tiempo cumplido");
+    }
+  }, [effectiveElapsedSeconds, tournament?.matchDurationMinutes, timeUpWarned]);
 
   const loadData = useCallback(async () => {
     try {
@@ -63,8 +102,17 @@ export default function MatchControlPage() {
       setStatus(foundMatch.status);
       setPresentPlayerIds(new Set(foundMatch.presentPlayerIds || []));
 
+      // Initialize timer state from persisted match
+      setBaseElapsedSeconds(foundMatch.timerElapsedSeconds ?? 0);
+      setIsRunning(foundMatch.timerRunning ?? false);
+      setStartedAtMs(foundMatch.timerStartedAt ? new Date(foundMatch.timerStartedAt).getTime() : null);
+
       await getTeams(foundMatch.tournamentId);
       await getPlaces(foundMatch.tournamentId);
+
+      // Load tournament for match duration cap
+      const tournamentData = await getTournamentById(foundMatch.tournamentId);
+      setTournament(tournamentData);
     } catch (err) {
       console.error("Error loading match:", err);
       setError("Error al cargar el partido");
@@ -81,50 +129,71 @@ export default function MatchControlPage() {
     loadData();
   }, [isAuthenticated, user]);
 
-  // Timer effect
-  useEffect(() => {
-    if (timerRunning) {
-      timerRef.current = setInterval(() => {
-        setElapsedSeconds((prev) => prev + 1);
-      }, 1000);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+  const persistTimer = async (base: number, running: boolean, started: number | null) => {
+    if (!match) return;
+    const updated: Match = {
+      ...match,
+      timerElapsedSeconds: base,
+      timerRunning: running,
+      timerStartedAt: started ? new Date(started).toISOString() : null,
     };
-  }, [timerRunning]);
-
-  const formatTime = (totalSeconds: number) => {
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    await updateMatch(updated);
+    setMatch(updated);
   };
-
-  const teamA = teams.find((t) => t.id === match?.teamAId);
-  const teamB = teams.find((t) => t.id === match?.teamBId);
-  const placeName = match?.placeId
-    ? places.find((p) => p.id === match.placeId)?.name
-    : null;
-
-  const matchDate = match?.date
-    ? typeof match.date === "string"
-      ? new Date(match.date)
-      : match.date
-    : null;
 
   const handleStartMatch = async () => {
     if (!match) return;
+    const now = Date.now();
+    setBaseElapsedSeconds(0);
+    setIsRunning(true);
+    setStartedAtMs(now);
+    setTimeUpWarned(false);
     try {
-      const updated: Match = { ...match, status: "live" };
+      const updated: Match = { ...match, status: "live", timerElapsedSeconds: 0, timerRunning: true, timerStartedAt: new Date(now).toISOString() };
       await updateMatch(updated);
       setMatch(updated);
       setStatus("live");
-      setTimerRunning(true);
       notify.success("Partido iniciado");
     } catch (err) {
       notify.error("Error al iniciar el partido");
+    }
+  };
+
+  const handlePauseMatch = async () => {
+    if (!match) return;
+    const currentElapsed = baseElapsedSeconds + (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+    setBaseElapsedSeconds(currentElapsed);
+    setIsRunning(false);
+    setStartedAtMs(null);
+    try {
+      await persistTimer(currentElapsed, false, null);
+    } catch (err) {
+      notify.error("Error al pausar");
+    }
+  };
+
+  const handleResumeMatch = async () => {
+    if (!match) return;
+    const now = Date.now();
+    setIsRunning(true);
+    setStartedAtMs(now);
+    try {
+      await persistTimer(baseElapsedSeconds, true, now);
+    } catch (err) {
+      notify.error("Error al reanudar");
+    }
+  };
+
+  const handleResetTimer = async () => {
+    if (!match) return;
+    setBaseElapsedSeconds(0);
+    setIsRunning(false);
+    setStartedAtMs(null);
+    setTimeUpWarned(false);
+    try {
+      await persistTimer(0, false, null);
+    } catch (err) {
+      notify.error("Error al reiniciar timer");
     }
   };
 
@@ -136,16 +205,22 @@ export default function MatchControlPage() {
       if (status === "scheduled" && (scoreA > 0 || scoreB > 0)) {
         finalStatus = "live";
       }
-
+      const currentElapsed = baseElapsedSeconds + (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
       const updated: Match = {
         ...match,
         result: { scoreA, scoreB },
         status: finalStatus,
         notes,
+        timerElapsedSeconds: currentElapsed,
+        timerRunning: false,
+        timerStartedAt: null,
       };
       await updateMatch(updated);
       setMatch(updated);
       setStatus(finalStatus);
+      setIsRunning(false);
+      setStartedAtMs(null);
+      setBaseElapsedSeconds(currentElapsed);
       notify.success("Resultado guardado");
     } catch (err) {
       notify.error("Error al guardar");
@@ -174,13 +249,18 @@ export default function MatchControlPage() {
 
   const handleFinishMatch = async () => {
     if (!match) return;
+    const currentElapsed = baseElapsedSeconds + (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+    setIsRunning(false);
+    setStartedAtMs(null);
     try {
-      setTimerRunning(false);
       const updated: Match = {
         ...match,
         status: "completed",
         result: { scoreA, scoreB },
         notes,
+        timerElapsedSeconds: currentElapsed,
+        timerRunning: false,
+        timerStartedAt: null,
       };
       await updateMatch(updated);
       setMatch(updated);
@@ -248,6 +328,20 @@ export default function MatchControlPage() {
       </div>
     );
   }
+
+  const teamA = teams.find((t) => t.id === match?.teamAId);
+  const teamB = teams.find((t) => t.id === match?.teamBId);
+  const placeName = match?.placeId
+    ? places.find((p) => p.id === match.placeId)?.name
+    : null;
+
+  const matchDate = match?.date
+    ? typeof match.date === "string"
+      ? new Date(match.date)
+      : match.date
+    : null;
+
+  const isTimeUp = tournament?.matchDurationMinutes ? effectiveElapsedSeconds >= tournament.matchDurationMinutes * 60 : false;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
@@ -324,14 +418,19 @@ export default function MatchControlPage() {
       </div>
 
       {/* Timer */}
-      <div className="bg-white p-5 rounded-2xl shadow-card border border-border mb-6">
+      <div className={`bg-white p-5 rounded-2xl shadow-card border mb-6 ${isTimeUp ? "border-amber-400" : "border-border"}`}>
         <div className="flex items-center gap-3 mb-3">
-          <Clock className="h-4 w-4 text-muted-foreground" />
-          <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Tiempo</h2>
+          <Clock className={`h-4 w-4 ${isTimeUp ? "text-amber-500" : "text-muted-foreground"}`} />
+          <h2 className={`text-sm font-bold uppercase tracking-wider ${isTimeUp ? "text-amber-700" : "text-foreground"}`}>Tiempo</h2>
+          {isTimeUp && (
+            <span className="flex items-center gap-1 text-amber-600 text-xs font-bold">
+              <AlertTriangle className="h-3 w-3" /> Tiempo cumplido
+            </span>
+          )}
         </div>
         <div className="flex items-center justify-between">
-          <div className="font-display text-4xl font-black text-foreground tabular-nums">
-            {formatTime(elapsedSeconds)}
+          <div className={`font-display text-4xl font-black tabular-nums ${isTimeUp ? "text-amber-600" : "text-foreground"}`}>
+            {formatTime(effectiveElapsedSeconds)}
           </div>
           <div className="flex items-center gap-2">
             {status === "scheduled" ? (
@@ -346,14 +445,14 @@ export default function MatchControlPage() {
               <>
                 <button
                   type="button"
-                  onClick={() => setTimerRunning(!timerRunning)}
+                  onClick={isRunning ? handlePauseMatch : handleResumeMatch}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all ${
-                    timerRunning
+                    isRunning
                       ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
                       : "bg-brand-600 hover:bg-brand-700 text-white"
                   }`}
                 >
-                  {timerRunning ? (
+                  {isRunning ? (
                     <><Pause className="h-3.5 w-3.5" /> Pausar</>
                   ) : (
                     <><Play className="h-3.5 w-3.5" /> Reanudar</>
@@ -361,7 +460,7 @@ export default function MatchControlPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setTimerRunning(false); setElapsedSeconds(0); }}
+                  onClick={handleResetTimer}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-muted-foreground text-sm font-bold transition-colors"
                 >
                   <RotateCcw className="h-3.5 w-3.5" /> Reset

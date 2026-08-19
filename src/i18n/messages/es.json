@@ -158,6 +158,7 @@
     "title": "Torneo",
     "subtitle": "Gestión y seguimiento del torneo",
     "id": "ID: {id}",
+    "settings": "Ajustes",
     "publicLink": "Ver página pública",
     "tabs": {
       "matches": "Partidos",
@@ -722,5 +723,22 @@
     "claimSuccess": "Jugador reclamado correctamente",
     "claimError": "Error al reclamar jugador",
     "notFound": "Equipo no encontrado o registro no habilitado"
+  },
+  "TournamentSettings": {
+    "title": "Ajustes del Torneo",
+    "subtitle": "Configura la duración del partido y otros detalles",
+    "name": "Nombre del torneo",
+    "location": "Ubicación",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "matchDuration": "Duración del partido",
+    "matchDurationPlaceholder": "90",
+    "matchDurationHelp": "Minutos. Si se deja vacío, el timer no tiene tope.",
+    "minutes": "minutos",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "saved": "Cambios guardados",
+    "back": "Volver",
+    "errorSaving": "Error al guardar"
   }
 }
