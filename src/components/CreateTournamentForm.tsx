@@ -89,6 +89,7 @@ const CreateTournamentForm: React.FC<CreateTournamentFormProps> = ({ onCreated }
                         name="startDate"
                         onChange={handleChange}
                         value={tournament.startDate as string}
+                        max={tournament.endDate ? (tournament.endDate as string) : undefined}
                         required
                         className={inputClass}
                     />
@@ -104,6 +105,7 @@ const CreateTournamentForm: React.FC<CreateTournamentFormProps> = ({ onCreated }
                         name="endDate"
                         onChange={handleChange}
                         value={tournament.endDate as string}
+                        min={tournament.startDate ? (tournament.startDate as string) : undefined}
                         required
                         className={inputClass}
                     />

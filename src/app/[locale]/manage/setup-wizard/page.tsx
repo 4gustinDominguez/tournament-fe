@@ -177,6 +177,7 @@ export default function SetupWizardPage() {
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleChange}
+                  max={formData.endDate}
                   className="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-brand-500 outline-none"
                 />
               </div>
@@ -189,6 +190,7 @@ export default function SetupWizardPage() {
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleChange}
+                  min={formData.startDate}
                   className="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-brand-500 outline-none"
                 />
               </div>

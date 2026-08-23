@@ -126,6 +126,7 @@ export default function TournamentSettingsPage(props: { params: Promise<{ id: st
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                max={endDate || undefined}
                 required
                 className="w-full p-3 border border-input rounded-xl focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
               />
@@ -136,6 +137,7 @@ export default function TournamentSettingsPage(props: { params: Promise<{ id: st
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
+                min={startDate || undefined}
                 required
                 className="w-full p-3 border border-input rounded-xl focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
               />
