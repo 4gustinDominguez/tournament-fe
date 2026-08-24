@@ -94,6 +94,10 @@ export default function PlayerDashboardPage() {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, 3);
 
+  const getTeamName = (teamId: string) => {
+    return teams.find((t) => t.id === teamId)?.name || t("unknownTeam");
+  };
+
   if (!isAuthenticated || user?.role !== UserRole.PLAYER) {
     return (
       <div className="py-8">
@@ -227,9 +231,9 @@ export default function PlayerDashboardPage() {
                   <p className="font-semibold text-foreground">
                     {new Date(m.date).toLocaleDateString()}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {t("matchLabel", { teamA: m.teamAId.slice(0, 8), teamB: m.teamBId.slice(0, 8) })}
-                  </p>
+                   <p className="text-xs text-muted-foreground">
+                     {getTeamName(m.teamAId)} vs {getTeamName(m.teamBId)}
+                   </p>
                 </li>
               ))}
             </ul>
