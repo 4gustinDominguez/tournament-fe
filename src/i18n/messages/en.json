@@ -570,6 +570,19 @@
     "completed": "Completed",
     "unknownTeam": "Unknown Team"
   },
+  "PlayerMatchDetail": {
+    "back": "Back to matches",
+    "notFound": "Match not found",
+    "teamA": "Team A",
+    "teamB": "Team B",
+    "scheduled": "Scheduled",
+    "live": "Live",
+    "completed": "Completed",
+    "venue": "Venue",
+    "referee": "Referee",
+    "incidents": "Incidents",
+    "notes": "Referee notes"
+  },
   "Referee": {
     "title": "Referee Panel",
     "denyAccess": "Access denied. This page is only for referees.",

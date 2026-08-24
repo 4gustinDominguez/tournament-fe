@@ -570,6 +570,19 @@
     "completed": "Finalizado",
     "unknownTeam": "Equipo Desconocido"
   },
+  "PlayerMatchDetail": {
+    "back": "Volver a partidos",
+    "notFound": "Partido no encontrado",
+    "teamA": "Equipo A",
+    "teamB": "Equipo B",
+    "scheduled": "Programado",
+    "live": "En Vivo",
+    "completed": "Finalizado",
+    "venue": "Sede",
+    "referee": "Árbitro",
+    "incidents": "Incidencias",
+    "notes": "Notas del árbitro"
+  },
   "Referee": {
     "title": "Panel del Árbitro",
     "denyAccess": "Acceso denegado. Esta página es solo para árbitros.",

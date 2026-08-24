@@ -6,6 +6,7 @@ import { useTournamentContext } from "@/sections/tournaments/tournaments-context
 import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
 import { useTranslations } from "next-intl";
+import { Link } from "@/navigation";
 
 export default function PlayerMatchesPage() {
   const t = useTranslations("PlayerMatches");
@@ -194,7 +195,10 @@ function MatchCard({
   getStatusBadge: (status: string) => React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-card border border-border p-4">
+    <Link
+      href={`/manage/player/matches/${match.id}`}
+      className="block bg-white rounded-xl shadow-card border border-border p-4 hover:shadow-elevated hover:border-brand-300 transition-all"
+    >
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs text-muted-foreground">{formatDate(match.date)}</span>
         {getStatusBadge(match.status)}
@@ -219,6 +223,6 @@ function MatchCard({
           <p className="font-bold text-foreground">{getTeamName(match.teamBId)}</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
