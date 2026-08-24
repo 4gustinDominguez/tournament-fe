@@ -12,7 +12,7 @@ export default function PlayerMatchesPage() {
   const t = useTranslations("PlayerMatches");
   const tCommon = useTranslations("Common");
   const { user, isAuthenticated } = useAuth();
-  const { getMyMatches, getMyTeams } = useTournamentContext();
+  const { getMyMatches, getMyTeams, getTeams } = useTournamentContext();
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
@@ -28,10 +28,22 @@ export default function PlayerMatchesPage() {
     const loadData = async () => {
       try {
         setLoading(true);
-        const myTeams = await getMyTeams();
-        setTeams(myTeams);
+        const [myTeams, myMatches] = await Promise.all([
+          getMyTeams(),
+          getMyMatches(),
+        ]);
 
-        const myMatches = await getMyMatches();
+        const tournamentIds = [...new Set(myMatches.map((m) => m.tournamentId))];
+        const allTeamsNested = await Promise.all(
+          tournamentIds.map((tid) => getTeams(tid)),
+        );
+        const allTeams = allTeamsNested.flat();
+        const mergedTeams = [
+          ...allTeams,
+          ...myTeams.filter((mt) => !allTeams.some((t) => t.id === mt.id)),
+        ];
+
+        setTeams(mergedTeams);
         setMatches(myMatches);
       } catch (err) {
         console.error("Error loading player matches:", err);

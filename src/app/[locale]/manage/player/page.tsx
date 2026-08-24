@@ -26,7 +26,8 @@ export default function PlayerDashboardPage() {
   const t = useTranslations("PlayerDashboard");
   const tCommon = useTranslations("Common");
   const { user, isAuthenticated } = useAuth();
-  const { getPlayerMe, getMyTeams, getMyMatches, getMyStats } = useTournamentContext();
+  const { getPlayerMe, getMyTeams, getMyMatches, getMyStats, getTeams } =
+    useTournamentContext();
 
   const [player, setPlayer] = useState<Player | null>(null);
   const [teams, setTeams] = useState<Team[]>([]);
@@ -56,7 +57,18 @@ export default function PlayerDashboardPage() {
           getMyMatches(),
           getMyStats(),
         ]);
-        setTeams(myTeams);
+
+        const tournamentIds = [...new Set(myMatches.map((m) => m.tournamentId))];
+        const allTeamsNested = await Promise.all(
+          tournamentIds.map((tid) => getTeams(tid)),
+        );
+        const allTeams = allTeamsNested.flat();
+        const mergedTeams = [
+          ...allTeams,
+          ...myTeams.filter((mt) => !allTeams.some((t) => t.id === mt.id)),
+        ];
+
+        setTeams(mergedTeams);
         setMatches(myMatches);
         const normalized: Record<string, TeamStats> = {};
         for (const [teamId, entry] of Object.entries(myStats)) {
@@ -167,11 +179,31 @@ export default function PlayerDashboardPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <SummaryStat label={t("statTeams")} value={teams.length} icon="⚽" />
-        <SummaryStat label={t("statMatches")} value={totalStats.matchesPlayed} icon="🏟️" />
-        <SummaryStat label={t("statGoals")} value={totalStats.goals} icon="⚽" />
-        <SummaryStat label={t("statAssists")} value={totalStats.assists} icon="🅰️" />
-        <SummaryStat label={t("statUpcoming")} value={upcomingMatches.length} icon="📅" />
-        <SummaryStat label={t("statCards")} value={totalStats.yellowCards + totalStats.redCards} icon="🟨" />
+        <SummaryStat
+          label={t("statMatches")}
+          value={totalStats.matchesPlayed}
+          icon="🏟️"
+        />
+        <SummaryStat
+          label={t("statGoals")}
+          value={totalStats.goals}
+          icon="⚽"
+        />
+        <SummaryStat
+          label={t("statAssists")}
+          value={totalStats.assists}
+          icon="🅰️"
+        />
+        <SummaryStat
+          label={t("statUpcoming")}
+          value={upcomingMatches.length}
+          icon="📅"
+        />
+        <SummaryStat
+          label={t("statCards")}
+          value={totalStats.yellowCards + totalStats.redCards}
+          icon="🟨"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -195,11 +227,17 @@ export default function PlayerDashboardPage() {
             <ul className="space-y-3">
               {teams.slice(0, 3).map((team) => (
                 <li key={team.id} className="flex items-center gap-3">
-                  <TeamCrest crestId={team.crestUrl} teamName={team.name} size={40} />
+                  <TeamCrest
+                    crestId={team.crestUrl}
+                    teamName={team.name}
+                    size={40}
+                  />
                   <div>
                     <p className="font-semibold text-foreground">{team.name}</p>
                     {team.coach && (
-                      <p className="text-xs text-muted-foreground">{team.coach}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {team.coach}
+                      </p>
                     )}
                   </div>
                 </li>
@@ -223,7 +261,9 @@ export default function PlayerDashboardPage() {
             )}
           </div>
           {upcomingMatches.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t("noUpcomingMatches")}</p>
+            <p className="text-sm text-muted-foreground">
+              {t("noUpcomingMatches")}
+            </p>
           ) : (
             <ul className="space-y-3">
               {upcomingMatches.map((m) => (
@@ -231,9 +271,9 @@ export default function PlayerDashboardPage() {
                   <p className="font-semibold text-foreground">
                     {new Date(m.date).toLocaleDateString()}
                   </p>
-                   <p className="text-xs text-muted-foreground">
-                     {getTeamName(m.teamAId)} vs {getTeamName(m.teamBId)}
-                   </p>
+                  <p className="text-xs text-muted-foreground">
+                    {getTeamName(m.teamAId)} vs {getTeamName(m.teamBId)}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -244,7 +284,15 @@ export default function PlayerDashboardPage() {
   );
 }
 
-function SummaryStat({ label, value, icon }: { label: string; value: number; icon: string }) {
+function SummaryStat({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: number;
+  icon: string;
+}) {
   return (
     <div className="bg-white rounded-xl border border-border shadow-card p-4 text-center">
       <div className="text-2xl mb-1">{icon}</div>
