@@ -30,11 +30,10 @@ const markerIcon = new L.DivIcon({
   iconAnchor: [12, 12],
 });
 
-function MapEvents({ onDragEnd }: { onDragEnd: (lat: number, lng: number) => void }) {
+function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
   useMapEvents({
-    dragend: (e) => {
-      const { lat, lng } = e.target.getCenter();
-      onDragEnd(lat, lng);
+    click: (e) => {
+      onClick(e.latlng.lat, e.latlng.lng);
     },
   });
   return null;
@@ -68,7 +67,7 @@ export function LocationPicker({
   const center: [number, number] = hasCoords ? [latitude!, longitude!] : [40.4168, -3.7038];
   const markerPosition: [number, number] | null = hasCoords ? [latitude!, longitude!] : null;
 
-  const searchNominatim = useCallback(async (q: string) => {
+  const searchNominatim = useCallback(async (q: string, selectFirst = false) => {
     if (q.length < 3) {
       setSuggestions([]);
       return;
@@ -82,12 +81,21 @@ export function LocationPicker({
       const data: NominatimResult[] = await res.json();
       setSuggestions(data);
       setShowSuggestions(true);
+      if (selectFirst && data.length > 0) {
+        const first = data[0];
+        const lat = parseFloat(first.lat);
+        const lng = parseFloat(first.lon);
+        setQuery(first.display_name);
+        setShowSuggestions(false);
+        setSuggestions([]);
+        onChange({ location: first.display_name, latitude: lat, longitude: lng });
+      }
     } catch {
       setSuggestions([]);
     } finally {
       setSearching(false);
     }
-  }, []);
+  }, [onChange]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -95,6 +103,14 @@ export function LocationPicker({
     onChange({ location: val });
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => searchNominatim(val), 300);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      searchNominatim(query, true);
+    }
   };
 
   const handleSelect = (result: NominatimResult) => {
@@ -105,6 +121,13 @@ export function LocationPicker({
     setSuggestions([]);
     onChange({ location: result.display_name, latitude: lat, longitude: lng });
   };
+
+  const handleMapClick = useCallback(
+    (lat: number, lng: number) => {
+      onChange({ location: query, latitude: lat, longitude: lng });
+    },
+    [query, onChange],
+  );
 
   const handleMarkerDragEnd = useCallback(
     (lat: number, lng: number) => {
@@ -132,6 +155,7 @@ export function LocationPicker({
             type="text"
             value={query}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
             placeholder={placeholder}
             className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
@@ -172,7 +196,7 @@ export function LocationPicker({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <MapEvents onDragEnd={handleMarkerDragEnd} />
+          <MapClickHandler onClick={handleMapClick} />
           <FlyToPosition position={markerPosition} />
           {markerPosition && (
             <Marker
