@@ -4,4 +4,6 @@ export interface Place {
     tournamentId: string;
     location?: string;
     capacity?: number;
+    latitude?: number;
+    longitude?: number;
 }

@@ -105,6 +105,7 @@ export interface ContextState {
     placeId: string;
     tournamentId: string;
   }) => Promise<void>;
+  updatePlace: (placeId: string, place: Partial<Omit<import("../../modules/places/domain/place").Place, "id" | "tournamentId">>) => Promise<void>;
   deleteRound: ({
     roundId,
     tournamentId,
@@ -489,6 +490,9 @@ export const TournamentContextProvider = ({
         }) => {
           await repository.deletePlace(placeId);
           await getPlaces(tournamentId);
+        },
+        updatePlace: async (placeId: string, place) => {
+          await repository.updatePlace(placeId, place);
         },
         deleteRound: async ({
           roundId,

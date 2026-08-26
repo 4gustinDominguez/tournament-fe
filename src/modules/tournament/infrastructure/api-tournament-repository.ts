@@ -176,6 +176,18 @@ export function createApiTournamentRepository(): TournamentRepository {
         }
     }
 
+    async function updatePlace(placeId: string, place: Partial<Omit<import("../../places/domain/place").Place, "id" | "tournamentId">>) {
+        const response = await fetch(`${baseUrl}/places/${placeId}`, {
+            method: "PUT",
+            headers: getHeaders(),
+            body: JSON.stringify(place),
+        });
+
+        if (!response.ok) {
+            throw await errorMessage(response, `Failed to update place with id ${placeId}`);
+        }
+    }
+
     async function deleteRound(roundId: string) {
         const response = await fetch(`${baseUrl}/rounds/${roundId}`, {
             method: "DELETE",
@@ -620,6 +632,7 @@ export function createApiTournamentRepository(): TournamentRepository {
         claimPlayer,
         deletePlayer,
         deletePlace,
+        updatePlace,
         deleteRound,
         deleteReferee,
         saveTeam,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { createApiPlaceRepository } from "../modules/places/infrastructure/api-place-repository";
 import { Place } from "../modules/places/domain/place";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
@@ -15,9 +15,15 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Users, Info, Navigation, Building2, Trash2 } from "lucide-react";
+import { MapPin, Users, Building2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { notify } from "@/lib/notify";
+import dynamic from "next/dynamic";
+
+const PlaceMap = dynamic(
+  () => import("./PlaceMap").then((mod) => mod.PlaceMap),
+  { ssr: false },
+);
 
 export const PlacesList = ({
   refreshTrigger,
@@ -108,10 +114,15 @@ export const PlacesList = ({
           </CardHeader>
 
           <CardContent className="space-y-4">
+            {place.latitude != null && place.longitude != null && (
+              <div className="rounded-lg overflow-hidden border border-gray-100" style={{ height: 140 }}>
+                <PlaceMap latitude={place.latitude} longitude={place.longitude} />
+              </div>
+            )}
             <div className="space-y-3">
               {place.location && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Navigation className="h-3.5 w-3.5 text-blue-500" />
+                  <MapPin className="h-3.5 w-3.5 text-blue-500" />
                   <span className="font-medium line-clamp-1">
                     {place.location}
                   </span>

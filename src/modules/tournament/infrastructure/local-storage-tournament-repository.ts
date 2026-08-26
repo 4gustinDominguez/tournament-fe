@@ -19,6 +19,7 @@ export function createLocalStorageTournamentRepository(): TournamentRepository {
         claimPlayer: async () => { },
         deletePlayer: async () => { },
         deletePlace: async () => { },
+        updatePlace: async () => { },
         deleteRound: async () => { },
         deleteReferee: async () => { },
         saveTeam,

@@ -1,12 +1,15 @@
 'use client';
 import { useState } from 'react';
 import { createApiPlaceRepository } from '../modules/places/infrastructure/api-place-repository';
+import { LocationPicker } from './LocationPicker';
 import { useTranslations } from 'next-intl';
 
 export const CreatePlaceForm = ({ onPlaceCreated, tournamentId }: { onPlaceCreated: () => void, tournamentId: string }) => {
     const t = useTranslations('CreatePlaceForm');
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
+    const [latitude, setLatitude] = useState<number | undefined>();
+    const [longitude, setLongitude] = useState<number | undefined>();
     const [capacity, setCapacity] = useState('');
     const repository = createApiPlaceRepository();
 
@@ -16,11 +19,15 @@ export const CreatePlaceForm = ({ onPlaceCreated, tournamentId }: { onPlaceCreat
             await repository.save({
                 name,
                 tournamentId,
-                location,
-                capacity: capacity ? Number(capacity) : undefined
+                location: location || undefined,
+                capacity: capacity ? Number(capacity) : undefined,
+                latitude,
+                longitude,
             });
             setName('');
             setLocation('');
+            setLatitude(undefined);
+            setLongitude(undefined);
             setCapacity('');
             onPlaceCreated();
         } catch (error) {
@@ -44,10 +51,15 @@ export const CreatePlaceForm = ({ onPlaceCreated, tournamentId }: { onPlaceCreat
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">{t('location')}</label>
-                    <input
+                    <LocationPicker
                         value={location}
-                        onChange={e => setLocation(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        latitude={latitude}
+                        longitude={longitude}
+                        onChange={(data) => {
+                            setLocation(data.location);
+                            setLatitude(data.latitude);
+                            setLongitude(data.longitude);
+                        }}
                         placeholder={t('locationPlaceholder')}
                     />
                 </div>

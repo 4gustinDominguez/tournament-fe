@@ -54,6 +54,8 @@ describe("CreatePlaceForm", () => {
       tournamentId: "t1",
       location: "Centro",
       capacity: 5000,
+      latitude: undefined,
+      longitude: undefined,
     });
     expect(onPlaceCreated).toHaveBeenCalled();
   });
@@ -73,8 +75,10 @@ describe("CreatePlaceForm", () => {
     expect(saveMock).toHaveBeenCalledWith({
       name: "Parque Este",
       tournamentId: "t1",
-      location: "",
+      location: undefined,
       capacity: undefined,
+      latitude: undefined,
+      longitude: undefined,
     });
     expect(onPlaceCreated).toHaveBeenCalledTimes(1);
     expect(screen.getByPlaceholderText("CreatePlaceForm.namePlaceholder")).toHaveValue("");

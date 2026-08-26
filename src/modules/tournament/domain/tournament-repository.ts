@@ -21,6 +21,7 @@ export interface TournamentRepository {
   claimPlayer: (playerId: string) => Promise<void>;
   deletePlayer: (playerId: string) => Promise<void>;
   deletePlace: (placeId: string) => Promise<void>;
+  updatePlace: (placeId: string, place: Partial<Omit<import("../../places/domain/place").Place, "id" | "tournamentId">>) => Promise<void>;
   deleteRound: (roundId: string) => Promise<void>;
   deleteReferee: (refereeId: string) => Promise<void>;
 

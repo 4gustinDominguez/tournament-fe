@@ -41,5 +41,17 @@ export function createApiPlaceRepository(): PlaceRepository {
 
             return response.json();
         },
+
+        async update(id: string, place: Partial<Omit<Place, "id" | "tournamentId">>) {
+            const response = await fetch(`${baseUrl}/places/${id}`, {
+                method: "PUT",
+                headers: getHeaders(),
+                body: JSON.stringify(place),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update place");
+            }
+        },
     };
 }
