@@ -256,6 +256,8 @@
     "emptyText": "Register the stadiums or sports complexes where matches will be played.",
     "spectators": "{count} spectators",
     "officialVenue": "Official Venue",
+    "getDirections": "Get directions",
+    "edit": "Edit",
     "deleteConfirm": "Are you sure you want to delete this venue?",
     "deleteError": "This venue cannot be deleted because it is in use.",
     "deleteSuccess": "Place removed successfully"
@@ -582,6 +584,19 @@
     "referee": "Referee",
     "incidents": "Incidents",
     "notes": "Referee notes"
+  },
+  "EditPlace": {
+    "title": "Edit Venue",
+    "name": "Name",
+    "location": "Location",
+    "locationPlaceholder": "e.g. Camp Nou, Barcelona",
+    "capacity": "Capacity",
+    "capacityPlaceholder": "e.g. 99354",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "saved": "Venue updated",
+    "cancel": "Cancel",
+    "error": "Error updating venue"
   },
   "Referee": {
     "title": "Referee Panel",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { createApiPlaceRepository } from "../modules/places/infrastructure/api-place-repository";
 import { Place } from "../modules/places/domain/place";
 import { useTournamentContext } from "@/sections/tournaments/tournaments-context";
@@ -15,10 +15,18 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Users, Building2, Trash2 } from "lucide-react";
+import {
+  MapPin,
+  Users,
+  Building2,
+  Trash2,
+  ExternalLink,
+  Pencil,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { notify } from "@/lib/notify";
 import dynamic from "next/dynamic";
+import { EditPlaceDialog } from "./EditPlaceDialog";
 
 const PlaceMap = dynamic(
   () => import("./PlaceMap").then((mod) => mod.PlaceMap),
@@ -38,6 +46,7 @@ export const PlacesList = ({
   const { user, isAuthenticated } = useAuth();
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingPlace, setEditingPlace] = useState<Place | null>(null);
   useEffect(() => {
     const repository = createApiPlaceRepository();
     setLoading(true);
@@ -69,9 +78,9 @@ export const PlacesList = ({
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="flex gap-4">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-44 w-full rounded-2xl" />
+          <Skeleton key={i} className="h-44 flex-1 min-w-0 rounded-2xl" />
         ))}
       </div>
     );
@@ -96,11 +105,11 @@ export const PlacesList = ({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <div className="flex gap-4 overflow-x-auto pb-2">
       {places.map((place) => (
         <Card
           key={place.id}
-          className="group overflow-hidden border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
+          className="group flex-1 min-w-0 overflow-hidden border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
         >
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between gap-4">
@@ -115,17 +124,21 @@ export const PlacesList = ({
 
           <CardContent className="space-y-4">
             {place.latitude != null && place.longitude != null && (
-              <div className="rounded-lg overflow-hidden border border-gray-100" style={{ height: 140 }}>
-                <PlaceMap latitude={place.latitude} longitude={place.longitude} />
+              <div
+                className="rounded-lg overflow-hidden border border-gray-100"
+                style={{ height: 140 }}
+              >
+                <PlaceMap
+                  latitude={place.latitude}
+                  longitude={place.longitude}
+                />
               </div>
             )}
             <div className="space-y-3">
               {place.location && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-3.5 w-3.5 text-blue-500" />
-                  <span className="font-medium line-clamp-1">
-                    {place.location}
-                  </span>
+                  <span className="font-medium ">{place.location}</span>
                 </div>
               )}
               {place.capacity && (
@@ -148,19 +161,59 @@ export const PlacesList = ({
             >
               {t("officialVenue")}
             </Badge>
-            {canManage && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleDeletePlace(place.id)}
-                className="h-7 text-[10px] font-bold uppercase tracking-widest text-destructive hover:text-destructive hover:bg-red-50"
-              >
-                <Trash2 className="h-3 w-3 mr-1" /> {tCommon("delete")}
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {(place.location ||
+                (place.latitude != null && place.longitude != null)) && (
+                <a
+                  href={
+                    place.latitude != null && place.longitude != null
+                      ? `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`
+                      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.location || "")}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-700"
+                >
+                  <ExternalLink className="h-3 w-3" /> {t("getDirections")}
+                </a>
+              )}
+              {canManage && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setEditingPlace(place)}
+                    className="h-7 text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                  >
+                    <Pencil className="h-3 w-3 mr-1" /> {tCommon("edit")}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeletePlace(place.id)}
+                    className="h-7 text-[10px] font-bold uppercase tracking-widest text-destructive hover:text-destructive hover:bg-red-50"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" /> {tCommon("delete")}
+                  </Button>
+                </>
+              )}
+            </div>
           </CardFooter>
         </Card>
       ))}
+
+      <EditPlaceDialog
+        place={editingPlace}
+        open={editingPlace !== null}
+        onOpenChange={(open) => {
+          if (!open) setEditingPlace(null);
+        }}
+        onSaved={() => {
+          setEditingPlace(null);
+          const repository = createApiPlaceRepository();
+          repository.getAll(tournamentId).then(setPlaces).catch(console.error);
+        }}
+      />
     </div>
   );
 };

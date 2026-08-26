@@ -256,6 +256,8 @@
     "emptyText": "Registra los estadios o complejos deportivos donde se jugarán los partidos.",
     "spectators": "{count} espectadores",
     "officialVenue": "Sede Oficial",
+    "getDirections": "Cómo llegar",
+    "edit": "Editar",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar esta sede?",
     "deleteError": "Esta sede no se puede eliminar porque está en uso.",
     "deleteSuccess": "Lugar eliminado correctamente"
@@ -582,6 +584,19 @@
     "referee": "Árbitro",
     "incidents": "Incidencias",
     "notes": "Notas del árbitro"
+  },
+  "EditPlace": {
+    "title": "Editar Sede",
+    "name": "Nombre",
+    "location": "Ubicación",
+    "locationPlaceholder": "ej. Camp Nou, Barcelona",
+    "capacity": "Capacidad",
+    "capacityPlaceholder": "ej. 99354",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "saved": "Sede actualizada",
+    "cancel": "Cancelar",
+    "error": "Error al actualizar sede"
   },
   "Referee": {
     "title": "Panel del Árbitro",
