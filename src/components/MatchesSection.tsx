@@ -29,6 +29,8 @@ import { Match } from "@/modules/tournament/domain/match";
 import { Round } from "@/modules/tournament/domain/round";
 import { useAuth, UserRole } from "@/sections/tournaments/auth-context";
 import MatchTimeline from "./MatchTimeline";
+import { PlaceLink } from "./PlaceLink";
+import { getPlace } from "@/lib/places";
 import { useTranslations } from "next-intl";
 import { notify } from "@/lib/notify";
 
@@ -89,11 +91,6 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
 
   const getTeam = (teamId: string) => {
     return teams.find((t) => t.id === teamId);
-  };
-
-  const getPlaceName = (placeId?: string) => {
-    if (!placeId) return null;
-    return places.find((p) => p.id === placeId)?.name || t("unknownPlace");
   };
 
   const getRefereeName = (refereeId?: string) => {
@@ -392,10 +389,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
 
                         {/* Footer metadata */}
                         <div className="w-full flex flex-wrap justify-center gap-x-8 gap-y-2 pt-4 border-t border-border/60">
-                          <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                            <MapPin className="h-3 w-3 text-brand-500" />
-                            {getPlaceName(match.placeId)}
-                          </div>
+                          <PlaceLink place={getPlace(match.placeId, places)} />
                           {match.refereeId && (
                             <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-wider">
                               <UserIcon className="h-3 w-3 text-amber-500" />

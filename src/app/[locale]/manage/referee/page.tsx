@@ -14,6 +14,8 @@ import { PhotoUpload } from "@/components/PhotoUpload";
 import { Button } from "@/components/ui/button";
 import { uploadImage } from "@/services/imageService";
 import { notify } from "@/lib/notify";
+import { PlaceLink } from "@/components/PlaceLink";
+import { getPlace } from "@/lib/places";
 
 export default function RefereePage() {
   const t = useTranslations("Referee");
@@ -104,11 +106,6 @@ export default function RefereePage() {
       </div>
     );
   }
-
-  const getPlaceName = (placeId?: string) => {
-    if (!placeId) return null;
-    return places.find((p) => p.id === placeId)?.name ?? null;
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -205,7 +202,7 @@ export default function RefereePage() {
               key={match.id}
               match={match}
               teams={teams}
-              getPlaceName={getPlaceName}
+              places={places}
               t={t}
               tCommon={tCommon}
               onControl={() => router.push(`/manage/referee/match/${match.id}`)}
@@ -220,7 +217,7 @@ export default function RefereePage() {
 interface MatchCardProps {
   match: Match;
   teams: Team[];
-  getPlaceName: (placeId?: string) => string | null;
+  places: Place[];
   t: any;
   tCommon: any;
   onControl: () => void;
@@ -229,14 +226,13 @@ interface MatchCardProps {
 function MatchCard({
   match,
   teams,
-  getPlaceName,
+  places,
   t,
   tCommon,
   onControl,
 }: MatchCardProps) {
   const teamA = teams.find((t) => t.id === match.teamAId);
   const teamB = teams.find((t) => t.id === match.teamBId);
-  const placeName = getPlaceName(match.placeId);
 
   const matchDate = typeof match.date === "string" ? new Date(match.date) : match.date;
 
@@ -259,11 +255,7 @@ function MatchCard({
               timeStyle: "short",
             })}
           </p>
-          {placeName && (
-            <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-              <span className="inline-block">📍</span> {placeName}
-            </p>
-          )}
+          <PlaceLink place={getPlace(match.placeId, places)} />
         </div>
 
         <div className="flex flex-col items-end gap-2 flex-shrink-0">

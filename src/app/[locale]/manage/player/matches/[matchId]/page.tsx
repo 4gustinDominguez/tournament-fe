@@ -7,6 +7,8 @@ import { useTournamentContext } from "@/sections/tournaments/tournaments-context
 import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
 import MatchTimeline from "@/components/MatchTimeline";
+import { PlaceLink } from "@/components/PlaceLink";
+import { getPlace } from "@/lib/places";
 import { ArrowLeft, MapPin, User, StickyNote } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -16,7 +18,7 @@ export default function PlayerMatchDetailPage() {
   const t = useTranslations("PlayerMatchDetail");
   const tCommon = useTranslations("Common");
   const { user, isAuthenticated } = useAuth();
-  const { getMatchById, getTeams } = useTournamentContext();
+  const { getMatchById, getTeams, places } = useTournamentContext();
 
   const [match, setMatch] = useState<Match | null>(null);
   const [teamA, setTeamA] = useState<Team | null>(null);
@@ -156,12 +158,7 @@ export default function PlayerMatchDetailPage() {
 
       {/* Match info */}
       <div className="bg-white rounded-2xl shadow-card border border-border p-5 mb-4 space-y-3">
-        {match.placeId && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span>{t("venue")}</span>
-          </div>
-        )}
+        <PlaceLink place={getPlace(match.placeId, places)} />
         {match.refereeId && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <User className="h-4 w-4" />

@@ -10,6 +10,8 @@ import { Match } from "@/modules/tournament/domain/match";
 import { useTranslations } from "next-intl";
 import { TeamCrest } from "@/components/TeamCrest";
 import { Button } from "@/components/ui/button";
+import { PlaceLink } from "@/components/PlaceLink";
+import { getPlace } from "@/lib/places";
 
 type TeamStats = { team: Team; statistics: PlayerStatistics };
 
@@ -26,7 +28,7 @@ export default function PlayerDashboardPage() {
   const t = useTranslations("PlayerDashboard");
   const tCommon = useTranslations("Common");
   const { user, isAuthenticated } = useAuth();
-  const { getPlayerMe, getMyTeams, getMyMatches, getMyStats, getTeams } =
+  const { getPlayerMe, getMyTeams, getMyMatches, getMyStats, getTeams, places } =
     useTournamentContext();
 
   const [player, setPlayer] = useState<Player | null>(null);
@@ -274,6 +276,7 @@ export default function PlayerDashboardPage() {
                   <p className="text-xs text-muted-foreground">
                     {getTeamName(m.teamAId)} vs {getTeamName(m.teamBId)}
                   </p>
+                  <PlaceLink place={getPlace(m.placeId, places)} />
                 </li>
               ))}
             </ul>

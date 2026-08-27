@@ -7,12 +7,15 @@ import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
 import { useTranslations } from "next-intl";
 import { Link } from "@/navigation";
+import { PlaceLink } from "@/components/PlaceLink";
+import { getPlace } from "@/lib/places";
+import { Place } from "@/modules/places/domain/place";
 
 export default function PlayerMatchesPage() {
   const t = useTranslations("PlayerMatches");
   const tCommon = useTranslations("Common");
   const { user, isAuthenticated } = useAuth();
-  const { getMyMatches, getMyTeams, getTeams } = useTournamentContext();
+  const { getMyMatches, getMyTeams, getTeams, places } = useTournamentContext();
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
@@ -143,6 +146,7 @@ export default function PlayerMatchesPage() {
                   <MatchCard
                     key={match.id}
                     match={match}
+                    places={places}
                     getTeamName={getTeamName}
                     formatDate={formatDate}
                     getStatusBadge={getStatusBadge}
@@ -162,6 +166,7 @@ export default function PlayerMatchesPage() {
                   <MatchCard
                     key={match.id}
                     match={match}
+                    places={places}
                     getTeamName={getTeamName}
                     formatDate={formatDate}
                     getStatusBadge={getStatusBadge}
@@ -181,6 +186,7 @@ export default function PlayerMatchesPage() {
                   <MatchCard
                     key={match.id}
                     match={match}
+                    places={places}
                     getTeamName={getTeamName}
                     formatDate={formatDate}
                     getStatusBadge={getStatusBadge}
@@ -197,11 +203,13 @@ export default function PlayerMatchesPage() {
 
 function MatchCard({
   match,
+  places,
   getTeamName,
   formatDate,
   getStatusBadge,
 }: {
   match: Match;
+  places: Place[];
   getTeamName: (id: string) => string;
   formatDate: (date: string | Date) => string;
   getStatusBadge: (status: string) => React.ReactNode;
@@ -234,6 +242,10 @@ function MatchCard({
         <div className="flex-1 text-left">
           <p className="font-bold text-foreground">{getTeamName(match.teamBId)}</p>
         </div>
+      </div>
+
+      <div className="mt-2">
+        <PlaceLink place={getPlace(match.placeId, places)} />
       </div>
     </Link>
   );

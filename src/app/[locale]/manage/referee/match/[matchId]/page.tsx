@@ -8,6 +8,8 @@ import { Match } from "@/modules/tournament/domain/match";
 import { Team } from "@/modules/tournament/domain/team";
 import { Tournament } from "@/modules/tournament/domain/tournament";
 import IncidentEditor from "@/components/IncidentEditor";
+import { PlaceLink } from "@/components/PlaceLink";
+import { getPlace } from "@/lib/places";
 import { notify } from "@/lib/notify";
 import {
   MapPin,
@@ -373,9 +375,6 @@ export default function MatchControlPage() {
 
   const teamA = teams.find((t) => t.id === match?.teamAId);
   const teamB = teams.find((t) => t.id === match?.teamBId);
-  const placeName = match?.placeId
-    ? places.find((p) => p.id === match.placeId)?.name
-    : null;
 
   const matchDate = match?.date
     ? typeof match.date === "string"
@@ -412,11 +411,7 @@ export default function MatchControlPage() {
                 })}
               </p>
             )}
-            {placeName && (
-              <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-                <MapPin className="h-3 w-3" /> {placeName}
-              </p>
-            )}
+            <PlaceLink place={getPlace(match?.placeId, places)} />
           </div>
           <div className="flex flex-col items-end gap-2 flex-shrink-0">
             <span
