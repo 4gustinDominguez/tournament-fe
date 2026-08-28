@@ -25,13 +25,8 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { notify } from "@/lib/notify";
-import dynamic from "next/dynamic";
 import { EditPlaceDialog } from "./EditPlaceDialog";
-
-const PlaceMap = dynamic(
-  () => import("./PlaceMap").then((mod) => mod.PlaceMap),
-  { ssr: false },
-);
+import { PlaceMap } from "./PlaceMap";
 
 export const PlacesList = ({
   refreshTrigger,
@@ -154,14 +149,14 @@ export const PlacesList = ({
             </div>
           </CardContent>
 
-          <CardFooter className="pt-0 flex items-center justify-between border-t border-gray-50 bg-gray-50/30 rounded-b-xl px-6 py-3">
-            <Badge
-              variant="secondary"
-              className="bg-white border-gray-100 text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-            >
-              {t("officialVenue")}
-            </Badge>
-            <div className="flex items-center gap-2">
+          <CardFooter className="pt-0 flex-col items-stretch border-t border-gray-50 bg-gray-50/30 rounded-b-xl px-6 py-3 gap-2">
+            <div className="flex items-center justify-between">
+              <Badge
+                variant="secondary"
+                className="bg-white border-gray-100 text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                {t("officialVenue")}
+              </Badge>
               {(place.location ||
                 (place.latitude != null && place.longitude != null)) && (
                 <a
@@ -177,27 +172,27 @@ export const PlacesList = ({
                   <ExternalLink className="h-3 w-3" /> {t("getDirections")}
                 </a>
               )}
-              {canManage && (
-                <>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setEditingPlace(place)}
-                    className="h-7 text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                  >
-                    <Pencil className="h-3 w-3 mr-1" /> {tCommon("edit")}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDeletePlace(place.id)}
-                    className="h-7 text-[10px] font-bold uppercase tracking-widest text-destructive hover:text-destructive hover:bg-red-50"
-                  >
-                    <Trash2 className="h-3 w-3 mr-1" /> {tCommon("delete")}
-                  </Button>
-                </>
-              )}
             </div>
+            {canManage && (
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setEditingPlace(place)}
+                  className="h-8 font-bold text-[10px] tracking-wider uppercase hover:bg-brand-50 hover:text-brand-600"
+                >
+                  <Pencil className="h-3 w-3 mr-1" /> {tCommon("edit")}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDeletePlace(place.id)}
+                  className="h-8 text-destructive font-bold text-[10px] tracking-wider uppercase hover:text-destructive hover:bg-red-50"
+                >
+                  <Trash2 className="h-3 w-3 mr-1" /> {tCommon("delete")}
+                </Button>
+              </div>
+            )}
           </CardFooter>
         </Card>
       ))}
