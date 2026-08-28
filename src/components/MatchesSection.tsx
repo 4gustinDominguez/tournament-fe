@@ -39,7 +39,10 @@ interface MatchesSectionProps {
   readOnly?: boolean;
 }
 
-const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly }) => {
+const MatchesSection: React.FC<MatchesSectionProps> = ({
+  tournamentId,
+  readOnly,
+}) => {
   const t = useTranslations("Matches");
   const tCommon = useTranslations("Common");
   const {
@@ -227,7 +230,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
             key={round.id}
             className="overflow-hidden border-border shadow-card bg-white rounded-2xl"
           >
-            <CardHeader className="bg-neutral-50/70 px-6 py-4 border-b border-border flex flex-row justify-between items-center">
+            <CardHeader className="bg-neutral-50/70 px-4 py-3 sm:px-6 sm:py-4 border-b border-border flex flex-row justify-between items-center">
               <CardTitle className="display-title text-xl text-foreground tracking-tight">
                 {round.name}
               </CardTitle>
@@ -297,7 +300,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                         />
                       </div>
                     ) : (
-                      <div className="p-6 flex flex-col items-center gap-6">
+                      <div className="p-4 sm:p-6 flex flex-col items-center gap-4 sm:gap-6">
                         {/* Header Info */}
                         <div className="w-full flex justify-between items-start">
                           <Badge
@@ -351,44 +354,70 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({ tournamentId, readOnly 
                         </div>
 
                         {/* Score / Teams */}
-                        <div className="w-full grid grid-cols-[1fr,auto,1fr] items-center gap-4 md:gap-12">
-                          <div className="flex items-center justify-end gap-2">
-                            <h4 className="font-display text-xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors text-right">
+                        <div className="w-full grid grid-cols-[1fr,auto,1fr] items-center gap-2 sm:gap-4 md:gap-12">
+                          <div className="flex items-center justify-end gap-1.5 sm:gap-2 min-w-0">
+                            <h4 className="font-display font-extrabold md:text-3xl tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors text-right truncate">
                               {getTeamName(match.teamAId)}
                             </h4>
                             <TeamCrest
                               crestId={getTeam(match.teamAId)?.crestUrl}
                               teamName={getTeamName(match.teamAId)}
+                              size={24}
+                              className="sm:hidden"
+                            />
+                            <TeamCrest
+                              crestId={getTeam(match.teamAId)?.crestUrl}
+                              teamName={getTeamName(match.teamAId)}
+                              size={32}
+                              className="hidden sm:grid md:hidden"
+                            />
+                            <TeamCrest
+                              crestId={getTeam(match.teamAId)?.crestUrl}
+                              teamName={getTeamName(match.teamAId)}
                               size={36}
+                              className="hidden md:grid"
                             />
                           </div>
 
-                          <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-neutral-100 border border-border">
-                            <span className="font-display text-3xl md:text-5xl font-black tabular-nums text-foreground">
+                          <div className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-2.5 rounded-2xl bg-neutral-100 border border-border">
+                            <span className="font-display text-xl md:text-4xl font-black tabular-nums text-foreground">
                               {match.result ? match.result.scoreA : "-"}
                             </span>
-                            <span className="font-display text-neutral-400 font-bold text-sm tracking-widest px-1">
+                            <span className="font-display text-neutral-400 font-bold text-xs sm:text-sm tracking-widest">
                               VS
                             </span>
-                            <span className="font-display text-3xl md:text-5xl font-black tabular-nums text-foreground">
+                            <span className="font-display text-xl md:text-4xl font-black tabular-nums text-foreground">
                               {match.result ? match.result.scoreB : "-"}
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <TeamCrest
+                              crestId={getTeam(match.teamBId)?.crestUrl}
+                              teamName={getTeamName(match.teamBId)}
+                              size={24}
+                              className="sm:hidden"
+                            />
+                            <TeamCrest
+                              crestId={getTeam(match.teamBId)?.crestUrl}
+                              teamName={getTeamName(match.teamBId)}
+                              size={32}
+                              className="hidden sm:grid md:hidden"
+                            />
                             <TeamCrest
                               crestId={getTeam(match.teamBId)?.crestUrl}
                               teamName={getTeamName(match.teamBId)}
                               size={36}
+                              className="hidden md:grid"
                             />
-                            <h4 className="font-display text-xl md:text-3xl font-extrabold tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors">
+                            <h4 className="font-display md:text-3xl font-extrabold tracking-tight text-foreground leading-tight group-hover:text-brand-600 transition-colors truncate">
                               {getTeamName(match.teamBId)}
                             </h4>
                           </div>
                         </div>
 
                         {/* Footer metadata */}
-                        <div className="w-full flex flex-wrap justify-center gap-x-8 gap-y-2 pt-4 border-t border-border/60">
+                        <div className="w-full flex flex-wrap justify-center gap-x-4 sm:gap-x-8 gap-y-2 pt-4 border-t border-border/60">
                           <PlaceLink place={getPlace(match.placeId, places)} />
                           {match.refereeId && (
                             <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground uppercase tracking-wider">

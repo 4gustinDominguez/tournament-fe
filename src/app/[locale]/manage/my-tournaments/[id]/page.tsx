@@ -1,11 +1,18 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import { CalendarDays, BarChart3, Users, Settings2, Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/navigation";
@@ -22,6 +29,7 @@ type TabType = "matches" | "standings" | "teams" | "infra" | "info";
 export default function Page(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
   const t = useTranslations("TournamentDetail");
+  const [activeTab, setActiveTab] = useState<TabType>("matches");
   const tabs = [
     { id: "matches", label: t("tabs.matches"), icon: CalendarDays },
     { id: "standings", label: t("tabs.standings"), icon: BarChart3 },
@@ -31,7 +39,7 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
   ] as const;
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-6">
+    <div className="max-w-6xl mx-auto p-2 md:p-4 space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="display-title text-3xl md:text-4xl text-foreground flex items-center gap-3">
@@ -58,19 +66,49 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
         </Link>
       </header>
 
-      <Tabs defaultValue="matches" className="w-full">
-        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2">
-          <TabsList className="grid w-full grid-cols-5 md:w-auto md:inline-flex p-1 bg-neutral-100 rounded-xl gap-1">
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => setActiveTab(v as TabType)}
+        className="w-full"
+      >
+        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-2">
+          <Select
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as TabType)}
+          >
+            <SelectTrigger className="md:hidden w-full h-11 rounded-xl bg-neutral-100 border-0 text-sm font-semibold uppercase">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <SelectItem
+                    key={tab.id}
+                    value={tab.id}
+                    className="rounded-lg"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Icon className="h-4 w-4" />
+                      {tab.label}
+                    </span>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+
+          <TabsList className="hidden md:inline-flex p-1 bg-neutral-100 rounded-xl gap-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <TabsTrigger
                   key={tab.id}
                   value={tab.id}
-                  className="flex flex-col md:flex-row items-center gap-1.5 px-3 py-2 data-[state=active]:bg-white data-[state=active]:shadow-card data-[state=active]:text-brand-700 data-[state=active]:ring-1 data-[state=active]:ring-brand-100 transition-all rounded-lg"
+                  className="flex flex-row items-center gap-1.5 px-3 py-2 data-[state=active]:bg-white data-[state=active]:shadow-card data-[state=active]:text-brand-700 data-[state=active]:ring-1 data-[state=active]:ring-brand-100 transition-all rounded-lg"
                 >
                   <Icon className="h-4 w-4" />
-                  <span className="text-[10px] md:text-sm font-bold md:font-semibold uppercase md:capitalize">
+                  <span className="text-sm font-semibold capitalize">
                     {tab.label}
                   </span>
                 </TabsTrigger>
