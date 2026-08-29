@@ -39,7 +39,7 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
   ] as const;
 
   return (
-    <div className="max-w-6xl mx-auto p-2 md:p-4 space-y-6">
+    <div className="space-y-8">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="display-title text-3xl md:text-4xl text-foreground flex items-center gap-3">
@@ -71,12 +71,12 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
         onValueChange={(v) => setActiveTab(v as TabType)}
         className="w-full"
       >
-        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-2">
+        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-2 pt-1">
           <Select
             value={activeTab}
             onValueChange={(v) => setActiveTab(v as TabType)}
           >
-            <SelectTrigger className="md:hidden w-full h-11 rounded-xl bg-neutral-100 border-0 text-sm font-semibold uppercase">
+            <SelectTrigger className="md:hidden w-full h-10 rounded-xl bg-neutral-100 border-0 text-sm font-semibold uppercase">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -120,20 +120,20 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
         <div>
           <TabsContent
             value="matches"
-            className="animate-in fade-in-50 duration-500"
+            className="space-y-8 animate-in fade-in-50 duration-500"
           >
             <MatchesSection tournamentId={params.id} />
           </TabsContent>
           <TabsContent
             value="teams"
-            className="animate-in fade-in-50 duration-500"
+            className="space-y-8 animate-in fade-in-50 duration-500"
           >
             <TeamsSection tournamentId={params.id} />
           </TabsContent>
 
           <TabsContent
             value="infra"
-            className="animate-in fade-in-50 duration-500"
+            className="space-y-8 animate-in fade-in-50 duration-500"
           >
             <PlacesSection tournamentId={params.id} />
             <RefereeSection tournamentId={params.id} />
@@ -141,15 +141,15 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
 
           <TabsContent
             value="standings"
-            className="animate-in fade-in-50 duration-500"
+            className="space-y-8 animate-in fade-in-50 duration-500"
           >
             <StandingsSection tournamentId={params.id} />
           </TabsContent>
           <TabsContent
             value="info"
-            className="animate-in fade-in-50 duration-500"
+            className="space-y-8 animate-in fade-in-50 duration-500"
           >
-            <Card className="mt-8 border-border shadow-card rounded-2xl overflow-hidden">
+            <Card className="border-border shadow-card rounded-2xl overflow-hidden">
               <CardContent className="p-0">
                 <TournamentItem id={params.id} />
               </CardContent>

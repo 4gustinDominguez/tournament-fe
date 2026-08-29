@@ -21,20 +21,26 @@ export const PlacesSection = ({ tournamentId }: { tournamentId: string }) => {
   const canManage = isAuthenticated && (isSuperAdmin || isOwner);
 
   return (
-    <section className="mt-8 mb-12 space-y-8">
+    <section className="space-y-8 pb-10">
       <header className="flex items-center gap-3">
         <div className="p-2 rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-100">
           <MapPin className="h-6 w-6" />
         </div>
         <div>
-          <h2 className="display-title text-2xl text-foreground">
+          <h2 className="display-title text-2xl md:text-3xl text-foreground">
             {t("title")}
           </h2>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div className={canManage ? "" : "lg:col-span-2"}>
+          <PlacesList
+            refreshTrigger={refreshTrigger}
+            tournamentId={tournamentId}
+          />
+        </div>
         {canManage && (
           <Card className="overflow-hidden border-border shadow-card rounded-2xl">
             <CardHeader className="bg-neutral-50/50 px-6 py-4 border-b border-border flex flex-row items-center gap-2">
@@ -51,12 +57,6 @@ export const PlacesSection = ({ tournamentId }: { tournamentId: string }) => {
             </CardContent>
           </Card>
         )}
-        <div className={canManage ? "" : "lg:col-span-2"}>
-          <PlacesList
-            refreshTrigger={refreshTrigger}
-            tournamentId={tournamentId}
-          />
-        </div>
       </div>
     </section>
   );

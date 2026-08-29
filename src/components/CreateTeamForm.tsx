@@ -129,7 +129,7 @@ const CreateTeamForm: React.FC<{ tournamentId?: string }> = ({ tournamentId }) =
                 </label>
             )}
 
-            <button type="submit" className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 shadow-card">
+            <button type="submit" className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200 shadow-card">
                 {t('submit')}
             </button>
         </form>

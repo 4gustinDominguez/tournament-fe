@@ -70,14 +70,14 @@ export default function TournamentSettingsPage(props: { params: Promise<{ id: st
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8 flex justify-center">
+      <div className="flex justify-center py-8">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-xl">
+    <div className="max-w-2xl mx-auto space-y-8">
       <button
         type="button"
         onClick={() => router.push(`/manage/my-tournaments/${params.id}`)}
@@ -92,12 +92,12 @@ export default function TournamentSettingsPage(props: { params: Promise<{ id: st
             <Settings2 className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-bold text-foreground">{t("title")}</h1>
+            <h1 className="display-title text-3xl text-foreground">{t("title")}</h1>
             <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
           </div>
         </div>
 
-        <form onSubmit={handleSave} className="space-y-5">
+        <form onSubmit={handleSave} className="space-y-6">
           <div>
             <label className="block text-sm font-bold text-foreground mb-1">{t("name")}</label>
             <input
@@ -119,7 +119,7 @@ export default function TournamentSettingsPage(props: { params: Promise<{ id: st
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-bold text-foreground mb-1">{t("startDate")}</label>
               <input

@@ -125,7 +125,7 @@ export default function PlayerProfilePage() {
 
   if (!isAuthenticated || user?.role !== UserRole.PLAYER) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
           {t("denyAccess")}
         </div>
@@ -135,7 +135,7 @@ export default function PlayerProfilePage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="text-center text-muted-foreground">
           {tCommon("loading")}
         </div>
@@ -145,7 +145,7 @@ export default function PlayerProfilePage() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
           {error}
         </div>
@@ -154,13 +154,13 @@ export default function PlayerProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="font-display text-3xl font-black text-foreground mb-6">
+    <div className="space-y-8">
+      <h1 className="display-title text-3xl md:text-4xl text-foreground">
         {t("title")}
       </h1>
 
       {player && (
-        <div className="bg-white p-4 rounded-xl border border-border shadow-card mb-6">
+        <div className="bg-white p-6 rounded-xl border border-border shadow-card">
           <div className="flex items-center gap-4">
             {(previewUrl || player.photoUrl) ? (
               <div className="h-16 w-16 rounded-xl overflow-hidden flex-shrink-0">

@@ -51,7 +51,7 @@ const StandingsSection: React.FC<StandingsSectionProps> = ({ tournamentId }) => 
     }
 
     return (
-        <div className="mt-8 space-y-8">
+        <div className="space-y-8">
             <header className="space-y-1">
                 <h2 className="display-title text-2xl md:text-3xl text-foreground">{t('title')}</h2>
                 <p className="text-sm text-muted-foreground">

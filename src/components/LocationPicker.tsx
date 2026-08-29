@@ -210,14 +210,14 @@ export function LocationPicker({
                 suggestions.length > 0 && setShowSuggestions(true)
               }
               placeholder={placeholder}
-              className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+              className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
             />
           </div>
           <button
             type="button"
             onClick={handleSearchClick}
             disabled={searching || query.length < 3}
-            className="px-3 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium"
+            className="px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center gap-1.5 text-sm font-medium"
           >
             {searching ? (
               <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -233,7 +233,7 @@ export function LocationPicker({
               <li key={s.place_id}>
                 <button
                   type="button"
-                  className="w-full text-left px-3 py-2.5 text-sm hover:bg-blue-50 flex items-start gap-2 transition-colors"
+                  className="w-full text-left px-3 py-2 text-sm hover:bg-blue-50 flex items-start gap-2 transition-colors"
                   onClick={() => handleSelect(s)}
                 >
                   <MapPin className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />

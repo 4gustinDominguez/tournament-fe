@@ -129,7 +129,7 @@ export default function ProfilePage() {
                         <button
                             type="submit"
                             disabled={savingInfo}
-                            className="w-full py-2.5 px-4 rounded-lg text-white font-bold transition duration-200 shadow-card bg-brand-600 hover:bg-brand-700 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
+                            className="w-full py-2 px-4 rounded-lg text-white font-bold transition duration-200 shadow-card bg-brand-600 hover:bg-brand-700 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
                         >
                             {savingInfo ? t('saving') : t('saveInfo')}
                         </button>
@@ -186,7 +186,7 @@ export default function ProfilePage() {
                         <button
                             type="submit"
                             disabled={savingPassword}
-                            className="w-full py-2.5 px-4 rounded-lg text-white font-bold transition duration-200 shadow-card bg-brand-600 hover:bg-brand-700 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
+                            className="w-full py-2 px-4 rounded-lg text-white font-bold transition duration-200 shadow-card bg-brand-600 hover:bg-brand-700 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
                         >
                             {savingPassword ? t('saving') : t('savePassword')}
                         </button>

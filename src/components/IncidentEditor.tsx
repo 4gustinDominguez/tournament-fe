@@ -158,7 +158,7 @@ const IncidentEditor: React.FC<IncidentEditorProps> = ({ teamA, teamB, incidents
                 <button
                     type="button"
                     onClick={handleAdd}
-                    className="mt-4 w-full bg-brand-600 hover:bg-brand-700 text-white text-xs font-black py-2.5 rounded-lg transition-all shadow-glow active:scale-95 inline-flex items-center justify-center gap-1.5"
+                    className="mt-4 w-full bg-brand-600 hover:bg-brand-700 text-white text-xs font-black py-2 rounded-lg transition-all shadow-glow active:scale-95 inline-flex items-center justify-center gap-1.5"
                 >
                     <Plus className="h-3.5 w-3.5" />
                     {t('add')}

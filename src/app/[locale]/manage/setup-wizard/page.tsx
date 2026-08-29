@@ -70,7 +70,7 @@ export default function SetupWizardPage() {
   // Mode selection screen
   if (mode === "select") {
     return (
-      <div className="max-w-2xl mx-auto py-8 px-4">
+      <div className="max-w-2xl mx-auto space-y-8">
         <Button
           variant="ghost"
           onClick={() => router.push("/manage/my-tournaments")}
@@ -123,7 +123,7 @@ export default function SetupWizardPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto py-8 px-4">
+    <div className="max-w-2xl mx-auto space-y-8">
       {/* Back button */}
       <Button
         variant="ghost"
@@ -167,7 +167,7 @@ export default function SetupWizardPage() {
                 className="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-brand-500 outline-none transition-colors"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">
                   {t("startDate")}
@@ -271,7 +271,7 @@ export default function SetupWizardPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">
                   {t("places")}
@@ -302,7 +302,7 @@ export default function SetupWizardPage() {
               <label className="block text-sm font-bold text-gray-700 mb-1">
                 {t("playersPerTeam")}
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {[5, 7, 11, 15].map((val) => (
                   <button
                     key={val}
@@ -406,7 +406,7 @@ export default function SetupWizardPage() {
           <Button
             onClick={() => setStep(step + 1)}
             disabled={step === 1 && !formData.tournamentName}
-            className="flex-1 h-11 rounded-xl bg-brand-600 hover:bg-brand-700 font-semibold shadow-card disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 h-10 rounded-xl bg-brand-600 hover:bg-brand-700 font-semibold shadow-card disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {t("next")}
           </Button>
@@ -416,7 +416,7 @@ export default function SetupWizardPage() {
           <Button
             onClick={handleGenerate}
             disabled={loading}
-            className="flex-1 h-11 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold shadow-card hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+            className="flex-1 h-10 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 text-white font-semibold shadow-card hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">

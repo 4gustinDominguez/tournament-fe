@@ -65,14 +65,14 @@ export function DangerZone({ tournamentId }: { tournamentId: string }) {
 
   return (
     <section className="rounded-2xl border border-red-200 bg-red-50/50 overflow-hidden shadow-card">
-      <div className="px-8 py-4 border-b border-red-200 flex items-center gap-3">
+      <div className="px-6 py-4 border-b border-red-200 flex items-center gap-3">
         <div className="p-2 rounded-lg bg-red-100 text-red-600">
           <AlertTriangle className="h-5 w-5" />
         </div>
         <h3 className="display-title text-xl text-red-700">{t("dangerZone.title")}</h3>
       </div>
 
-      <div className="p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <p className="text-sm text-muted-foreground max-w-lg">
           {t("dangerZone.description")}
         </p>

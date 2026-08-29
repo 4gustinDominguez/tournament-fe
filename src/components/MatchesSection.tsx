@@ -168,10 +168,10 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({
   });
 
   return (
-    <div className="mt-8 space-y-10 pb-20 md:pb-10">
+    <div className="space-y-8 pb-10">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="space-y-1">
-          <h2 className="display-title text-3xl text-foreground flex items-center gap-3">
+          <h2 className="display-title text-2xl md:text-3xl text-foreground flex items-center gap-3">
             {t("title")}
             {rounds.length > 0 && (
               <Badge
@@ -224,7 +224,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({
         </Card>
       )}
 
-      <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {rounds.map((round) => (
           <Card
             key={round.id}
@@ -278,7 +278,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({
                     className="relative group transition-all duration-300 hover:bg-neutral-50/50"
                   >
                     {editingMatch?.id === match.id ? (
-                      <div className="p-8 bg-muted/20 animate-in fade-in zoom-in-95 duration-300">
+                      <div className="p-6 bg-muted/20 animate-in fade-in zoom-in-95 duration-300">
                         <div className="flex justify-between items-center mb-6">
                           <h4 className="font-black text-lg">
                             {t("editMatch")}
@@ -379,7 +379,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({
                             />
                           </div>
 
-                          <div className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-2.5 rounded-2xl bg-neutral-100 border border-border">
+                          <div className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-2 rounded-2xl bg-neutral-100 border border-border">
                             <span className="font-display text-xl md:text-4xl font-black tabular-nums text-foreground">
                               {match.result ? match.result.scoreA : "-"}
                             </span>
@@ -467,7 +467,7 @@ const MatchesSection: React.FC<MatchesSectionProps> = ({
 
               {/* Add Match Form */}
               {openRoundFormId === round.id && !editingMatch && (
-                <div className="p-8 bg-brand-50/30 border-t border-border animate-in slide-in-from-top-2 duration-300">
+                <div className="p-6 bg-brand-50/30 border-t border-border animate-in slide-in-from-top-2 duration-300">
                   <h4 className="font-black text-lg mb-6 flex items-center gap-2">
                     <Plus className="h-5 w-5 text-brand-600" />
                     {t("addMatchToRound")}

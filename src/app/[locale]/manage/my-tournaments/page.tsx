@@ -69,7 +69,7 @@ export default function TournamentsPage() {
     ];
 
     return (
-        <div className="space-y-8 pb-10">
+        <div className="space-y-8">
             {/* Header section */}
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1">
@@ -87,13 +87,13 @@ export default function TournamentsPage() {
                         <Button
                             variant="outline"
                             onClick={() => router.push("/manage/setup-wizard")}
-                            className="h-11 px-6 rounded-lg border-brand-200 bg-brand-50/50 text-brand-700 hover:bg-brand-100 hover:text-brand-800 font-semibold gap-2"
+                            className="h-10 px-6 rounded-lg border-brand-200 bg-brand-50/50 text-brand-700 hover:bg-brand-100 hover:text-brand-800 font-semibold gap-2"
                         >
                             <Sparkles className="h-4 w-4" /> {t('quickSetup')}
                         </Button>
                         <Button
                             onClick={() => setShowCreateForm(true)}
-                            className="h-11 px-6 rounded-lg bg-brand-600 hover:bg-brand-700 font-semibold gap-2 shadow-card"
+                            className="h-10 px-6 rounded-lg bg-brand-600 hover:bg-brand-700 font-semibold gap-2 shadow-card"
                         >
                             <Plus className="h-4 w-4" /> {tTr('create')}
                         </Button>

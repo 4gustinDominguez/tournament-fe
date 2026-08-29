@@ -135,7 +135,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
         }
     };
 
-    const fieldClass = "w-full rounded-md border border-input bg-white px-3 py-2.5 text-sm text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring transition-colors";
+    const fieldClass = "w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring transition-colors";
     const labelClass = "block text-xs font-black uppercase tracking-wider text-muted-foreground mb-1.5";
 
     const statusConfig: Record<string, { label: string; Icon: typeof Radio }> = {
@@ -269,7 +269,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
             {initialValues && (
                 <div className="mb-4">
                     <label className="block text-xs font-black uppercase tracking-wider text-muted-foreground mb-1.5">{t('status')}</label>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {(['scheduled', 'live', 'completed'] as const).map((s) => {
                             const active = match.status === s;
                             const { label, Icon } = statusConfig[s];
@@ -278,7 +278,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
                                     key={s}
                                     type="button"
                                     onClick={() => setMatch({ ...match, status: s })}
-                                    className={`flex-1 py-2 px-2 rounded-lg border text-sm font-bold transition-all inline-flex items-center justify-center gap-1.5 ${active
+                                    className={`flex-1 min-w-[120px] py-2 px-2 rounded-lg border text-sm font-bold transition-all inline-flex items-center justify-center gap-1.5 ${active
                                         ? 'bg-brand-600 border-brand-600 text-white shadow-glow'
                                         : 'bg-white border-border text-muted-foreground hover:bg-neutral-50'
                                         }`}

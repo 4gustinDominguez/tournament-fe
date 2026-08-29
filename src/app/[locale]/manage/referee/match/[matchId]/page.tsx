@@ -347,7 +347,7 @@ export default function MatchControlPage() {
 
   if (!isAuthenticated || user?.role !== UserRole.REFEREE) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
           Acceso denegado.
         </div>
@@ -357,7 +357,7 @@ export default function MatchControlPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="text-center text-muted-foreground">Cargando...</div>
       </div>
     );
@@ -365,7 +365,7 @@ export default function MatchControlPage() {
 
   if (error || !match) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
           {error || "Partido no encontrado"}
         </div>
@@ -387,7 +387,7 @@ export default function MatchControlPage() {
     : false;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="max-w-2xl mx-auto space-y-8">
       <button
         type="button"
         onClick={() => router.push("/manage/referee")}
@@ -397,7 +397,7 @@ export default function MatchControlPage() {
       </button>
 
       {/* Header */}
-      <div className="bg-white p-5 rounded-2xl shadow-card border border-border mb-6">
+      <div className="bg-white p-6 rounded-2xl shadow-card border border-border">
         <div className="flex justify-between items-start gap-4">
           <div className="flex-1 min-w-0">
             <h1 className="font-display text-xl font-bold text-foreground truncate">
@@ -433,9 +433,9 @@ export default function MatchControlPage() {
         </div>
 
         {/* Score */}
-        <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
-          <div className="flex-1 text-right">
-            <p className="font-bold text-foreground text-sm">
+        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-border">
+          <div className="flex-1 min-w-0 text-right">
+            <p className="font-bold text-foreground text-sm truncate">
               {teamA?.name || "A"}
             </p>
           </div>
@@ -458,8 +458,8 @@ export default function MatchControlPage() {
               className="w-16 p-2 border border-input rounded-lg text-center font-display text-lg font-bold focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 outline-none"
             />
           </div>
-          <div className="flex-1 text-left">
-            <p className="font-bold text-foreground text-sm">
+          <div className="flex-1 min-w-0 text-left">
+            <p className="font-bold text-foreground text-sm truncate">
               {teamB?.name || "B"}
             </p>
           </div>
@@ -468,7 +468,7 @@ export default function MatchControlPage() {
 
       {/* Timer */}
       <div
-        className={`bg-white p-5 rounded-2xl shadow-card border mb-6 ${isTimeUp ? "border-amber-400" : "border-border"}`}
+        className={`bg-white p-6 rounded-2xl shadow-card border ${isTimeUp ? "border-amber-400" : "border-border"}`}
       >
         <div className="flex items-center gap-3 mb-3">
           <Clock
@@ -485,7 +485,7 @@ export default function MatchControlPage() {
             </span>
           )}
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div
             className={`font-display text-4xl font-black tabular-nums ${isTimeUp ? "text-amber-600" : "text-foreground"}`}
           >
@@ -496,7 +496,7 @@ export default function MatchControlPage() {
               <button
                 type="button"
                 onClick={handleStartMatch}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold transition-all shadow-glow active:scale-95"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold transition-all shadow-glow active:scale-95"
               >
                 <Play className="h-4 w-4" /> Iniciar Partido
               </button>
@@ -535,8 +535,8 @@ export default function MatchControlPage() {
       </div>
 
       {/* Presence */}
-      <div className="bg-white p-5 rounded-2xl shadow-card border border-border mb-6">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white p-6 rounded-2xl shadow-card border border-border">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
             <UserCheck className="h-4 w-4 text-muted-foreground" />
             <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">
@@ -592,7 +592,7 @@ export default function MatchControlPage() {
       </div>
 
       {/* Incidents */}
-      <div className="bg-white p-5 rounded-2xl shadow-card border border-border mb-6">
+      <div className="bg-white p-6 rounded-2xl shadow-card border border-border">
         <div className="flex items-center gap-2 mb-4">
           <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">
             Eventos / Incidentes
@@ -615,7 +615,7 @@ export default function MatchControlPage() {
       </div>
 
       {/* Notes */}
-      <div className="bg-white p-5 rounded-2xl shadow-card border border-border mb-6">
+      <div className="bg-white p-6 rounded-2xl shadow-card border border-border">
         <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">
           Acta del Partido / Notas
         </h2>
@@ -629,12 +629,12 @@ export default function MatchControlPage() {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <button
           type="button"
           onClick={handleSaveResult}
           disabled={saving}
-          className="flex-1 py-2.5 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-bold transition-colors disabled:opacity-50"
+          className="flex-1 py-2 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-bold transition-colors disabled:opacity-50"
         >
           {saving ? "Guardando..." : "Guardar Resultado"}
         </button>
@@ -642,7 +642,7 @@ export default function MatchControlPage() {
           <button
             type="button"
             onClick={handleFinishMatch}
-            className="flex-1 py-2.5 px-4 rounded-lg bg-neutral-800 hover:bg-neutral-900 text-white font-bold transition-colors"
+            className="flex-1 py-2 px-4 rounded-lg bg-neutral-800 hover:bg-neutral-900 text-white font-bold transition-colors"
           >
             Finalizar Partido
           </button>

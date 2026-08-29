@@ -120,7 +120,7 @@ export default function PlayerMatchDetailPage() {
   const hasNotes = match.notes && match.notes.trim().length > 0;
 
   return (
-    <div className="py-8 max-w-xl mx-auto">
+    <div className="max-w-2xl mx-auto space-y-8">
       <button
         onClick={() => router.push("/manage/player/matches")}
         className="text-sm text-muted-foreground hover:text-foreground mb-6 inline-flex items-center gap-1"
@@ -129,18 +129,18 @@ export default function PlayerMatchDetailPage() {
       </button>
 
       {/* Score header */}
-      <div className="bg-white rounded-2xl shadow-card border border-border p-6 mb-4">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-white rounded-2xl shadow-card border border-border p-6">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <span className="text-sm text-muted-foreground">{formatDate(match.date)}</span>
           {getStatusBadge(match.status)}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex-1 text-right">
-            <p className="font-bold text-foreground text-lg">{teamA?.name || t("teamA")}</p>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex-1 min-w-0 text-right">
+            <p className="font-bold text-foreground text-lg truncate">{teamA?.name || t("teamA")}</p>
           </div>
 
-          <div className="mx-6 flex items-center gap-3">
+          <div className="mx-4 flex items-center gap-3 flex-shrink-0">
             {match.result ? (
               <span className="font-display text-3xl font-black text-foreground">
                 {match.result.scoreA} - {match.result.scoreB}
@@ -150,14 +150,14 @@ export default function PlayerMatchDetailPage() {
             )}
           </div>
 
-          <div className="flex-1 text-left">
-            <p className="font-bold text-foreground text-lg">{teamB?.name || t("teamB")}</p>
+          <div className="flex-1 min-w-0 text-left">
+            <p className="font-bold text-foreground text-lg truncate">{teamB?.name || t("teamB")}</p>
           </div>
         </div>
       </div>
 
       {/* Match info */}
-      <div className="bg-white rounded-2xl shadow-card border border-border p-5 mb-4 space-y-3">
+      <div className="bg-white rounded-2xl shadow-card border border-border p-6 space-y-3">
         <PlaceLink place={getPlace(match.placeId, places)} />
         {match.refereeId && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -169,7 +169,7 @@ export default function PlayerMatchDetailPage() {
 
       {/* Incidents */}
       {hasIncidents && teamA && teamB && (
-        <div className="bg-white rounded-2xl shadow-card border border-border p-5 mb-4">
+        <div className="bg-white rounded-2xl shadow-card border border-border p-6">
           <h2 className="font-display text-sm font-bold text-foreground mb-3 uppercase tracking-wider">
             {t("incidents")}
           </h2>
@@ -179,7 +179,7 @@ export default function PlayerMatchDetailPage() {
 
       {/* Notes */}
       {hasNotes && (
-        <div className="bg-white rounded-2xl shadow-card border border-border p-5">
+        <div className="bg-white rounded-2xl shadow-card border border-border p-6">
           <div className="flex items-center gap-2 mb-2">
             <StickyNote className="h-4 w-4 text-muted-foreground" />
             <h2 className="font-display text-sm font-bold text-foreground uppercase tracking-wider">

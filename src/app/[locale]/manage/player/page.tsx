@@ -141,9 +141,9 @@ export default function PlayerDashboardPage() {
   }
 
   return (
-    <div className="py-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-3xl font-black text-foreground">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <h1 className="display-title text-3xl md:text-4xl text-foreground">
           {t("title")}
         </h1>
         <Link href="/manage/player/profile">

@@ -100,7 +100,7 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
   }
 
   return (
-    <div className="mt-8 space-y-8">
+    <div className="space-y-8">
       <header className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="display-title text-2xl md:text-3xl text-foreground">
@@ -218,13 +218,13 @@ const TeamsSection: React.FC<TeamsSectionProps> = ({ tournamentId, readOnly }) =
       {canManage && (
         <div className="pt-12 border-t border-border">
           <div className="bg-white rounded-2xl border border-border shadow-card overflow-hidden">
-            <div className="bg-neutral-50/50 px-8 py-4 border-b border-border flex items-center gap-3">
+            <div className="bg-neutral-50/50 px-6 py-4 border-b border-border flex items-center gap-3">
               <div className="p-2 rounded-lg bg-brand-50 text-brand-600">
                 <Plus className="h-5 w-5" />
               </div>
               <h3 className="display-title text-xl text-foreground">{t("enrollNew")}</h3>
             </div>
-            <div className="p-8">
+            <div className="p-6">
               <CreateTeamForm tournamentId={tournamentId} />
             </div>
           </div>

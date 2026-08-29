@@ -124,8 +124,8 @@ export default function PlayerMatchesPage() {
   const completedMatches = matches.filter((m) => m.status === "completed");
 
   return (
-    <div className="py-8">
-      <h1 className="font-display text-2xl font-black text-foreground mb-6">
+    <div className="space-y-8">
+      <h1 className="display-title text-3xl md:text-4xl text-foreground">
         {t("title")}
       </h1>
 
@@ -134,14 +134,14 @@ export default function PlayerMatchesPage() {
           <p className="text-muted-foreground">{t("noMatches")}</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {liveMatches.length > 0 && (
             <div>
               <h2 className="font-display text-lg font-bold text-foreground mb-3 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
                 {t("liveMatches")}
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {liveMatches.map((match) => (
                   <MatchCard
                     key={match.id}
@@ -161,7 +161,7 @@ export default function PlayerMatchesPage() {
               <h2 className="font-display text-lg font-bold text-foreground mb-3">
                 {t("upcomingMatches")}
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {upcomingMatches.map((match) => (
                   <MatchCard
                     key={match.id}
@@ -181,7 +181,7 @@ export default function PlayerMatchesPage() {
               <h2 className="font-display text-lg font-bold text-foreground mb-3">
                 {t("completedMatches")}
               </h2>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {completedMatches.map((match) => (
                   <MatchCard
                     key={match.id}
@@ -219,17 +219,17 @@ function MatchCard({
       href={`/manage/player/matches/${match.id}`}
       className="block bg-white rounded-xl shadow-card border border-border p-4 hover:shadow-elevated hover:border-brand-300 transition-all"
     >
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <span className="text-xs text-muted-foreground">{formatDate(match.date)}</span>
         {getStatusBadge(match.status)}
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex-1 text-right">
-          <p className="font-bold text-foreground">{getTeamName(match.teamAId)}</p>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex-1 min-w-0 text-right">
+          <p className="font-bold text-foreground truncate">{getTeamName(match.teamAId)}</p>
         </div>
 
-        <div className="mx-4 flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {match.result ? (
             <span className="font-display text-xl font-black text-foreground">
               {match.result.scoreA} - {match.result.scoreB}
@@ -239,8 +239,8 @@ function MatchCard({
           )}
         </div>
 
-        <div className="flex-1 text-left">
-          <p className="font-bold text-foreground">{getTeamName(match.teamBId)}</p>
+        <div className="flex-1 min-w-0 text-left">
+          <p className="font-bold text-foreground truncate">{getTeamName(match.teamBId)}</p>
         </div>
       </div>
 

@@ -54,7 +54,7 @@ const DashboardHeader = () => {
               className="p-1 h-auto rounded-full hover:bg-neutral-50"
             >
               <div className="flex items-center gap-3 pr-2">
-                <Avatar className="h-9 w-9 border border-border shadow-sm">
+                <Avatar className="h-10 w-10 border border-border shadow-sm">
                   <AvatarImage src={user?.avatarUrl} />
                   <AvatarFallback className="bg-brand-500 text-white font-display font-bold text-sm">
                     {user?.firstName?.charAt(0) || "U"}
@@ -79,7 +79,7 @@ const DashboardHeader = () => {
               {tDash("myAccount")}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild className="py-2.5 cursor-pointer">
+            <DropdownMenuItem asChild className="py-2 cursor-pointer">
               <Link href="/manage/profile" className="flex items-center">
                 <UserIcon className="mr-2 h-4 w-4" />
                 <span>{tDash("profile")}</span>
@@ -88,7 +88,7 @@ const DashboardHeader = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={logout}
-              className="py-2.5 text-destructive focus:text-destructive cursor-pointer"
+              className="py-2 text-destructive focus:text-destructive cursor-pointer"
             >
               <LogOut className="mr-2 h-4 w-4" />
               <span>{t("logout")}</span>

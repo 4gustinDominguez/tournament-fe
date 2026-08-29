@@ -72,8 +72,8 @@ export default function PlayerTeamsPage() {
 
   if (teams.length === 0) {
     return (
-      <div className="py-8">
-        <h1 className="font-display text-2xl font-black text-foreground mb-4">
+      <div className="space-y-8">
+        <h1 className="display-title text-3xl md:text-4xl text-foreground">
           {t("title")}
         </h1>
         <div className="bg-white rounded-xl shadow-card border border-border p-8 text-center">
@@ -84,8 +84,8 @@ export default function PlayerTeamsPage() {
   }
 
   return (
-    <div className="py-8">
-      <h1 className="font-display text-2xl font-black text-foreground mb-6">
+    <div className="space-y-8">
+      <h1 className="display-title text-3xl md:text-4xl text-foreground">
         {t("title")}
       </h1>
 
@@ -97,10 +97,10 @@ export default function PlayerTeamsPage() {
               key={team.id}
               className="bg-white rounded-xl shadow-card border border-border p-6"
             >
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-4 mb-4 min-w-0">
                 <TeamCrest crestId={team.crestUrl} teamName={team.name} size={56} />
-                <div>
-                  <h2 className="font-display text-xl font-black text-foreground">
+                <div className="min-w-0">
+                  <h2 className="font-display text-xl font-black text-foreground truncate">
                     {team.name}
                   </h2>
                   {team.coach && (

@@ -79,7 +79,7 @@ export default function RefereePage() {
 
   if (!isAuthenticated || user?.role !== UserRole.REFEREE) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
           {t("denyAccess")}
         </div>
@@ -89,7 +89,7 @@ export default function RefereePage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="text-center text-muted-foreground">
           {tCommon("loading")}
         </div>
@@ -99,7 +99,7 @@ export default function RefereePage() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-8">
         <div className="bg-status-danger-soft border border-status-danger text-status-danger px-4 py-3 rounded-lg">
           {error}
         </div>
@@ -108,13 +108,13 @@ export default function RefereePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="font-display text-3xl font-black text-foreground mb-6">
+    <div className="space-y-8">
+      <h1 className="display-title text-3xl md:text-4xl text-foreground">
         {t("title")}
       </h1>
 
       {referee && (
-        <div className="bg-white p-4 rounded-xl border border-border shadow-card mb-6">
+        <div className="bg-white p-6 rounded-xl border border-border shadow-card">
           <div className="flex items-center gap-4">
             {(previewUrl || referee.photoUrl) ? (
               <div className="h-16 w-16 rounded-xl overflow-hidden flex-shrink-0">
@@ -187,12 +187,12 @@ export default function RefereePage() {
         </div>
       )}
 
-      <h2 className="font-display text-2xl font-black text-foreground mb-4">
+      <h2 className="display-title text-2xl text-foreground">
         {t("myMatches")}
       </h2>
 
       {matches.length === 0 ? (
-        <div className="bg-neutral-100 p-4 rounded-lg text-muted-foreground">
+        <div className="bg-neutral-100 p-4 rounded-xl text-muted-foreground">
           {t("noMatches")}
         </div>
       ) : (
@@ -242,8 +242,8 @@ function MatchCard({
       : t("controlMatch");
 
   return (
-    <div className="bg-white p-5 rounded-2xl shadow-card border border-border">
-      <div className="flex justify-between items-start gap-4">
+    <div className="bg-white p-4 rounded-xl shadow-card border border-border">
+      <div className="flex flex-wrap justify-between items-start gap-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-display text-lg font-bold text-foreground truncate">
             {teamA?.name || t("fallbackTeamA")} vs{" "}

@@ -100,7 +100,7 @@ export const PlacesList = ({
   }
 
   return (
-    <div className="flex gap-4 overflow-x-auto pb-2">
+    <div className="grid gap-4 pb-2">
       {places.map((place) => (
         <Card
           key={place.id}
