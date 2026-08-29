@@ -16,7 +16,7 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="pt-24 pb-20 bg-night-900 relative overflow-hidden">
+      <section className="pt-20 pb-24 md:pt-28 md:pb-32 bg-night-900 relative overflow-hidden">
         <div className="absolute top-[-30%] left-[-10%] w-[45%] h-[60%] bg-amber-500/15 rounded-full blur-[120px]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="font-display text-5xl md:text-7xl font-black tracking-tight text-white mb-6">
@@ -29,9 +29,9 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 md:py-20 bg-neutral-50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-6xl mx-auto">
             {/* Contact Form */}
             <Card className="shadow-card border-border bg-white rounded-2xl">
               <CardHeader>

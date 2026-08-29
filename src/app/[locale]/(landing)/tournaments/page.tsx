@@ -57,7 +57,7 @@ export default function TournamentsPage() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="pt-24 pb-20 bg-night-900 relative overflow-hidden">
+      <section className="pt-20 pb-24 md:pt-28 md:pb-32 bg-night-900 relative overflow-hidden">
         <div className="absolute top-[-30%] right-[-10%] w-[45%] h-[60%] bg-brand-600/25 rounded-full blur-[120px]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="font-display text-5xl md:text-7xl font-black tracking-tight text-white mb-6">
@@ -70,10 +70,10 @@ export default function TournamentsPage() {
       </section>
 
       {/* Tournaments Grid */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 md:py-20 bg-neutral-50">
         <div className="container mx-auto px-4">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {Array.from({ length: 6 }).map((_, idx) => (
                 <div
                   key={idx}
@@ -82,14 +82,14 @@ export default function TournamentsPage() {
               ))}
             </div>
           ) : hasTournaments ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {tournaments.map((tournament) => (
                 <Card
                   key={tournament.id}
                   className="shadow-card border-border bg-white hover:shadow-elevated transition-all duration-300 transform hover:-translate-y-1 rounded-2xl"
                 >
                   <CardHeader>
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                       <Badge
                         className={`${getStatusColor(
                           tournament.status || "ongoing",
@@ -109,28 +109,28 @@ export default function TournamentsPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-neutral-400" />
-                        <span className="text-muted-foreground">
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Calendar className="h-4 w-4 text-neutral-400 flex-shrink-0" />
+                        <span className="text-muted-foreground truncate">
                           {new Date(tournament.startDate).toLocaleDateString()}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-neutral-400" />
+                      <div className="flex items-center gap-2 min-w-0">
+                        <MapPin className="h-4 w-4 text-neutral-400 flex-shrink-0" />
                         <span className="text-muted-foreground truncate">
                           {tournament.location}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-neutral-400" />
-                        <span className="text-muted-foreground">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Users className="h-4 w-4 text-neutral-400 flex-shrink-0" />
+                        <span className="text-muted-foreground truncate">
                           {t("teamsCount", { count: tournament.teams?.length ?? 0 })}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Trophy className="h-4 w-4 text-neutral-400" />
-                        <span className="text-muted-foreground">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Trophy className="h-4 w-4 text-neutral-400 flex-shrink-0" />
+                        <span className="text-muted-foreground truncate">
                           {tournament.category || t("general")}
                         </span>
                       </div>
@@ -149,7 +149,7 @@ export default function TournamentsPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-white border border-dashed border-border rounded-3xl">
+            <div className="text-center py-16 bg-white border border-dashed border-border rounded-2xl">
               <Trophy className="mx-auto h-16 w-16 text-neutral-300 mb-4" />
               <h3 className="text-xl font-bold text-foreground mb-2">
                 {t("emptyTitle")}
@@ -163,7 +163,7 @@ export default function TournamentsPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800">
+      <section className="py-16 md:py-20 bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800">
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-display text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
             {t("ctaTitle")}

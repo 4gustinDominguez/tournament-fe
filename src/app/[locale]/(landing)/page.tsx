@@ -77,7 +77,7 @@ export default function Home() {
           {/* Scoreboard showcase */}
           <div className="mt-16 max-w-3xl mx-auto">
             <div className="rounded-2xl border border-white/10 bg-night-800/70 backdrop-blur-md overflow-hidden shadow-elevated animate-enter">
-              <div className="flex items-center justify-between px-5 py-2.5 bg-white/5 border-b border-white/10">
+              <div className="flex items-center justify-between px-4 py-2 sm:px-5 sm:py-2.5 bg-white/5 border-b border-white/10">
                 <span className="inline-flex items-center gap-2 eyebrow text-[10px] text-brand-300">
                   <Radio className="h-3 w-3 text-status-live animate-pulse" />
                   {t("matchCenter")}
@@ -86,13 +86,13 @@ export default function Home() {
                   {t("matchLabel")}
                 </span>
               </div>
-              <div className="grid grid-cols-[1fr,auto,1fr] items-center gap-4 px-6 py-6">
-                <div className="text-right">
+              <div className="grid grid-cols-[1fr,auto,1fr] items-center gap-2 sm:gap-4 p-4 sm:px-6 sm:py-6">
+                <div className="min-w-0 text-right">
                   <p className="font-display text-lg md:text-2xl font-bold text-white truncate">
                     {t("matchTeamA")}
                   </p>
                 </div>
-                <div className="flex items-center gap-3 px-5 py-2 rounded-xl bg-night-900 border border-white/10">
+                <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2 rounded-xl bg-night-900 border border-white/10">
                   <span className="font-display text-4xl font-black tabular-nums text-white">
                     1
                   </span>
@@ -103,7 +103,7 @@ export default function Home() {
                     2
                   </span>
                 </div>
-                <div className="text-left">
+                <div className="min-w-0 text-left">
                   <p className="font-display text-lg md:text-2xl font-bold text-white truncate">
                     {t("matchTeamB")}
                   </p>
@@ -131,7 +131,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-night-800/50 border-y border-white/5">
+      <section className="py-16 md:py-20 bg-night-800/50 border-y border-white/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
             <h2 className="eyebrow text-brand-400">{t("featuresTitle")}</h2>
@@ -181,10 +181,10 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 text-white relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 text-center">
             <div className="space-y-2">
               <div className="font-display text-5xl md:text-6xl font-black tracking-tight">
                 500+
@@ -222,7 +222,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-24 bg-night-900">
+      <section className="py-16 md:py-20 bg-night-900">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto rounded-3xl bg-night-800 p-12 md:p-20 text-center relative overflow-hidden border border-white/10 shadow-elevated">
             <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-amber-500/10 blur-[120px] rounded-full"></div>

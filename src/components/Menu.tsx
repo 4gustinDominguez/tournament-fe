@@ -69,7 +69,7 @@ const Menu = ({ mobile = false, onNavigate }: MenuProps) => {
         <div className="flex items-center space-x-4">
           <Link
             href={dashboardHref}
-            className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-sm font-bold py-2.5 px-4 rounded-lg transition-all shadow-glow hover:scale-105"
+            className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-sm font-bold py-2 px-4 rounded-lg transition-all shadow-glow hover:scale-105"
           >
             <LayoutDashboard className="h-4 w-4" />
             {t("dashboard")}
@@ -79,7 +79,7 @@ const Menu = ({ mobile = false, onNavigate }: MenuProps) => {
           </span>
           <button
             onClick={logout}
-            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-colors border border-white/10"
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors border border-white/10"
           >
             <LogOut className="h-4 w-4" />
             {t("logout")}
@@ -88,7 +88,7 @@ const Menu = ({ mobile = false, onNavigate }: MenuProps) => {
       ) : (
         <Link
           href="/login"
-          className="bg-brand-500 hover:bg-brand-400 text-white text-sm font-bold py-2.5 px-6 rounded-lg transition-all shadow-glow hover:scale-105"
+          className="bg-brand-500 hover:bg-brand-400 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all shadow-glow hover:scale-105"
         >
           {t("login")}
         </Link>

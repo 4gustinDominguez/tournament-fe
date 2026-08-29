@@ -38,14 +38,14 @@ export const TournamentList: React.FC = () => {
                             </div>
 
                             <div className="space-y-2 text-sm text-muted-foreground">
-                                <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-neutral-400" />
-                                    <span>{new Date(tournament.startDate).toLocaleDateString()} - {new Date(tournament.endDate).toLocaleDateString()}</span>
+                                <div className="flex items-center gap-2 min-w-0">
+                                    <Calendar className="w-4 h-4 text-neutral-400 flex-shrink-0" />
+                                    <span className="truncate">{new Date(tournament.startDate).toLocaleDateString()} - {new Date(tournament.endDate).toLocaleDateString()}</span>
                                 </div>
 
-                                <div className="flex items-center gap-2">
-                                    <MapPin className="w-4 h-4 text-neutral-400" />
-                                    <span>{tournament.location}</span>
+                                <div className="flex items-center gap-2 min-w-0">
+                                    <MapPin className="w-4 h-4 text-neutral-400 flex-shrink-0" />
+                                    <span className="truncate">{tournament.location}</span>
                                 </div>
                             </div>
 

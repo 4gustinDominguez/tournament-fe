@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-night-900/80 backdrop-blur-lg border-b border-white/10 shadow-lg">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 grid place-items-center text-white shadow-glow">
             <Trophy className="h-5 w-5" />
@@ -80,7 +80,7 @@ export default function Header() {
       </div>
       {isMobileMenuOpen && (
         <div className="md:hidden bg-night-900/95 backdrop-blur-lg border-t border-white/10">
-          <nav className="container mx-auto px-6 py-4 space-y-4">
+          <nav className="container mx-auto px-4 py-4 space-y-4">
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}

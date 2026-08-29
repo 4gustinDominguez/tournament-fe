@@ -39,13 +39,13 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
     if (loading) {
         return (
             <div className="flex flex-col min-h-screen bg-night-900">
-                <section className="pt-32 pb-20">
+                <section className="pt-20 pb-24 md:pt-28 md:pb-32">
                     <div className="container mx-auto px-4 text-center space-y-4">
                         <Skeleton className="h-14 w-3/4 max-w-2xl mx-auto rounded-lg bg-white/10" />
                         <Skeleton className="h-6 w-1/2 max-w-md mx-auto rounded-lg bg-white/10" />
                     </div>
                 </section>
-                <div className="container mx-auto px-4 py-12 space-y-12">
+                <div className="container mx-auto px-4 py-12 space-y-12 max-w-6xl">
                     <Skeleton className="h-96 w-full rounded-3xl bg-white/10" />
                     <Skeleton className="h-96 w-full rounded-3xl bg-white/10" />
                 </div>
@@ -66,7 +66,7 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
     return (
         <div className="flex flex-col w-full bg-neutral-50">
             {/* Hero Section */}
-            <section className="relative pt-24 pb-24 md:pt-32 md:pb-32 overflow-hidden bg-night-900 text-white">
+            <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 overflow-hidden bg-night-900 text-white">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[70%] bg-brand-600/25 rounded-full blur-[120px]"></div>
                     <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[50%] bg-amber-500/15 rounded-full blur-[120px]"></div>
@@ -98,11 +98,11 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
             </section>
 
             {/* Content Sections */}
-            <main className="container mx-auto px-4 py-16 space-y-24">
+            <main className="container mx-auto px-4 py-16 md:py-20 space-y-16 md:space-y-20 max-w-6xl">
 
                 {/* Standings */}
-                <section className="bg-white rounded-3xl p-8 md:p-12 shadow-card border border-border">
-                    <div className="mb-10 text-center">
+                <section className="bg-white rounded-3xl p-8 md:p-10 shadow-card border border-border">
+                    <div className="mb-8 text-center">
                         <h2 className="eyebrow text-brand-600 mb-3">{t('standingsEyebrow')}</h2>
                         <h3 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight">{t('standingsTitle')}</h3>
                     </div>
@@ -110,8 +110,8 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
                 </section>
 
                 {/* Matches */}
-                <section className="bg-white rounded-3xl p-8 md:p-12 shadow-card border border-border">
-                    <div className="mb-10 text-center">
+                <section className="bg-white rounded-3xl p-8 md:p-10 shadow-card border border-border">
+                    <div className="mb-8 text-center">
                         <h2 className="eyebrow text-amber-600 mb-3">{t('calendarEyebrow')}</h2>
                         <h3 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight">{t('calendarTitle')}</h3>
                     </div>
@@ -119,8 +119,8 @@ export default function PublicTournamentPage(props: { params: Promise<{ id: stri
                 </section>
 
                 {/* Teams */}
-                <section className="bg-white rounded-3xl p-8 md:p-12 shadow-card border border-border">
-                    <div className="mb-10 text-center">
+                <section className="bg-white rounded-3xl p-8 md:p-10 shadow-card border border-border">
+                    <div className="mb-8 text-center">
                         <h2 className="eyebrow text-sky-600 mb-3">{t('teamsEyebrow')}</h2>
                         <h3 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight">{t('teamsTitle')}</h3>
                     </div>

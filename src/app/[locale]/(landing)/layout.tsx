@@ -16,7 +16,7 @@ export default async function LandingLayout({
       <Header />
       <main className="flex-grow pt-20">{children}</main>
       <footer className="bg-night-800 border-t border-white/10 text-night-200 py-16">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-3 mb-6">
