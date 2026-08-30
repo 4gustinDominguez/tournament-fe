@@ -1,38 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import DocsSidebar from '@/components/DocsSidebar';
-import { Menu, X } from 'lucide-react';
+import { useRouter, usePathname } from '@/navigation';
 import { useTranslations } from 'next-intl';
+
+const navItems = [
+    { href: '/docs', key: 'index' },
+    { href: '/docs/tournaments', key: 'tournaments' },
+    { href: '/docs/teams', key: 'teams' },
+    { href: '/docs/matches', key: 'matches' },
+    { href: '/docs/players', key: 'players' },
+] as const;
 
 export default function DocsLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
     const t = useTranslations('Docs.nav');
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const currentHref = navItems.find(
+        (item) => item.href === pathname || pathname.startsWith(`${item.href}/`)
+    )?.href ?? '/docs';
 
     return (
         <div className="container mx-auto px-4 py-8 md:py-12">
-            <div className="flex items-center justify-between md:hidden mb-6">
-                <h2 className="font-display text-xl font-bold text-night-100">
+            <div className="md:hidden mb-6">
+                <label className="block text-xs font-semibold text-night-400 mb-2 uppercase tracking-wider">
                     {t('title')}
-                </h2>
-                <button
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="h-10 w-10 rounded-xl bg-white/[0.06] border border-white/10 grid place-items-center text-night-200 hover:bg-white/[0.1] transition-colors"
-                    aria-label={sidebarOpen ? 'Cerrar menú' : 'Abrir menú'}
+                </label>
+                <select
+                    value={currentHref}
+                    onChange={(e) => router.push(e.target.value)}
+                    className="w-full appearance-none bg-white/[0.06] border border-white/10 rounded-xl px-4 py-3 text-sm font-medium text-night-100 focus:outline-none focus:ring-2 focus:ring-brand-400/50"
                 >
-                    {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </button>
+                    {navItems.map((item) => (
+                        <option key={item.href} value={item.href} className="bg-night-800 text-night-100">
+                            {t(item.key)}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="flex gap-8 items-start">
-                <DocsSidebar
-                    className={sidebarOpen ? 'flex' : 'hidden md:flex'}
-                    onNavigate={() => setSidebarOpen(false)}
-                />
+                <DocsSidebar className="hidden md:flex" />
                 <div className="flex-1 min-w-0">
                     {children}
                 </div>
