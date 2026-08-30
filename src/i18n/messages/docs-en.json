@@ -1,0 +1,162 @@
+{
+  "Docs": {
+    "nav": {
+      "title": "Documentation",
+      "index": "Overview",
+      "tournaments": "Tournaments",
+      "teams": "Teams",
+      "matches": "Matches",
+      "players": "Players"
+    },
+    "index": {
+      "title": "Documentation",
+      "subtitle": "Learn how to get the most out of GTM to manage your tournaments, teams, and matches.",
+      "tournaments": {
+        "title": "Tournaments",
+        "description": "Create and configure tournaments, manage rounds, and track the progress of your competitions.",
+        "link": "View tournament guide"
+      },
+      "teams": {
+        "title": "Teams",
+        "description": "Register teams, add players, and manage your team roster.",
+        "link": "View team guide"
+      },
+      "matches": {
+        "title": "Matches",
+        "description": "Score matches in real time, record incidents, and view results.",
+        "link": "View match guide"
+      },
+      "players": {
+        "title": "Players",
+        "description": "Access your dashboard, view your stats, and keep your profile up to date.",
+        "link": "View player guide"
+      }
+    },
+    "tournaments": {
+      "title": "Tournaments",
+      "subtitle": "Everything you need to create, configure, and manage your tournaments.",
+      "create": {
+        "title": "Create a Tournament",
+        "description": "From the \"My Tournaments\" section, click the \"Create Tournament\" button to start a new competition.",
+        "step1": {
+          "title": "Basic Information",
+          "text": "Enter the tournament name, description, and dates. The name will be visible to all participants."
+        },
+        "step2": {
+          "title": "Location",
+          "text": "Optionally add a venue or location. This helps participants find where matches will be played."
+        },
+        "step3": {
+          "title": "Format and Categories",
+          "text": "Select the tournament format and define the categories. You can configure this later from the settings."
+        }
+      },
+      "manage": {
+        "title": "Manage Your Tournament",
+        "description": "Once created, access your tournament to manage all aspects from a single dashboard.",
+        "tabs": {
+          "matches": "View and manage all scheduled matches. You can create matches manually or generate them automatically from rounds.",
+          "standings": "Track the tournament leaderboard in real time. Rankings update automatically as match results are recorded.",
+          "teams": "See all registered teams and their details. Manage acceptances and team information.",
+          "info": "View general tournament information, dates, and configuration."
+        }
+      },
+      "rounds": {
+        "title": "Rounds",
+        "description": "Rounds allow you to organize matches into groups. Create rounds to schedule batches of matches.",
+        "tip": "You can create as many rounds as you need. Each round contains matches that are played within a defined time period."
+      },
+      "settings": {
+        "title": "Settings",
+        "description": "From the settings page you can modify key tournament parameters: name, dates, format, and visibility."
+      }
+    },
+    "teams": {
+      "title": "Teams",
+      "subtitle": "Learn how to register teams and manage your roster.",
+      "register": {
+        "title": "Register a Team",
+        "description": "Anyone with the tournament registration link can register a team. You don't need an account to start, but you'll need one to manage the team later.",
+        "step1": {
+          "title": "Access the Link",
+          "text": "Get the registration link from the tournament administrator or find it on the public tournament page."
+        },
+        "step2": {
+          "title": "Complete the Form",
+          "text": "Enter the team name and the required information. Some tournaments may require additional details."
+        },
+        "step3": {
+          "title": "Confirmation",
+          "text": "Once registered, you'll receive confirmation. The team will appear in the tournament's team list."
+        }
+      },
+      "manage": {
+        "title": "Manage Your Team",
+        "description": "After registering, you can access your team to add players and update information.",
+        "players": "Add players to your team roster. Each player needs a name and basic information.",
+        "edit": "Update team details such as name or additional information at any time."
+      },
+      "players": {
+        "title": "Add Players",
+        "description": "A team is made up of players. Add all members of your team so they can participate in matches.",
+        "tip": "Players can be added at any time before or during the tournament, as long as the tournament rules allow it."
+      }
+    },
+    "matches": {
+      "title": "Matches",
+      "subtitle": "How match scoring works and how to view results.",
+      "score": {
+        "title": "Score a Match",
+        "description": "Referees can access the match scoring panel to record events in real time.",
+        "step1": {
+          "title": "Access the Panel",
+          "text": "From the referee section, select the match you want to score. You'll see the scoreboard with both teams."
+        },
+        "step2": {
+          "title": "Record Events",
+          "text": "Use the scoring controls to add goals, cards, substitutions, and other incidents as they happen."
+        },
+        "step3": {
+          "title": "End the Match",
+          "text": "When the match is over, finalize the score. The results will automatically update the tournament standings."
+        }
+      },
+      "view": {
+        "title": "View Results",
+        "description": "Match results are available from the tournament page. You can see the score, incidents, and detailed statistics.",
+        "public": "Public tournament pages show match results without requiring login."
+      },
+      "incidents": {
+        "title": "Incidents",
+        "description": "During a match, various incidents can be recorded: goals, yellow cards, red cards, substitutions, and other relevant events.",
+        "tip": "All incidents are saved in real time and are visible to tournament administrators."
+      }
+    },
+    "players": {
+      "title": "Players",
+      "subtitle": "Your personal dashboard, profile, and statistics.",
+      "dashboard": {
+        "title": "Player Dashboard",
+        "description": "The player dashboard is your personal control panel. From here you can access all your information.",
+        "stats": "View your statistics: matches played, goals scored, cards received, and more.",
+        "teams": "See all the teams you belong to and switch between them.",
+        "matches": "Review your match history with scores and incidents."
+      },
+      "profile": {
+        "title": "Your Profile",
+        "description": "Keep your profile up to date with your personal information. This data is used by tournament administrators to identify you.",
+        "tip": "Upload a profile photo so teams and referees can easily identify you during matches."
+      },
+      "stats": {
+        "title": "Statistics",
+        "description": "Track your performance across tournaments. Your stats are updated automatically as matches are scored.",
+        "metrics": "View matches played, goals, assists, cards, and other metrics depending on the sport."
+      },
+      "matches": {
+        "title": "Match History",
+        "description": "Access a complete record of all your matches. Filter by tournament, date, or team to find specific games.",
+        "detail": "Click on any match to see detailed information: final score, incidents, lineups, and more."
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "@/components/Header";
+import { Link } from "@/navigation";
 import { Trophy } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -96,13 +97,13 @@ export default async function LandingLayout({
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/docs"
                     className="hover:text-amber-300 transition-colors flex items-center gap-2"
                   >
                     <span className="w-1.5 h-1.5 bg-brand-500 rounded-full"></span>
                     {t("supportHelp")}
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a

@@ -1,0 +1,162 @@
+{
+  "Docs": {
+    "nav": {
+      "title": "Documentación",
+      "index": "Inicio",
+      "tournaments": "Torneos",
+      "teams": "Equipos",
+      "matches": "Partidos",
+      "players": "Jugadores"
+    },
+    "index": {
+      "title": "Documentación",
+      "subtitle": "Aprende a sacar el máximo provecho de GTM para gestionar tus torneos, equipos y partidos.",
+      "tournaments": {
+        "title": "Torneos",
+        "description": "Crea y configura torneos, gestiona rondas y sigue el progreso de tus competiciones.",
+        "link": "Ver guía de torneos"
+      },
+      "teams": {
+        "title": "Equipos",
+        "description": "Registra equipos, agrega jugadores y administra tu plantilla.",
+        "link": "Ver guía de equipos"
+      },
+      "matches": {
+        "title": "Partidos",
+        "description": "Arbitra partidos en tiempo real, registra incidentes y consulta resultados.",
+        "link": "Ver guía de partidos"
+      },
+      "players": {
+        "title": "Jugadores",
+        "description": "Accede a tu panel, consulta tus estadísticas y mantén tu perfil actualizado.",
+        "link": "Ver guía de jugadores"
+      }
+    },
+    "tournaments": {
+      "title": "Torneos",
+      "subtitle": "Todo lo que necesitas para crear, configurar y gestionar tus torneos.",
+      "create": {
+        "title": "Crear un Torneo",
+        "description": "Desde la sección \"Mis Torneos\", haz clic en el botón \"Crear Torneo\" para iniciar una nueva competición.",
+        "step1": {
+          "title": "Información Básica",
+          "text": "Ingresa el nombre del torneo, la descripción y las fechas. El nombre será visible para todos los participantes."
+        },
+        "step2": {
+          "title": "Ubicación",
+          "text": "Opcionalmente agrega una sede o ubicación. Esto ayuda a los participantes a encontrar dónde se jugarán los partidos."
+        },
+        "step3": {
+          "title": "Formato y Categorías",
+          "text": "Selecciona el formato del torneo y define las categorías. Puedes configurar esto más tarde desde los ajustes."
+        }
+      },
+      "manage": {
+        "title": "Gestionar tu Torneo",
+        "description": "Una vez creado, accede a tu torneo para gestionar todos los aspectos desde un solo panel.",
+        "tabs": {
+          "matches": "Visualiza y administra todos los partidos programados. Puedes crear partidos manualmente o generarlos automáticamente desde las rondas.",
+          "standings": "Sigue la clasificación del torneo en tiempo real. Los rankings se actualizan automáticamente a medida que se registran los resultados.",
+          "teams": "Consulta todos los equipos inscritos y sus detalles. Gestiona aceptaciones e información de equipos.",
+          "info": "Consulta la información general del torneo, fechas y configuración."
+        }
+      },
+      "rounds": {
+        "title": "Rondas",
+        "description": "Las rondas te permiten organizar partidos en grupos. Crea rondas para programar lotes de partidos.",
+        "tip": "Puedes crear todas las rondas que necesites. Cada ronda contiene partidos que se juegan dentro de un período de tiempo definido."
+      },
+      "settings": {
+        "title": "Ajustes",
+        "description": "Desde la página de ajustes puedes modificar parámetros clave del torneo: nombre, fechas, formato y visibilidad."
+      }
+    },
+    "teams": {
+      "title": "Equipos",
+      "subtitle": "Aprende a registrar equipos y gestionar tu plantilla.",
+      "register": {
+        "title": "Registrar un Equipo",
+        "description": "Cualquier persona con el enlace de inscripción del torneo puede registrar un equipo. No necesitas una cuenta para comenzar, pero sí para gestionar el equipo después.",
+        "step1": {
+          "title": "Acceder al Enlace",
+          "text": "Obtén el enlace de inscripción del administrador del torneo o búscalo en la página pública del torneo."
+        },
+        "step2": {
+          "title": "Completar el Formulario",
+          "text": "Ingresa el nombre del equipo y la información requerida. Algunos torneos pueden exigir detalles adicionales."
+        },
+        "step3": {
+          "title": "Confirmación",
+          "text": "Una vez registrado, recibirás una confirmación. El equipo aparecerá en la lista de equipos del torneo."
+        }
+      },
+      "manage": {
+        "title": "Gestionar tu Equipo",
+        "description": "Después de registrarte, puedes acceder a tu equipo para agregar jugadores y actualizar información.",
+        "players": "Agrega jugadores a la plantilla de tu equipo. Cada jugador necesita un nombre e información básica.",
+        "edit": "Actualiza los datos del equipo como el nombre o información adicional en cualquier momento."
+      },
+      "players": {
+        "title": "Agregar Jugadores",
+        "description": "Un equipo está compuesto por jugadores. Agrega a todos los miembros de tu equipo para que puedan participar en los partidos.",
+        "tip": "Los jugadores pueden agregarse en cualquier momento antes o durante el torneo, siempre que las reglas lo permitan."
+      }
+    },
+    "matches": {
+      "title": "Partidos",
+      "subtitle": "Cómo funciona el marcado de partidos y cómo ver los resultados.",
+      "score": {
+        "title": "Marcar un Partido",
+        "description": "Los árbitros pueden acceder al panel de marcado para registrar eventos en tiempo real.",
+        "step1": {
+          "title": "Acceder al Panel",
+          "text": "Desde la sección de árbitros, selecciona el partido que deseas marcar. Verás el marcador con ambos equipos."
+        },
+        "step2": {
+          "title": "Registrar Eventos",
+          "text": "Usa los controles de marcado para agregar goles, tarjetas, cambios y otros incidentes a medida que ocurren."
+        },
+        "step3": {
+          "title": "Finalizar el Partido",
+          "text": "Cuando el partido termine, finaliza el marcador. Los resultados actualizarán automáticamente la clasificación del torneo."
+        }
+      },
+      "view": {
+        "title": "Ver Resultados",
+        "description": "Los resultados de los partidos están disponibles desde la página del torneo. Puedes ver el marcador, incidentes y estadísticas detalladas.",
+        "public": "Las páginas públicas de los torneos muestran los resultados de los partidos sin requerir inicio de sesión."
+      },
+      "incidents": {
+        "title": "Incidentes",
+        "description": "Durante un partido, se pueden registrar varios incidentes: goles, tarjetas amarillas, tarjetas rojas, cambios y otros eventos relevantes.",
+        "tip": "Todos los incidentes se guardan en tiempo real y son visibles para los administradores del torneo."
+      }
+    },
+    "players": {
+      "title": "Jugadores",
+      "subtitle": "Tu panel personal, perfil y estadísticas.",
+      "dashboard": {
+        "title": "Panel del Jugador",
+        "description": "El panel del jugador es tu centro de control personal. Desde aquí puedes acceder a toda tu información.",
+        "stats": "Consulta tus estadísticas: partidos jugados, goles marcados, tarjetas recibidas y más.",
+        "teams": "Consulta todos los equipos a los que perteneces y cambia entre ellos.",
+        "matches": "Revisa tu historial de partidos con marcadores e incidentes."
+      },
+      "profile": {
+        "title": "Tu Perfil",
+        "description": "Mantén tu perfil actualizado con tu información personal. Estos datos son utilizados por los administradores del torneo para identificarte.",
+        "tip": "Sube una foto de perfil para que equipos y árbitros puedan identificarte fácilmente durante los partidos."
+      },
+      "stats": {
+        "title": "Estadísticas",
+        "description": "Sigue tu rendimiento a través de los torneos. Tus estadísticas se actualizan automáticamente a medida que se registran los partidos.",
+        "metrics": "Consulta partidos jugados, goles, asistencias, tarjetas y otras métricas según el deporte."
+      },
+      "matches": {
+        "title": "Historial de Partidos",
+        "description": "Accede a un registro completo de todos tus partidos. Filtra por torneo, fecha o equipo para encontrar partidos específicos.",
+        "detail": "Haz clic en cualquier partido para ver información detallada: marcador final, alineaciones, incidentes y más."
+      }
+    }
+  }
+}

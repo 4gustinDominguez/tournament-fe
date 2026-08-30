@@ -9,8 +9,16 @@ export default getRequestConfig(async ({ requestLocale }) => {
     // Validate that the incoming `locale` parameter is valid
     if (!locales.includes(locale as any)) notFound();
 
+    const [mainMessages, docsMessages] = await Promise.all([
+        import(`./messages/${locale}.json`),
+        import(`./messages/docs-${locale}.json`)
+    ]);
+
     return {
         locale,
-        messages: (await import(`./messages/${locale}.json`)).default
+        messages: {
+            ...mainMessages.default,
+            ...docsMessages.default
+        }
     };
 });
