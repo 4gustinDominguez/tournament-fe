@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint & Typecheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +24,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
+      - run: pnpm typecheck
 
   unit:
     name: Unit & Integration Tests
