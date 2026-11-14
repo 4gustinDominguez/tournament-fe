@@ -82,22 +82,22 @@
 }
 
 @layer components {
-  /* Eyebrow: etiqueta condensada estilo broadcast */
+  /* Eyebrow: condensed broadcast-style label */
   .eyebrow {
     @apply font-display font-bold uppercase tracking-wider text-xs;
   }
 
-  /* Título display condensado (h1) */
+  /* Condensed display title (h1) */
   .display-title {
     @apply font-display font-extrabold tracking-tight;
   }
 
-  /* Tarjeta base del sistema */
+  /* Base system card */
   .card-surface {
     @apply bg-card text-card-foreground border border-border rounded-xl shadow-card;
   }
 
-  /* Píldora de estado (puntitos/etiquetas) */
+  /* Status pill (dots/labels) */
   .pill {
     @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-display font-semibold uppercase tracking-wider text-[11px];
   }
@@ -108,7 +108,7 @@
     text-wrap: balance;
   }
 
-  /* Animación de entrada genérica */
+  /* Generic entrance animation */
   .animate-enter {
     animation: enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
   }

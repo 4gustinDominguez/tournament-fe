@@ -19,9 +19,9 @@ export default defineConfig({
     video: "retain-on-failure",
   },
 
-  // E2E levanta su propio stack local en puertos dedicados (3002/3003),
-  // aislado de lo que corra en 3000/3001 (dev o Docker) y sin Postgres
-  // (file storage). Si ya hay algo escuchando en 3002/3003 se reutiliza.
+  // The e2e suite boots its own local stack on dedicated ports (3002/3003),
+  // isolated from whatever runs on 3000/3001 (dev or Docker) and without Postgres
+  // (file storage). Anything already listening on 3002/3003 is reused.
   webServer: [
     {
       command: "PORT=3002 pnpm --dir ../t-form-api dev",

@@ -84,7 +84,7 @@ export function LocationPicker({
   latitude,
   longitude,
   onChange,
-  placeholder = "Buscar dirección...",
+  placeholder = "Search address...",
 }: LocationPickerProps) {
   const [query, setQuery] = useState(value);
   const [suggestions, setSuggestions] = useState<NominatimResult[]>([]);
