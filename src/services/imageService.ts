@@ -29,15 +29,6 @@ export async function uploadImage(
   if (folder) {
     formData.append("folder", folder);
   }
-  console.log("Uploading image to Cloudinary...");
-  console.log(
-    "Cloudinary Cloud Name:",
-    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  );
-  console.log(
-    "Cloudinary Upload Preset:",
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-  );
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,

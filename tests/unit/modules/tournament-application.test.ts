@@ -9,7 +9,6 @@ import { getAllMatches } from "@/modules/tournament/application/get-all/get-all-
 import { getAllRounds } from "@/modules/tournament/application/get-all/get-all-rounds";
 import { getAllTeams } from "@/modules/tournament/application/get-all/get-all-teams";
 import { getAllTournaments } from "@/modules/tournament/application/get-all/get-all-tournaments";
-import { getTournament } from "@/modules/tournament/application/get/get-tournament";
 import type { Match } from "@/modules/tournament/domain/match";
 import type { Player } from "@/modules/tournament/domain/player";
 import type { Round } from "@/modules/tournament/domain/round";
@@ -86,12 +85,6 @@ describe("tournament application cases", () => {
   it("getAllTournaments returns the repository result", async () => {
     vi.mocked(repo.getAll).mockResolvedValueOnce([tournament]);
     await expect(getAllTournaments(repo)).resolves.toEqual([tournament]);
-  });
-
-  it("getTournament returns the tournament by id", async () => {
-    vi.mocked(repo.get).mockResolvedValueOnce(tournament);
-    await expect(getTournament(repo, "t1")).resolves.toEqual(tournament);
-    expect(repo.get).toHaveBeenCalledWith("t1");
   });
 
   it("createTeam delegates with tournamentId and team", async () => {

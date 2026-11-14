@@ -6,7 +6,5 @@ export async function createPlayer(
     teamId: string,
     player: Player
 ): Promise<void> {
-    // ensureTournamentIsValid(course);
-
     await tournamentRepository.savePlayer({ teamId, player });
 }

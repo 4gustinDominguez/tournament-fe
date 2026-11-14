@@ -318,7 +318,6 @@ export function createApiTournamentRepository(): TournamentRepository {
     }
 
     async function updateMatch(match: Match) {
-        console.log("Updating match:", match);
         const matchDate = typeof match.date === 'string' ? new Date(match.date) : match.date;
 
         const response = await fetch(`${baseUrl}/matches/${match.id}`, {

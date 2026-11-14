@@ -44,7 +44,6 @@ const CreateTournamentForm: React.FC<CreateTournamentFormProps> = ({ onCreated }
 
         createTournament({ ...tournament, id: crypto.randomUUID() })
             .then(() => {
-                console.log("Tournament created successfully");
                 setTournament({
                     id: '',
                     name: '',
