@@ -1,48 +1,48 @@
 # Features
 
-## Sedes (Places)
+## Venues (Places)
 
-Gestión de sedes/locales para torneos, con soporte de geolocalización y mapa interactivo.
+Venue/location management for tournaments, with geolocation support and an interactive map.
 
-### Crear sede
+### Create a venue
 
-- Formulario con nombre, dirección, capacidad
-- **LocationPicker**: autocomplete con Nominatim (OpenStreetMap), mapa interactivo con pin arrastrable
-- Al hacer click en el mapa o arrastrar el pin, se hace **reverse geocoding** para autocompletar la dirección
-- Guarda lat/lng para geolocalización precisa
+- Form with name, address and capacity
+- **LocationPicker**: autocomplete with Nominatim (OpenStreetMap), interactive map with a draggable pin
+- Clicking the map or dragging the pin triggers **reverse geocoding** to autofill the address
+- Stores lat/lng for precise geolocation
 
-### Editar sede
+### Edit a venue
 
-- Dialog modal (`EditPlaceDialog`) con el mismo formulario que creación
-- Modifica nombre, ubicación, capacidad y coordenadas
-- Botón ✏️ visible solo para admins/propietarios del torneo
+- Modal dialog (`EditPlaceDialog`) with the same form as creation
+- Edits name, location, capacity and coordinates
+- ✏️ button visible only to tournament admins/owners
 
-### Eliminar sede
+### Delete a venue
 
-- Botón 🗑️ con confirmación, visible solo para admins/propietarios
+- 🗑️ button with confirmation, visible only to tournament admins/owners
 
-### Lista de sedes
+### Venue list
 
-- Layout horizontal (`flex`) con scroll si hay muchas sedes
-- Cada card muestra: nombre, mini mapa (PlaceMap), dirección, capacidad
-- Link "Cómo llegar" a Google Maps usando coordenadas
-- Formulario de creación y lista al 50% del ancho en desktop (`lg:grid-cols-2`)
+- Horizontal (`flex`) layout with scrolling when there are many venues
+- Each card shows: name, mini map (PlaceMap), address, capacity
+- "Get directions" link to Google Maps using the coordinates
+- Creation form and list side by side at 50% width on desktop (`lg:grid-cols-2`)
 
-### PlaceLink (en partidos)
+### PlaceLink (in matches)
 
-- Componente reutilizable que muestra nombre de sede + link a Google Maps
-- Integrado en:
-  - **MatchesSection** (público + admin): footer de cada partido
-  - **Referee dashboard**: cards de partidos asignados
-  - **Referee match control**: header del partido
-  - **Player match detail**: info del partido (arreglado bug que no mostraba nombre)
-  - **Player matches list**: cards de partidos
-  - **Player dashboard**: partidos próximos
+- Reusable component showing the venue name + Google Maps link
+- Integrated in:
+  - **MatchesSection** (public + admin): footer of each match
+  - **Referee dashboard**: assigned match cards
+  - **Referee match control**: match header
+  - **Player match detail**: match info (fixed a bug where the name was not shown)
+  - **Player matches list**: match cards
+  - **Player dashboard**: upcoming matches
 
-### Detalles técnicos
+### Technical details
 
-- **Z-index**: Leaflet usa `zIndex: 0` en el `MapContainer` inline style para no superponer modales
+- **Z-index**: Leaflet uses `zIndex: 0` on the `MapContainer` inline style so it does not overlay modals
 - **API**: `GET /places`, `POST /places`, `PUT /places/:id`, `DELETE /places/:id`
-- **Backend**: Place entity con `latitude?`, `longitude?`, validación con Zod
-- **i18n**: Keys en `Places.*`, `CreatePlaceForm.*`, `EditPlace.*`, `Common.*`
-- **Util compartido**: `getPlaceName`, `getPlace`, `getGoogleMapsUrl` en `@/lib/places`
+- **Backend**: Place entity with `latitude?`, `longitude?`, Zod validation
+- **i18n**: keys under `Places.*`, `CreatePlaceForm.*`, `EditPlace.*`, `Common.*`
+- **Shared utilities**: `getPlaceName`, `getPlace`, `getGoogleMapsUrl` in `@/lib/places`
