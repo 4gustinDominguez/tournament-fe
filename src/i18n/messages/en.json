@@ -712,6 +712,13 @@
     "resetPasswordInvalidDesc": "This password reset link is invalid or has expired.",
     "newPassword": "New password",
     "confirmPassword": "Confirm password",
+    "verifyEmailTitle": "Verify your email",
+    "verifyEmailVerifying": "Verifying your email...",
+    "verifyEmailSuccess": "Email verified successfully",
+    "verifyEmailSuccessDesc": "Your email address has been verified. You can now sign in.",
+    "verifyEmailError": "Error verifying email",
+    "verifyEmailInvalid": "Invalid link",
+    "verifyEmailInvalidDesc": "This verification link is invalid or has already been used.",
     "backToLogin": "Back to sign in"
   },
   "Wizard": {

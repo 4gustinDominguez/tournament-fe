@@ -712,6 +712,13 @@
     "resetPasswordInvalidDesc": "Este enlace de restablecimiento es inválido o ha expirado.",
     "newPassword": "Nueva contraseña",
     "confirmPassword": "Confirmar contraseña",
+    "verifyEmailTitle": "Verifica tu correo electrónico",
+    "verifyEmailVerifying": "Verificando tu correo...",
+    "verifyEmailSuccess": "Correo verificado correctamente",
+    "verifyEmailSuccessDesc": "Tu correo electrónico ha sido verificado. Ya puedes iniciar sesión.",
+    "verifyEmailError": "Error al verificar el correo",
+    "verifyEmailInvalid": "Enlace inválido",
+    "verifyEmailInvalidDesc": "Este enlace de verificación es inválido o ya fue usado.",
     "backToLogin": "Volver al inicio de sesión"
   },
   "Wizard": {
