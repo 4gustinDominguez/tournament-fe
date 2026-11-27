@@ -24,12 +24,13 @@ export default defineConfig({
   // (file storage). Anything already listening on 3002/3003 is reused.
   webServer: [
     {
-      command: "PORT=3002 pnpm --dir ../t-form-api dev",
+      command:
+        "STORAGE=json DATABASE_URL= DATA_DIR=./.e2e-data MJ_APIKEY_PUBLIC= MJ_APIKEY_PRIVATE= PORT=3002 pnpm --dir ../t-form-api dev",
       port: 3002,
       reuseExistingServer: !isCI,
     },
     {
-      command: "NEXT_PUBLIC_API_URL=http://localhost:3002 pnpm exec next dev -p 3003",
+      command: "NEXT_PUBLIC_API_URL=http://localhost:3002 pnpm exec next dev --webpack -p 3003",
       url: "http://localhost:3003",
       reuseExistingServer: !isCI,
     },

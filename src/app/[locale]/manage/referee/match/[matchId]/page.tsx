@@ -169,11 +169,6 @@ export default function MatchControlPage() {
   const handleStartMatch = async () => {
     if (!match) return;
     const now = Date.now();
-    setBaseElapsedSeconds(0);
-    setEffectiveElapsedSeconds(0);
-    setIsRunning(true);
-    setStartedAtMs(now);
-    setTimeUpWarned(false);
     try {
       const updated: Match = {
         ...match,
@@ -184,6 +179,11 @@ export default function MatchControlPage() {
       };
       await updateMatch(updated);
       setMatch(updated);
+      setBaseElapsedSeconds(0);
+      setEffectiveElapsedSeconds(0);
+      setIsRunning(true);
+      setStartedAtMs(now);
+      setTimeUpWarned(false);
       setStatus("live");
       notify.success("Partido iniciado");
     } catch (err) {
@@ -196,12 +196,12 @@ export default function MatchControlPage() {
     const currentElapsed =
       baseElapsedSeconds +
       (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
-    setBaseElapsedSeconds(currentElapsed);
-    setEffectiveElapsedSeconds(currentElapsed);
-    setIsRunning(false);
-    setStartedAtMs(null);
     try {
       await persistTimer(currentElapsed, false, null);
+      setBaseElapsedSeconds(currentElapsed);
+      setEffectiveElapsedSeconds(currentElapsed);
+      setIsRunning(false);
+      setStartedAtMs(null);
     } catch (err) {
       notify.error("Error al pausar");
     }
@@ -210,10 +210,10 @@ export default function MatchControlPage() {
   const handleResumeMatch = async () => {
     if (!match) return;
     const now = Date.now();
-    setIsRunning(true);
-    setStartedAtMs(now);
     try {
       await persistTimer(baseElapsedSeconds, true, now);
+      setIsRunning(true);
+      setStartedAtMs(now);
     } catch (err) {
       notify.error("Error al reanudar");
     }
@@ -221,13 +221,13 @@ export default function MatchControlPage() {
 
   const handleResetTimer = async () => {
     if (!match) return;
-    setBaseElapsedSeconds(0);
-    setEffectiveElapsedSeconds(0);
-    setIsRunning(false);
-    setStartedAtMs(null);
-    setTimeUpWarned(false);
     try {
       await persistTimer(0, false, null);
+      setBaseElapsedSeconds(0);
+      setEffectiveElapsedSeconds(0);
+      setIsRunning(false);
+      setStartedAtMs(null);
+      setTimeUpWarned(false);
     } catch (err) {
       notify.error("Error al reiniciar timer");
     }
@@ -244,22 +244,20 @@ export default function MatchControlPage() {
       const currentElapsed =
         baseElapsedSeconds +
         (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
+      const persistedElapsed = isRunning ? baseElapsedSeconds : currentElapsed;
       const updated: Match = {
         ...match,
         result: { scoreA, scoreB },
         status: finalStatus,
         notes,
-        timerElapsedSeconds: currentElapsed,
-        timerRunning: false,
-        timerStartedAt: null,
+        timerElapsedSeconds: persistedElapsed,
+        timerRunning: isRunning,
+        timerStartedAt:
+          isRunning && startedAtMs ? new Date(startedAtMs).toISOString() : null,
       };
       await updateMatch(updated);
       setMatch(updated);
       setStatus(finalStatus);
-      setIsRunning(false);
-      setStartedAtMs(null);
-      setBaseElapsedSeconds(currentElapsed);
-      setEffectiveElapsedSeconds(currentElapsed);
       notify.success("Resultado guardado");
     } catch (err) {
       notify.error("Error al guardar");
@@ -291,9 +289,7 @@ export default function MatchControlPage() {
     const currentElapsed =
       baseElapsedSeconds +
       (startedAtMs ? Math.floor((Date.now() - startedAtMs) / 1000) : 0);
-    setIsRunning(false);
-    setStartedAtMs(null);
-    setEffectiveElapsedSeconds(currentElapsed);
+    setSaving(true);
     try {
       const updated: Match = {
         ...match,
@@ -307,9 +303,15 @@ export default function MatchControlPage() {
       await updateMatch(updated);
       setMatch(updated);
       setStatus("completed");
+      setIsRunning(false);
+      setStartedAtMs(null);
+      setBaseElapsedSeconds(currentElapsed);
+      setEffectiveElapsedSeconds(currentElapsed);
       notify.success("Partido finalizado");
     } catch (err) {
       notify.error("Error al finalizar el partido");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -642,9 +644,10 @@ export default function MatchControlPage() {
           <button
             type="button"
             onClick={handleFinishMatch}
-            className="flex-1 py-2 px-4 rounded-lg bg-neutral-800 hover:bg-neutral-900 text-white font-bold transition-colors"
+            disabled={saving}
+            className="flex-1 py-2 px-4 rounded-lg bg-neutral-800 hover:bg-neutral-900 text-white font-bold transition-colors disabled:opacity-50"
           >
-            Finalizar Partido
+            {saving ? "Finalizando..." : "Finalizar Partido"}
           </button>
         )}
       </div>
