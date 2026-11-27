@@ -2,13 +2,14 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/sections/tournaments/auth-context';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { UserRound, LockKeyhole } from 'lucide-react';
 import { notify } from '@/lib/notify';
 
 export default function ProfilePage() {
     const t = useTranslations('Profile');
     const tCommon = useTranslations('Common');
+    const locale = useLocale();
     const { user, updateProfile } = useAuth();
 
     const [firstName, setFirstName] = useState(user?.firstName || '');
@@ -41,7 +42,7 @@ export default function ProfilePage() {
         }
         setSavingPassword(true);
         try {
-            await updateProfile({ currentPassword, newPassword });
+            await updateProfile({ currentPassword, newPassword, locale });
             setCurrentPassword('');
             setNewPassword('');
             setConfirmPassword('');

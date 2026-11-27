@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { API_BASE_URL } from "@/config/api";
 
 export default function RegisterPage() {
     const t = useTranslations('Auth');
+    const locale = useLocale();
     const searchParams = useSearchParams();
     const redirect = searchParams.get("redirect") || "";
     const roleParam = searchParams.get("role");
@@ -33,7 +34,7 @@ export default function RegisterPage() {
             const response = await fetch(`${API_BASE_URL}/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, locale }),
             });
 
             if (!response.ok) {

@@ -34,6 +34,7 @@ interface AuthContextType {
         lastName?: string;
         currentPassword?: string;
         newPassword?: string;
+        locale?: string;
     }) => Promise<void>;
     isLoading: boolean;
 }
@@ -88,6 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         lastName?: string;
         currentPassword?: string;
         newPassword?: string;
+        locale?: string;
     }) => {
         const response = await fetch(`${API_BASE_URL}/auth/profile`, {
             method: "PATCH",
